@@ -29,8 +29,8 @@ G0 = administración/quiosco y emergencia en A13. G1 = identidad, protocolo y re
 | P-ACK-02 | **ACK perdido.** Aceptar en hijo y descartar ACK; sincronizar nuevamente. | Reconciliar id/seq/hash sin reiniciar temporizador. | Integración | PENDIENTE |
 | P-ACK-03 | **Enforcement pendiente/fallido.** Hijo devuelve pending o failed; ALLOW aceptado pero red no sana. | UI muestra causa/pendiente/error, no permiso efectivo falso. | Automática + UI | PENDIENTE |
 | P-NET-01 | **Padre cerrado.** Preparar intención sin hijo; cerrar y abrir después. | No entrega en background; pide autenticación/sincronización/confirmación. | Android padre | PENDIENTE |
-| P-UI-01 | **Acciones y duraciones.** Probar cuatro acciones, 59,60,604800,604801s y doble pulsación. | Límites correctos, una orden en curso, explicación de efectos. | UI automática | PENDIENTE |
-| P-UI-02 | **Estado antiguo.** Cortar conexión después de STATE válido. | Muestra último estado y antigüedad, no estado actual inventado. | UI automática | PENDIENTE |
+| P-UI-01 | **Acciones y duraciones.** Probar cuatro acciones, 59,60,604800,604801s y doble pulsación. | Límites correctos, una orden en curso, explicación de efectos. | UI automática | PENDIENTE; P00 prepara navegación y cuatro botones deshabilitados, sin duraciones/órdenes operativas |
+| P-UI-02 | **Estado antiguo.** Cortar conexión después de STATE válido. | Muestra último estado y antigüedad, no estado actual inventado. | UI automática | PENDIENTE; modelo JVM probado en P00 y UI ficticia compilada, no ejecutada; integración con STATE real pendiente |
 
 ## Relay Render
 

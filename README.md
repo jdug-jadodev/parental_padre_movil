@@ -4,9 +4,9 @@ Proyecto Android nativo en Kotlin y servicio Node/TypeScript. Este repositorio
 solo implementa el rol del padre y el relay. El APK del hijo pertenece a otro
 proyecto. La copia del protocolo CP/1 en `compartido/` permanece congelada.
 
-## Qué hay implementado (C00–C02, alcance local)
+## Qué hay implementado (C00–C02 y P00, alcance local)
 
-- `app-parent/`: pantalla inicial en español, sin identidad, vinculación ni órdenes.
+- `app-parent/`: navegación Primer inicio → Vincular → Control → Recuperación en español; sin identidad, vinculación real ni envío de órdenes.
 - `core-protocol/`: modelos, parser estricto, esquema congelado y serialización determinista CP/1, sin dependencias de Android.
 - `relay/`: servidor **local** ligado a `127.0.0.1`, sin WebSocket operativo.
 - `relay/test/soporte/`: cliente hijo simulado limitado a loopback y lectura de un fixture congelado; no prueba políticas reales.
@@ -28,6 +28,14 @@ de configuración/vínculo confiable, nunca una pública elegida por el comando.
 `DocumentoVerificado` no acredita frescura, autorización contextual ni `APPLIED`:
 esas comprobaciones corresponden a los casos de uso futuros. Ninguno de estos
 datos se usa todavía para confirmar ni aplicar órdenes.
+
+P00 separa conexión al relay, presencia indicativa del hijo, última evidencia e
+intención pendiente. Las cuatro acciones están visibles y deshabilitadas. La
+recuperación informativa es accesible desde todas las pantallas, sin conexión ni
+vínculo. Explorar el recorrido no crea autoridad. El repositorio de producción es
+no operativo y muestra datos desconocidos; el falso se compila solo en tests JVM
+e instrumentados. P05 deberá alimentar evidencia autenticada/correlacionada y
+calcular su antigüedad/frescura; P00 no implementa ese cálculo ni un reloj remoto.
 
 El relay devuelve **503** en `/healthz` porque todavía no está listo para CP/1.
 Rechaza upgrades y ejecución en `NODE_ENV=production`. No es desplegable en
@@ -82,6 +90,9 @@ del padre**, se podrá instalar el APK debug y ejecutar
 `:app-parent:connectedDebugAndroidTest`. No ejecutar ese comando todavía.
 Además de la pantalla, el APK instrumentado verifica el parser y el acceso al
 esquema dentro de Android. Está compilado, pero esas pruebas no se han ejecutado.
+Incluye además pruebas de navegación y presentación con hijo ausente, estado
+confirmado, desconexión e intención sin confirmar. Son datos ficticios exclusivos
+del APK instrumentado, no evidencias de un dispositivo hijo.
 También comprueba vectores criptográficos y una clave temporal no exportable en
 Keystore. Esa clave existe solo en el test instrumentado y se elimina en su
 `finally`; no es identidad de producción ni prueba autenticación del adulto.
@@ -91,3 +102,4 @@ la integración se planifican por separado.
 Estado real y próxima tarea: `ESTADO.md`. Herramientas: `BUILD_ENV.md`.
 Acuerdos del propietario, idioma y frecuencia de commits: `AGENTS.md`.
 Evidencia criptográfica local: `pruebas/EVIDENCIA_C02.md`.
+Evidencia de navegación y estados: `pruebas/EVIDENCIA_P00.md`.

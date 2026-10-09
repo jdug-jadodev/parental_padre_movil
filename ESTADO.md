@@ -1,9 +1,9 @@
 # Estado de implementación
 
 Última actualización: 2026-10-08
-Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. Primer bloque C02: f120557; cierre en el commit posterior, consultar git log.
+Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. Primer bloque P00: 37c74a3; cierre en el commit posterior, consultar git log.
 Tarea actual: P00
-Estado: EN_CURSO — navegación y estados separados implementados; falta cierre de pruebas y evidencia
+Estado: COMPLETADA_LOCAL — navegación y modelos comprobados en JVM; pruebas UI Android compiladas, pendientes de dispositivo
 
 ## Entorno observado
 
@@ -13,8 +13,9 @@ SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Terminado y demostrado
 
-- P00 primer bloque: MainActivity, AppContainer, ParentViewModel/StateFlow, cuatro pantallas y estados separados. Producción usa fuente no operativa, no un simulador; repositorio falso exclusivo de tests. Botones de órdenes deshabilitados, recuperación informativa siempre accesible.
-- P00: 9 tests JVM de la app correctos (8 nuevos). Compilación debug/instrumentada y lint correctos antes del último lote de tests; UI nueva instrumentada todavía pendiente de preparar/ejecutar. Se corrigió la limpieza de ViewModelStore antes de resetMain en las pruebas JVM, sin simular APIs Android.
+- P00: MainActivity, AppContainer, ParentViewModel/StateFlow, cuatro pantallas y estados separados. Producción usa fuente no operativa, no un simulador; repositorio falso exclusivo de tests. Botones de órdenes deshabilitados, recuperación informativa siempre accesible. No se crea autoridad ni vinculación al explorar controles.
+- P00: 9 tests JVM de la app correctos (8 nuevos). Compilación debug/instrumentada/release sin firma de distribución y lint correctos. Cinco nuevos tests UI instrumentados preparados y compilados, no ejecutados. Se corrigió la limpieza de ViewModelStore antes de resetMain en las pruebas JVM, sin simular APIs Android.
+- Estado de presentación confirmado únicamente con vínculo, relay conectado, hijo presente y resumen marcado fresco; al desconectar/ausentarse pasa a última evidencia conocida. P05 deberá producir resumen desde evidencia autenticada/correlacionada y calcular antigüedad/frescura; P00 no valida ni aplica órdenes.
 
 - Acuerdos del propietario persistidos en AGENTS.md y protegidos por un commit.
 - Base Android compilada: APK debug de la app y APK instrumentado de pruebas generados.
@@ -31,12 +32,15 @@ SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Archivos modificados en la última tarea
 
-00_EMPIEZA_AQUI.md, README.md, BUILD_ENV.md, ESTADO.md, scripts/verificar.ps1.
-core-protocol/build.gradle.kts, core-protocol/src/main/kotlin/dev/controlparental/protocol/CriptografiaProtocolo.kt.
-core-protocol/src/test/kotlin/dev/controlparental/protocol/CriptografiaProtocoloTest.kt e InteroperabilidadTest.kt.
-relay/src/crypto-protocol.ts, relay/test/crypto-protocol.test.ts, relay/test/soporte/interoperabilidad.mjs.
-app-parent/build.gradle.kts, app-parent/src/androidTest/java/dev/controlparental/parent/CriptografiaAndroidTest.kt.
-pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_C02.md, pruebas/HANDOFF_C02.md.
+README.md, BUILD_ENV.md, ESTADO.md, gradle/libs.versions.toml, app-parent/build.gradle.kts.
+app-parent/src/main/java/dev/controlparental/parent/MainActivity.kt y AppContainer.kt.
+app-parent/src/main/java/dev/controlparental/parent/presentation/ParentUiState.kt y ParentViewModel.kt.
+app-parent/src/main/java/dev/controlparental/parent/data/RepositorioPadre.kt.
+app-parent/src/main/java/dev/controlparental/parent/ui/AplicacionPadre.kt y ResumenEstado.kt.
+app-parent/src/main/res/values/strings.xml; app-parent/src/soporteTest/kotlin/dev/controlparental/parent/RepositorioPadreFalso.kt.
+app-parent/src/test/java/dev/controlparental/parent/ParentUiStateTest.kt y ParentViewModelTest.kt.
+app-parent/src/androidTest/java/dev/controlparental/parent/PantallaInicialTest.kt y EstadoPantallaTest.kt.
+pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P00.md, pruebas/HANDOFF_P00.md.
 
 ## Pruebas ejecutadas y resultado
 
@@ -58,6 +62,10 @@ pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_C02.md, pruebas/HANDOFF_C02.md.
 - Inspección de los tres APK como ZIP y búsqueda de identificadores de clases de prueba en DEX: fixture solo en APK instrumentado; ni fixture, ni clases criptográficas de prueba examinadas, ni alias cp.test.crypto en la app debug/release.
 - Primer intento de empaquetado C02 detectó dependencia implícita de assets/lint. Se corrigió con la API oficial addGeneratedSourceDirectory y se repitió la verificación completa con éxito.
 - Cinco pruebas instrumentadas disponibles (pantalla, dos de parser, dos de criptografía/Keystore); compiladas, no ejecutadas. No se usó ADB.
+- P00 cierre: scripts/verificar.ps1 correcto; 30 tests del núcleo, 9 de la app, 30 Node y 1 interoperabilidad, total 70 aprobados. Los tests Gradle del núcleo/interoperabilidad estaban actualizados en esa ejecución; se volvieron a ejecutar explícitamente con --rerun-tasks, junto con tests de app y compilaciones/debug/instrumentado/release y lint, con éxito (130 tareas ejecutadas).
+- P00 lint: cero errores y 15 avisos de versiones más recientes; sin suprimir comprobaciones. npm ci/check/build/test correctos; 78 comprobaciones documentales correctas. npm informó cero vulnerabilidades y aviso de script postinstall de esbuild sin autorización individual; no se alteraron permisos de npm.
+- P00: inspección ZIP/DEX de app debug y release no encuentra fixture ni identificadores RepositorioPadreFalso, EstadoPantallaTest o cp.test.crypto. No reemplaza análisis de seguridad completo.
+- Ahora hay diez pruebas instrumentadas compiladas (tres de inicio/navegación, tres de estados, dos de parser, dos de criptografía/Keystore). Ninguna ejecutada. La validación visual, botón Atrás, rotación, texto grande y acceso físico a recuperación siguen pendientes de Android.
 
 ## Decisiones locales sin cambiar ADR
 
@@ -75,7 +83,7 @@ La referencia plantillas/HANDOFF.md de padre/AGENTS.md no existe; usar pruebas/H
 
 ## Próxima tarea y lectura mínima
 
-Próxima tarea de desarrollo: P00 — padre/PLAN_PADRE.md, SPEC_PADRE P2–P3; navegación y estados de presentación sin endpoints reales. Consultar ADR-P-001 respetando la separación independiente del paquete. No iniciar P01 antes de P00.
+Próxima tarea de desarrollo: P01 — padre/PLAN_PADRE.md, SPEC_PADRE P4 y CP/1 §4; autoridad Keystore, credencial segura y autenticación. No se inició P01 en esta tarea. La aceptación física de P00 sigue pendiente de UI Android.
 Comprobación física disponible: cuando el propietario habilite el teléfono del padre por ADB, ejecutar :app-parent:connectedDebugAndroidTest y registrar resultados de pantalla/parser/esquema/criptografía. No requiere Device Owner, vinculación, órdenes ni restablecimiento. La app requiere Android 11/API 30 o superior. La clave Keystore del test es temporal y se elimina; no reemplaza ninguna identidad.
 
 ## Seguridad

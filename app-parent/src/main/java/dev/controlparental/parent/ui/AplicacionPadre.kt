@@ -6,6 +6,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -18,7 +19,9 @@ import dev.controlparental.protocol.Protocolo
 fun AplicacionPadre(estado: ParentUiState, navegar: (PantallaPadre) -> Unit, volver: () -> Unit) {
     BackHandler(enabled = estado.puedeVolver, onBack = volver)
     Scaffold(bottomBar = {
-        FlowRow(modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp)) {
+        FlowRow(modifier = Modifier.fillMaxWidth()
+            .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom))
+            .padding(horizontal = 12.dp)) {
             if (estado.puedeVolver) TextButton(onClick = volver) { Text(stringResource(R.string.volver)) }
             TextButton(
                 onClick = { navegar(PantallaPadre.RECUPERACION) },
@@ -26,17 +29,20 @@ fun AplicacionPadre(estado: ParentUiState, navegar: (PantallaPadre) -> Unit, vol
             ) { Text(stringResource(R.string.abrir_recuperacion)) }
         }
     }) { margenes ->
-        Column(
-            modifier = Modifier.fillMaxSize().padding(margenes).verticalScroll(rememberScrollState())
-                .padding(20.dp).testTag("pantalla_${estado.pantalla.name}"),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            Text(stringResource(R.string.app_name), style = MaterialTheme.typography.titleMedium)
-            when (estado.pantalla) {
-                PantallaPadre.PRIMER_INICIO -> PrimerInicio { navegar(PantallaPadre.VINCULAR) }
-                PantallaPadre.VINCULAR -> Vincular { navegar(PantallaPadre.CONTROL) }
-                PantallaPadre.CONTROL -> Control(estado.datos)
-                PantallaPadre.RECUPERACION -> Recuperacion()
+        // Cada destino abre desde arriba, no reutiliza el scroll de otra pantalla.
+        key(estado.pantalla) {
+            Column(
+                modifier = Modifier.fillMaxSize().padding(margenes).verticalScroll(rememberScrollState())
+                    .padding(20.dp).testTag("pantalla_${estado.pantalla.name}"),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                Text(stringResource(R.string.app_name), style = MaterialTheme.typography.titleMedium)
+                when (estado.pantalla) {
+                    PantallaPadre.PRIMER_INICIO -> PrimerInicio { navegar(PantallaPadre.VINCULAR) }
+                    PantallaPadre.VINCULAR -> Vincular { navegar(PantallaPadre.CONTROL) }
+                    PantallaPadre.CONTROL -> Control(estado.datos)
+                    PantallaPadre.RECUPERACION -> Recuperacion()
+                }
             }
         }
     }

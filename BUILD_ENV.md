@@ -1,4 +1,4 @@
-# Entorno de compilación — C00–C02
+# Entorno de compilación — C00–C02 y P00
 
 ## Herramientas observadas
 
@@ -18,6 +18,8 @@
 | TypeScript | 5.9.3 |
 | ws / tsx | 8.22.0 / 4.23.15 |
 | Ajv (JSON Schema 2020-12) | 8.20.0 |
+| Lifecycle ViewModel / runtime Compose | 2.9.1 |
+| Coroutines core / test | 1.10.2 |
 
 Las versiones Android están fijadas en `gradle/libs.versions.toml`. Las de Node
 están fijadas en `relay/package.json` y `relay/package-lock.json`.
@@ -37,6 +39,15 @@ https://developer.android.com/reference/tools/gradle-api/8.11/com/android/build/
 C02 usa SHA256withECDSA del JDK y SHA-256/ECDSA DER de node:crypto. No añade
 bibliotecas criptográficas ni implementa curvas. La prueba cruzada usa Node 24
 y tsx en procesos locales, con claves efímeras solo en memoria.
+
+Fuentes primarias consultadas para P00 (estado hoisted, ViewModel y recolección
+de StateFlow respetando lifecycle):
+https://developer.android.com/develop/ui/compose/state
+https://developer.android.com/develop/ui/compose/state-hoisting
+
+P00 conserva inyección manual y no añade Hilt ni biblioteca de navegación.
+El recorrido simple vive en ParentViewModel. Reiniciar el proceso vuelve al
+primer inicio; la persistencia de autoridad/vínculo corresponde a tareas futuras.
 
 ## Límites de la verificación
 
