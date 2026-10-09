@@ -13,6 +13,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
 import org.junit.Test
+import dev.controlparental.parent.pairing.QrLocal
 
 class OfflineChallengeSignerTest {
     private class Entorno(scope: CoroutineScope) {
@@ -121,6 +122,19 @@ class OfflineChallengeSignerTest {
         assertFalse(aceptar(token, ID, AccionOffline.MAINTENANCE))
         assertTrue(aceptar(token, BOOT, AccionOffline.MAINTENANCE))
         assertFalse(aceptar(token, BOOT, AccionOffline.MAINTENANCE))
+        e.store.cerrar()
+    }
+
+    @Test fun ambosQrSeLeenLocalmenteYLaRespuestaConservaFirmaOffline() = runTest {
+        val e = Entorno(backgroundScope); e.store.inicializar(e.datos)
+        fun roundtrip(frame: ByteArray): ByteArray {
+            val matriz = QrLocal.generar(frame.toString(Charsets.UTF_8))
+            val pixeles = IntArray(matriz.width * matriz.height) { if (matriz[it % matriz.width, it / matriz.width]) 0xff000000.toInt() else 0xffffffff.toInt() }
+            return QrLocal.leer(matriz.width, matriz.height, pixeles).toByteArray(Charsets.UTF_8)
+        }
+        val p = e.flujo.preparar(roundtrip(e.frame()))
+        val respuesta = e.verificar(roundtrip(e.flujo.responder(p, false)))
+        assertEquals(e.reto.nonce, respuesta.nonce); assertEquals(e.reto.bootId, respuesta.bootId)
         e.store.cerrar()
     }
 

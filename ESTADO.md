@@ -3,7 +3,7 @@
 Última actualización: 2026-10-09
 Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. P00: 37c74a3, 943082c. Primer bloque P01: 0f143c4; cierre local en el commit posterior, consultar git log.
 Tarea actual: P07 — autorización local sin internet
-Estado: EN_CURSO_LOCAL — firmante OFFLINE y pantalla/lectores locales compilados; pruebas instrumentadas y cierre de verificación pendientes
+Estado: P07_IMPLEMENTADO_LOCAL_PARCIAL — 140 pruebas locales correctas; APK compilados; recuperación física e integración pendientes
 
 ## Entorno observado
 
@@ -47,6 +47,8 @@ Node 24.21.0 / npm 11.19.0 / Windows 11 amd64
 SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Terminado y demostrado
+
+- P07 cierre local: ocho tests JVM propios aprobados, incluidos ambos QR sintéticos y firma conservada. Dos PantallaRecuperacionTest aislados RAM/JCA compilados/no ejecutados (advertencia RETIRE y cambio de entrada). No modifican identidad cotidiana ni retiran dispositivos. El simulador comprueba rechazo de repetición, arranque distinto y acción cruzada, no acredita consumo duradero en el hijo. Evidencia: pruebas/EVIDENCIA_P07.md; primer commit 90d3eff, cierre en commit posterior. Base del padre preparada para coordinar integración local con servidor separado, no para entrega/despliegue ni para habilitar órdenes con PREPARADO. Propietario avisado; él organizará trabajo externo, sin agentes ni cambios de servidor aquí.
 
 - P07 primer bloque: OfflineChallengeSigner verifica OFFLINE_CHALLENGE con pública del hijo guardada y pairId, autentica antes/después de firmar OFFLINE_RESPONSE exacta (acción/boot/nonce). Referencia de preparación única, revisión contra salida/cambio de entrada, margen local 4 min sin timestamp inventado; hijo decide sus 5 min/consumo/boot. RecoveryScreen muestra advertencia de borrado para RETIRE, QR solo en memoria/con autoridad vigente, descarte al salir/fondo, cámara e imagen locales sin relay. PREPARADO permite recuperación firmada necesaria para integración, pero no se promociona ni habilita uso normal. Siete tests JVM iniciales correctos (103 app total); no ADB, restablecimientos ni servidor externo. Retiro/aplicación reales y QR/autenticación físicos pendientes.
 
@@ -126,6 +128,13 @@ SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Archivos modificados en la última tarea
 
+P07: app-parent/src/main/java/dev/controlparental/parent/recovery/OfflineChallengeSigner.kt;
+app-parent/src/main/java/dev/controlparental/parent/ui/{RecoveryScreen,CamaraOferta,AplicacionPadre}.kt;
+app-parent/src/main/java/dev/controlparental/parent/MainActivity.kt;
+app-parent/src/test/java/dev/controlparental/parent/OfflineChallengeSignerTest.kt;
+app-parent/src/androidTest/java/dev/controlparental/parent/PantallaRecuperacionTest.kt;
+README.md, ESTADO.md y pruebas/EVIDENCIA_P07.md. Sin nuevos permisos/dependencias ni cambios CP/1/servidor.
+
 P06 (prioritario): app-parent/src/main/java/dev/controlparental/parent/ui/{ControlScreen,AplicacionPadre,ConexionRelayScreen}.kt;
 app-parent/src/main/java/dev/controlparental/parent/presentation/{AccionesControl,PresentacionControl}.kt;
 app-parent/src/main/java/dev/controlparental/parent/{MainActivity,policy/ControlPoliticas,data/MetadatosPadre,data/ParentStore}.kt;
@@ -155,6 +164,8 @@ app-parent/src/androidTest/java/dev/controlparental/parent/AlmacenAndroidTest.kt
 pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P03.md y pruebas/HANDOFF_P03.md.
 
 ## Pruebas ejecutadas y resultado
+
+- P07: scripts/verificar.ps1 correcto; Gradle completo --rerun-tasks, 130 tareas ejecutadas correctamente (tests app/núcleo/interoperabilidad, debug/instrumentado/release sin firma de distribución y lint). XML: 104 app + 30 núcleo + 1 interop, cero fallos/errores/omisiones; cinco oráculo Node, total 140 locales. Diez vectores/78 comprobaciones documentales; lint cero errores/23 avisos. Dos tests instrumentados nuevos compilados/no ejecutados. Sin ADB, instalaciones, restablecimientos, servidor externo ni despliegue.
 
 - P06: scripts/verificar.ps1 correcto y Gradle completo con --rerun-tasks (tests app/núcleo/interoperabilidad, debug/instrumentado/release sin firma de distribución y lint): 130 tareas ejecutadas correctamente. XML: 96 app + 30 núcleo + 1 interop, cero fallos/errores/omisiones; oráculo Node cinco aprobados, total 132 locales. Diez vectores/78 comprobaciones documentales; lint cero errores/23 avisos. Primer intento de recompilación instrumentada falló por lambda en posición del nuevo parámetro Boolean de ControlScreen; se corrigió la llamada de test con autenticar nombrado, sin relajar controles. Cinco tests UI compilados, no ejecutados; modificación del test Android de migración compilada/no repetida en dispositivo. No instalaciones/ADB ni integración real.
 
@@ -234,7 +245,8 @@ La referencia plantillas/HANDOFF.md de padre/AGENTS.md no existe; usar pruebas/H
 
 ## Próxima tarea y lectura mínima
 
-P06 implementado localmente; P-UI-01/02 y texto grande/rotación/fondo físicos pendientes, además de integración con hijo/servidor reales. Próxima tarea: P07 de padre/PLAN_PADRE.md, SPEC-P P3/P4 y CP/1 §9, autorización local sin internet/retirada presencial. No declarar recuperación acreditada ni promocionar PREPARADO solo porque la interfaz esté compilada. Padre aún no terminado/preparado para integración completa; mantener aviso al propietario cuando cierre esa parte y comunicación local antes de despliegue, sin agentes ni desarrollo del servidor aquí. Antes de nuevas pruebas físicas/actualización APK en A56, avisar y esperar autorización; no operar A13.
+P07 implementado localmente. Próxima tarea: P08, coordinación de integración y entrega privada, bloqueada por servidor autenticado e hijo compatible y por aceptación física pendiente. El propietario debe orquestar el servidor en parental_render; probar comunicación local antes de cualquier despliegue. Base padre preparada para iniciar esa coordinación, no producto terminado. P-UI-01/02, texto grande/rotación/fondo, QR/autenticación OFFLINE reales y recuperación presencial siguen pendientes. No promocionar PREPARADO automáticamente ni certificar funciones del hijo por simuladores. Antes de actualizar/probar A56, avisar y esperar autorización nueva. No operar A13: la referencia histórica de P08 a ese teléfono no autoriza su uso. No restablecer teléfonos ni desarrollar servidor aquí.
+La indicación histórica siguiente de próxima tarea P07 ya fue atendida en este turno.
 La indicación histórica siguiente de próxima tarea P06 ya fue atendida en este turno.
 
 P05 implementado localmente; integración externa H09/H10/R02 pendiente. Próxima tarea local: P06 de padre/PLAN_PADRE.md, SPEC-P P3/P6, interfaz final de acciones/duración/confirmación, última evidencia, causas y pendiente. No habilitar órdenes con PREPARADO ni fingir prueba de recuperación local. El descarte local debe avisar que no revoca una orden recibida; después exige sincronizar y confirmar de nuevo. Selección offline aún sin formulario/cola de nuevas órdenes; no firmar sin contexto válido. Padre todavía no preparado para integración completa: P06/P07 y aceptación física/integrada pendientes. El propietario orquestará el servidor; comunicación local antes de despliegue, sin agentes ni cambios externos desde aquí.

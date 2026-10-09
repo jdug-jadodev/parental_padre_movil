@@ -14,14 +14,22 @@ No hay servidor ni dependencias npm en este proyecto. Las especificaciones/evide
 antiguas se conservan como historia, no como tareas de desarrollo del servidor aquí.
 El cliente Android WSS y CP/1 siguen formando parte de la app.
 
-## Qué hay implementado (C00–C02, P00–P06 local parcial)
+## Qué hay implementado (C00–C02, P00–P07 local parcial)
+
+P07 incorpora desafío QR firmado del hijo guardado y respuesta OFFLINE tras
+autenticación, sin relay ni ALLOW. Conserva propósito/acción/boot/nonce; RETIRE
+exige advertencia explícita de borrado y confirmación posterior en el hijo.
+QR solo en memoria, descartado al salir/fondo o caducar autoridad/preparación.
+140 pruebas locales correctas; dos tests nuevos de recuperación compilados,
+no ejecutados. Ver pruebas/EVIDENCIA_P07.md. Base del padre preparada para
+coordinar integración local; aceptación física y comunicación real pendientes.
 
 P06 incorpora pantalla de controles con duración 60–604800 s, advertencias y
 confirmación explícita separada del guardado. Una selección offline se conserva
 cifrada sin firmar/reservar seq; reemplazar exige confirmación y nunca sustituye
 silenciosamente una orden pendiente. Formato privado v3 migra v1/v2 conservando
 contador/comando/evidencia/aceptación, sin cambiar CP/1. Vínculo PREPARADO no
-habilita acciones; recuperación presencial P07 sigue pendiente.
+habilita órdenes; recuperación presencial real sigue pendiente de acreditación.
 La UI muestra modo/causa reales de evidencia firmada: APPLIED no significa
 permitido si el hijo sigue bloqueado por red/Android. Desconectar degrada a última
 evidencia; el tiempo reportado no se descuenta como confirmación remota.
