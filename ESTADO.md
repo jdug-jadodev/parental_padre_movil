@@ -3,7 +3,7 @@
 Última actualización: 2026-10-08
 Commit de acuerdos: 4cc7a39; commit de base C00: e25bff5. Correcciones y cierre registrados en el commit posterior; consultar git log.
 Tarea actual: C01
-Estado: EN_CURSO — primer bloque de modelos, JSON estricto y formatos; falta conectar validación completa
+Estado: EN_CURSO — codec Kotlin validado; modelos Node listos, falta su codec y pruebas cruzadas
 
 ## Entorno observado
 
@@ -18,7 +18,8 @@ SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 - Base del relay compilada; responde 503 en health y rechaza upgrades/producción. No implementa todavía R01–R03.
 - Cliente hijo simulado exclusivamente en tests, limitado a loopback; lectura de fixture firmado congelado.
 - Verificación local completa mediante scripts/verificar.ps1 aprobada. No se ha instalado la app ni demostrado control real de un dispositivo.
-- C01 parcial: DTO Kotlin para todos los tipos CP/1 y parser que conserva/rechaza duplicados, controla profundidad, ASCII, UTF-8 y enteros seguros. No se usa aún para aceptar tráfico operativo.
+- C01 parcial: DTO Kotlin para todos los tipos CP/1, esquema tomado directamente de la copia congelada, parser estricto, codec determinista y validación adicional de secuencias, base64, SPKI P-256, DER y origen HTTPS. No hay verificación de firmas ni autorización contextual todavía.
+- DTO Node añadidos y Ajv 8.20.0 fijado para JSON Schema 2020-12. Se descartó 8.17.1 porque npm audit detectó un aviso moderado; la versión finalmente fijada no presenta avisos en la auditoría ejecutada.
 
 ## Archivos modificados en la última tarea
 
@@ -41,6 +42,7 @@ local.properties creado solo para este equipo y excluido de Git.
 - Primer comando Android interrumpido a los 120 segundos. Segundo intento completó APK/tests, pero lint detectó un escape incorrecto en local.properties y ausencia de icono. Ambos corregidos. La ejecución final completa de `scripts/verificar.ps1` terminó correctamente: núcleo, app, lint, relay y vectores.
 - Ninguna prueba por ADB, en teléfono, en Render o con el APK real del hijo.
 - C01 primer bloque: `:core-protocol:test` correcto, 8 pruebas aprobadas: cinco de JSON estricto, dos de base64/secuencias y el test base.
+- C01 segundo bloque: `:core-protocol:test` correcto con 19 pruebas; diez vectores preservan sus bytes exactos. `npm run check` correcto con los nuevos DTO. Las firmas criptográficas alteradas se comprobarán en C02, no se declara autenticación por validación de DER.
 
 ## Decisiones locales sin cambiar ADR
 
@@ -58,7 +60,7 @@ La referencia plantillas/HANDOFF.md de padre/AGENTS.md no existe; usar pruebas/H
 
 ## Próxima tarea y lectura mínima
 
-Continuar C01: conectar esquema congelado, codec y pruebas Kotlin/Node; aún no iniciar C02.
+Continuar C01: codec Node y pruebas con los mismos vectores/contraejemplos; después, verificación local completa. Aún no iniciar C02.
 Prueba física disponible: cuando el propietario habilite el teléfono del padre por ADB, ejecutar :app-parent:connectedDebugAndroidTest y registrar resultado. No requiere Device Owner ni restablecimiento. La app requiere Android 11/API 30 o superior.
 
 ## Seguridad
