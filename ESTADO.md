@@ -2,8 +2,8 @@
 
 Última actualización: 2026-10-09
 Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. P00: 37c74a3, 943082c. Primer bloque P01: 0f143c4; cierre local en el commit posterior, consultar git log.
-Tarea actual: P04 — cliente WSS del padre
-Estado: P04_IMPLEMENTADO_LOCAL_PARCIAL — cliente WSS/TLS y lifecycle compilados; 97 pruebas locales correctas; validación física y R02 externos pendientes
+Tarea actual: P05 — sincronización y envío idempotente
+Estado: EN_CURSO_LOCAL — casos de uso compilados y cuatro pruebas iniciales correctas; conexión al transporte y negativos ampliados pendientes
 
 ## Entorno observado
 
@@ -47,6 +47,8 @@ Node 24.21.0 / npm 11.19.0 / Windows 11 amd64
 SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Terminado y demostrado
+
+- P05 primer bloque local: ControlPoliticas valida STATE firmado/nonce/pareja/secuencia/sesión, exige confirmación explícita por ticket no reutilizable, reserva max(local, remoto)+1 y persiste comando/etapa conservadora antes de encolar. ACK correlacionado por id/seq/hash del payload/boot/sesión; dos retransmisiones de bytes exactos y luego nueva sincronización, nunca duración nueva por ACK perdido. ParentStore.resolverIntencion guarda evidencia y resolución juntas. No promociona PREPARADO ni acredita recuperación. Cuatro tests iniciales aprobados (65 app total); integración al transporte/negativos ampliados pendientes. Sin ADB ni cambios de servidor/CP/1.
 
 - P04 cierre local parcial: transporte OkHttp 4.12.0 con WSS exclusivo, /ws, cp.v1, confianza/hostname del sistema, sin redirecciones ni bypass TLS. AUTH usa AutoridadPadre/Keystore; el cliente verifica pública y reto exactos antes de encolar. Canal sano solo tras PONG vigente, separado de presencia indicativa y red validada por Android. Backoff se reinicia al recibir PONG, no solo por AUTH_OK. Se descartan callbacks antiguos y sockets devueltos después de un fallo síncrono.
 - P04 Android: apertura explícita desde Controles con vínculo PREPARADO/VINCULADO guardado; nunca crea identidad/pareja para conectar. Al salir de Controles se desconecta; al pasar a fondo cierra socket, bloquea autoridad y retira NetworkCallback. Al volver requiere autoridad vigente para reconectar, sin servicio oculto. RedAndroid solo observa la red predeterminada; su indicador no prueba acceso al relay ni autoriza órdenes. No se cambió CP/1 ni el proyecto servidor.

@@ -148,6 +148,31 @@ class ParentStore(
         guardar(datos.copy(ultimaEvidenciaFrameB64 = Base64.getUrlEncoder().withoutPadding().encodeToString(frame)))
     }
 
+    // P05 aporta frescura/contexto. Evidencia y resolución de pendiente se escriben juntas.
+    suspend fun resolverIntencion(documento: DocumentoVerificado, resuelta: Boolean) = transaccion {
+        val datos = cargar()
+        val pendiente = datos.pendiente ?: error("Sin intención pendiente")
+        val ordenDoc = CriptografiaProtocolo.verificarSobre(Base64.getUrlDecoder().decode(pendiente.frameB64 ?: error("Sin comando")),
+            ClaveVerificacion.desdeSpki(Rol.PARENT, datos.parentPublicKeyB64), Proposito.MESSAGE)
+        val orden = ordenDoc.mensaje as OrdenPolitica
+        val frame = documento.bytesFrame()
+        val doc = CriptografiaProtocolo.verificarSobre(frame,
+            ClaveVerificacion.desdeSpki(Rol.CHILD, datos.childPublicKeyB64!!), Proposito.MESSAGE)
+        when (val mensaje = doc.mensaje) {
+            is Confirmacion -> require(mensaje.pairId == datos.pairId && mensaje.commandId == orden.commandId &&
+                mensaje.seq == orden.seq && mensaje.commandPayloadSha256B64 == ordenDoc.payloadSha256B64 &&
+                mensaje.bootId == orden.bootId && mensaje.childSessionId == orden.childSessionId &&
+                resuelta == (mensaje.result != ResultadoAck.ACCEPTED_PENDING_ENFORCEMENT))
+            is EstadoDispositivo -> require(mensaje.pairId == datos.pairId && mensaje.lastCommandId == orden.commandId &&
+                mensaje.lastAcceptedSeq == orden.seq && mensaje.lastCommandPayloadSha256B64 == ordenDoc.payloadSha256B64 &&
+                mensaje.lastResult != ResultadoEstado.NONE &&
+                resuelta == (mensaje.lastResult != ResultadoEstado.ACCEPTED_PENDING_ENFORCEMENT))
+            else -> error("No es evidencia de la intención")
+        }
+        guardar(datos.copy(pendiente = if (resuelta) null else pendiente,
+            ultimaEvidenciaFrameB64 = Base64.getUrlEncoder().withoutPadding().encodeToString(frame)))
+    }
+
     private fun cargar(): MetadatosPadre {
         if (incierto) throw AlmacenNoDisponible()
         return try {
