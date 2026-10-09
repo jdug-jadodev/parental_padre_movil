@@ -2,22 +2,45 @@
 
 Última actualización: 2026-10-09
 Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. P00: 37c74a3, 943082c. Primer bloque P01: 0f143c4; cierre local en el commit posterior, consultar git log.
-Tarea actual: P02 — vinculación QR
-Estado: VALIDADA_PARCIAL_LOCAL_Y_A56 — 99 pruebas locales y cuatro físicas de imagen/almacenamiento aprobadas; revisión manual, migración física e integración pendientes
+Tarea actual: separación del servidor por petición del propietario
+Estado: SEPARADO_Y_VERIFICADO_LOCAL — padre independiente; servidor en parental_render; P02 conserva validación parcial anterior
 
 ## Entorno observado
 
 ### Cambio de alcance acordado
 
-El propietario indicó que Render no debe mezclarse con la app del padre:
-servidor en `C:\Users\Usuario\Documents\parental_render`, desarrollo aparte
-posterior. Carpeta consultada: sin entradas visibles. No se modificó esa carpeta.
-Se actualizan AGENTS.md, padre/AGENTS.md, 00_EMPIEZA_AQUI.md y README.md para
-impedir nuevo desarrollo de servidor aquí. El relay existente no se ha movido ni
-borrado; extracción de código y adaptación de tests/scripts pendiente. No se
-ejecutaron pruebas ni ADB para este ajuste exclusivamente documental. CP/1 intacto.
-Próximo paso de organización: acordar traslado del relay existente conservando
-sus pruebas y separando verificadores locales del padre, sin perder trabajo.
+El propietario autorizó separar el relay. Se trasladó a
+`C:\Users\Usuario\Documents\parental_render\relay`, incluidos sus tests y
+dependencias/resultados locales. Dieciocho archivos propios comparados por
+SHA-256 antes/después, sin cambios. Contrato/ejemplos/fixture y verificadores
+copiados al servidor sin modificar CP/1. Documentación/evidencias antiguas del
+padre conservadas como historia; tareas R01–R03 retiradas del plan activo y
+conservadas en el plan original copiado al servidor. Proyecto externo tiene
+instrucciones, estado, README y script propio; desarrollo de servidor posterior.
+
+scripts/verificar.ps1 del padre ya no instala npm ni verifica un relay local.
+pruebas/interoperabilidad.mjs es oráculo de tests Node estándar contra payloads
+congelados, no servidor/codec de producción. Cinco negativos/positivos propios.
+Test JVM/Node predeterminado independiente; cruce con codec del servidor solo
+opcional con -PrutaRelay. No se oculta ni elimina la prueba con codec real.
+
+Verificación padre: 38 app, 30 núcleo, 1 interop y 5 oráculo Node, 74 tests.
+Gradle de tests repetido --rerun-tasks: correcto; script completo también correcto,
+APK debug/instrumentado y lint correctos (tareas sin cambios reutilizan resultados).
+Servidor: npm ci/check/build y 30 tests correctos; ambos verificadores documentales
+10 vectores/78 comprobaciones. Interop opcional con codec externo también aprobado
+con --rerun-tasks: 20 cruces de firmas nuevas. No hubo ADB/despliegue ni funciones
+nuevas de servidor. Los 99 tests anteriores eran antes de separar los 30 Node.
+
+Archivos de separación: relay/ trasladado fuera; scripts/verificar.ps1,
+core-protocol/build.gradle.kts y src/test/kotlin/dev/controlparental/protocol/InteroperabilidadTest.kt;
+pruebas/interoperabilidad.mjs e interoperabilidad.test.mjs; AGENTS.md,
+00_EMPIEZA_AQUI.md, README.md, BUILD_ENV.md, INTEGRACION_FUTURA.md,
+padre/PLAN_PADRE.md y este ESTADO.md. Evidencia en pruebas/SEPARACION_RENDER.md.
+Próximo desarrollo del padre: continuar pendientes P02 según HANDOFF_P02.md.
+Servidor: R01 en sesión/proyecto aparte cuando el propietario lo indique.
+Primer commit del repositorio servidor independiente: 4b9309d. Sin push ni
+remoto configurado por esta extracción; cierre del padre en commit posterior.
 
 Android Studio AI-253.32098.37.2534.15232325 / JDK 21.0.6 / Gradle 8.13 / AGP 8.11.1 / Kotlin 2.2.0. Detalles en BUILD_ENV.md.
 Node 24.21.0 / npm 11.19.0 / Windows 11 amd64

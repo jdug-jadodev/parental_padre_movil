@@ -1,5 +1,10 @@
 # Entorno de compilación — C00–C02, P00, P01, P03 y P02 parcial
 
+Separación del servidor: este proyecto no requiere npm, tsx, ws ni Ajv. Node 24
+solo para verificadores/oráculo criptográfico de tests. Servidor/dependencias
+en parental_render/relay; su verificación está en su proyecto. Interop por
+defecto Node estándar; codec externo opcional mediante -PrutaRelay.
+
 P02 añade ZXing core 3.5.3 fijado, sin scanner remoto ni Play Services. Usa
 PickVisualMedia de Activity 1.10.1 ya disponible, con fallback oficial a documentos;
 no permisos de cámara/galería completa. Fuentes consultadas:

@@ -1,28 +1,28 @@
-# Control parental — aplicación del padre y relay
+# Control parental — aplicación del padre
 
-Proyecto Android nativo en Kotlin y servicio Node/TypeScript. Este repositorio
-solo implementa el rol del padre y el relay. El APK del hijo pertenece a otro
+Proyecto Android nativo en Kotlin. Este repositorio
+solo implementa el rol del padre. El APK del hijo pertenece a otro
 proyecto. La copia del protocolo CP/1 en `compartido/` permanece congelada.
 
 ## Separación del servidor
 
 Por acuerdo del propietario, este proyecto es solo de la **app del padre**.
 El servidor Render se desarrollará aparte en
-`C:\Users\Usuario\Documents\parental_render`. Su código `relay/` existente
-aquí todavía está pendiente de extracción junto con las dependencias de pruebas
-y scripts; no se ha movido ni borrado. No continuar tareas de servidor aquí.
+`C:\Users\Usuario\Documents\parental_render`. Su código y tests se trasladaron
+a `parental_render/relay/`; contrato/fixtures copiados sin modificaciones.
+No hay servidor ni dependencias npm en este proyecto. Las especificaciones/evidencias
+antiguas se conservan como historia, no como tareas de desarrollo del servidor aquí.
 El cliente Android WSS y CP/1 siguen formando parte de la app.
 
 ## Qué hay implementado (C00–C02, P00, P01, P03 y P02 local parcial)
 
 - `app-parent/`: navegación en español e identidad/autenticación Keystore implementadas, pendientes de validación física; sin vinculación real ni envío de órdenes.
 - `core-protocol/`: modelos, parser estricto, esquema congelado y serialización determinista CP/1, sin dependencias de Android.
-- `relay/`: servidor **local** ligado a `127.0.0.1`, sin WebSocket operativo.
-- `relay/test/soporte/`: cliente hijo simulado limitado a loopback y lectura de un fixture congelado; no prueba políticas reales.
+- `pruebas/interoperabilidad.mjs`: oráculo de pruebas criptográficas usando Node estándar; no servidor ni codec de producción.
 - `scripts/verificar.ps1`: compilación y pruebas locales, sin acceso a dispositivos.
 
-C01 añade los mismos modelos y validaciones en `relay/src/protocol.ts`, mediante
-Ajv 2020-12. Ambos lados conservan los bytes de los diez vectores comunes.
+C01 añade modelos y validaciones Kotlin CP/1; su contraparte Node se conserva
+en el proyecto separado del servidor. Ambos conservan los diez vectores comunes.
 Se controlan UTF-8, ASCII, duplicados, límites, secuencias, base64url, formatos
 SPKI/DER, propósito y coherencia de los campos del estado.
 
@@ -76,9 +76,7 @@ revinculación; faltan estado firmado del hijo y recuperación local comprobada.
 pruebas de imagen Android y regresión de almacenamiento. Pantalla/aceptación y
 migración v1 física pendientes. Ver `pruebas/EVIDENCIA_P02.md`.
 
-El relay devuelve **503** en `/healthz` porque todavía no está listo para CP/1.
-Rechaza upgrades y ejecución en `NODE_ENV=production`. No es desplegable en
-Render hasta implementar R01–R03. No hay modo público de prueba sin autenticación.
+El servidor externo sigue siendo base local, sin WSS público operativo ni despliegue.
 
 ## Compilar y probar en Windows
 
@@ -89,11 +87,11 @@ Studio o ejecutar desde PowerShell:
 .\scripts\verificar.ps1
 ```
 
-Para un módulo: `-Modulo nucleo`, `-Modulo app` o `-Modulo relay`.
+Para un módulo: `-Modulo nucleo` o `-Modulo app`.
 El script detiene la verificación si falla cualquier comando.
 La verificación completa también ejecuta `:core-protocol:testInterop`: firmas
 nuevas cruzadas en ambos sentidos JVM/Node para los diez vectores. Requiere Node
-y las dependencias instaladas en relay; el script las prepara antes. El test
+y únicamente módulos integrados de Node, sin npm ni proyecto servidor. El test
 JVM puro no exige Node y no incluye ese caso de interoperabilidad.
 
 Comandos Android individuales:
@@ -107,20 +105,18 @@ Comandos Android individuales:
 El APK debug se genera en `app-parent/build/outputs/apk/debug/`. Se excluye de
 Git, igual que claves, archivos `.env`, resultados y configuración local.
 
-## Iniciar la base del relay
+## Interoperabilidad opcional entre proyectos
 
-Desde la carpeta `relay/`, ejecutar cada comando por separado:
+El test predeterminado verifica cruce criptográfico JVM/Node contra los payloads
+congelados, no el codec del servidor. Para probar también el codec Node externo,
+tras instalar sus dependencias en su propio proyecto:
 
 ```powershell
-npm ci
-npm run check
-npm test
-npm run build
-npm start
+.\gradlew.bat :core-protocol:testInterop '-PrutaRelay=C:\Users\Usuario\Documents\parental_render\relay' --rerun-tasks
 ```
 
-Consultar `http://127.0.0.1:10000/healthz`. Detener con Ctrl+C.
-`npm run dev` permite desarrollo con recarga. `PORT` admite valores 1–65535.
+Es integración explícita opcional, no una dependencia de compilación de la app.
+Inicio/desarrollo/pruebas del servidor: README del proyecto parental_render.
 
 ## Pruebas físicas
 

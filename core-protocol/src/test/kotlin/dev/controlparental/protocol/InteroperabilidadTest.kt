@@ -9,7 +9,7 @@ import kotlinx.serialization.json.*
 import org.junit.Assert.*
 import org.junit.Test
 
-// Separado del test JVM puro: requiere npm ci en relay y Node 24 disponibles.
+// Por defecto solo Node 24, sin servidor ni npm. rutaRelay habilita cruce opcional con codec externo.
 class InteroperabilidadTest {
     private val raiz = File(System.getProperty("raiz.proyecto"))
 
@@ -50,8 +50,11 @@ class InteroperabilidadTest {
     }
 
     private fun invocarNode(peticion: JsonObject): JsonObject {
-        val proceso = ProcessBuilder("node", "--import", "tsx", "test/soporte/interoperabilidad.mjs")
-            .directory(File(raiz, "relay")).redirectErrorStream(true).start()
+        val relayExterno = System.getProperty("ruta.relay")?.let(::File)
+        val comando = if (relayExterno == null) listOf("node", "pruebas/interoperabilidad.mjs")
+            else listOf("node", "--import", "tsx", "test/soporte/interoperabilidad.mjs")
+        val proceso = ProcessBuilder(comando)
+            .directory(relayExterno ?: raiz).redirectErrorStream(true).start()
         try {
             proceso.outputStream.use { it.write(peticion.toString().toByteArray(Charsets.UTF_8)) }
             assertTrue("Node no respondió dentro del límite", proceso.waitFor(15, TimeUnit.SECONDS))

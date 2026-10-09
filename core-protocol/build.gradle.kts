@@ -41,4 +41,5 @@ tasks.register<Test>("testInterop") {
     classpath = sourceSets.test.get().runtimeClasspath
     include("**/InteroperabilidadTest.class")
     systemProperty("raiz.proyecto", rootProject.projectDir.absolutePath)
+    providers.gradleProperty("rutaRelay").orNull?.let { systemProperty("ruta.relay", it) }
 }

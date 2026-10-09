@@ -2,9 +2,9 @@
 
 **Separación acordada con el propietario:** aquí se desarrolla solo la app del
 padre. El servidor pertenece a `C:\Users\Usuario\Documents\parental_render` y
-se desarrollará aparte más adelante. El `relay/` ya existente y sus dependencias
-de tests/scripts están pendientes de extracción conservadora; todavía no se han
-trasladado ni borrado. Las referencias históricas a ambos componentes no cambian
+se desarrollará aparte más adelante. El `relay/` se trasladó allí conservando
+sus pruebas; las verificaciones del padre no dependen del servidor ni de npm.
+Las referencias históricas a ambos componentes no cambian
 este alcance. El cliente WSS de Android y el contrato común sí pertenecen al padre.
 
 **Especificaciones v1.0 y desarrollo inicial independiente. Hay bases compiladas y APK de desarrollo; la aplicación completa y la integración siguen pendientes. Consultar `ESTADO.md` para la evidencia vigente.**
@@ -31,7 +31,7 @@ Este repositorio **no contiene el código del otro dispositivo**. El protocolo c
 - `padre/AGENTS.md`: modo de trabajo detallado del rol.
 - `padre/PLAN_PADRE.md`: tareas y dependencias.
 - `padre/SPEC_PADRE.md`: requisitos técnicos y reglas.
-- `padre/SPEC_RELAY_RENDER.md`: servidor sin base de datos.
+- `padre/SPEC_RELAY_RENDER.md`: copia histórica de especificación; desarrollo del servidor solo en parental_render.
 - `padre/adr/`: decisiones de arquitectura.
 - `compartido/00_CONTRATO_V1.md`: el protocolo común, congelado.
 - `compartido/protocolo.schema.json` y `compartido/ejemplos/`: mensajes y formatos de prueba.

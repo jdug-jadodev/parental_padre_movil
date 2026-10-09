@@ -83,53 +83,12 @@ Estado de todas las tareas: **PENDIENTE**. Ninguna aplicación ha sido compilada
 
 **Cierre de tarea:** registrar archivos cambiados, comando/test realmente ejecutado, resultado observado y bloqueos restantes. Si una API no existe o exige privilegios no disponibles, detener esa vía y documentar el problema; no reemplazarla por reflexión o una falsa confirmación.
 
-## R01 — HTTP, configuración y límites básicos
+## Dependencias externas R01–R03
 
-**Depende de:** C00.
-
-**Leer:** SPEC-R R1–R3.
-
-**Archivos/componentes previstos:** config.ts, server.ts, config.test.ts.
-
-**Implementar:** Crear relay Node24, scripts de compilación/test y health. Validar env y las públicas P-256. Configurar upgrade seguro, maxPayload y deshabilitar compresión.
-
-**Criterio de aceptación:** Sin configuración válida no atiende sockets. Health no expone claves/pareja.
-
-**Comprobación:** R-CONFIG-01 y R-LIMIT-01.
-
-**Cierre de tarea:** registrar archivos cambiados, comando/test realmente ejecutado, resultado observado y bloqueos restantes. Si una API no existe o exige privilegios no disponibles, detener esa vía y documentar el problema; no reemplazarla por reflexión o una falsa confirmación.
-
-## R02 — Autenticación por reto
-
-**Depende de:** R01, C02.
-
-**Leer:** CP/1 §6; SPEC-R R4.
-
-**Archivos/componentes previstos:** auth.ts, protocol.ts, auth.test.ts.
-
-**Implementar:** Retos por socket con nonce32B y timeout10s; verificar firma del rol configurado; consumir reto antes de registrar. Implementar AUTH_OK y cierre por fallo.
-
-**Criterio de aceptación:** Un cliente no puede enviar su propia clave para convertirse en padre ni reutilizar el reto de otra conexión.
-
-**Comprobación:** R-AUTH-01/02/03; pruebas contra fixture de ambos roles.
-
-**Cierre de tarea:** registrar archivos cambiados, comando/test realmente ejecutado, resultado observado y bloqueos restantes. Si una API no existe o exige privilegios no disponibles, detener esa vía y documentar el problema; no reemplazarla por reflexión o una falsa confirmación.
-
-## R03 — Relay, latidos y despliegue
-
-**Depende de:** R02.
-
-**Leer:** SPEC-R R4–R7; CP/1 §8.
-
-**Archivos/componentes previstos:** registry.ts, heartbeat.ts, routing.test.ts, render.yaml.
-
-**Implementar:** Mantener un socket por rol, dirigir mensajes válidos, responder PING y PEER_UNAVAILABLE. Añadir backpressure, limpieza, cierre SIGTERM y despliegue de una instancia.
-
-**Criterio de aceptación:** El relay no acumula órdenes. Una conexión impostora no expulsa la auténtica. Un cierre de socket antiguo no borra el nuevo.
-
-**Comprobación:** R-ROUTE-01/02, R-FAIL-01, R-LIMIT-02.
-
-**Cierre de tarea:** registrar archivos cambiados, comando/test realmente ejecutado, resultado observado y bloqueos restantes. Si una API no existe o exige privilegios no disponibles, detener esa vía y documentar el problema; no reemplazarla por reflexión o una falsa confirmación.
+Las tareas de servidor se trasladaron al proyecto parental_render. Sus entradas
+originales se conservan en documentacion/PLAN_ORIGEN_PADRE.md de ese proyecto.
+No implementar servidor en este repositorio. Las dependencias R02/R03 de P04/P08
+son puertas de integración con el servicio externo, no módulos locales del padre.
 
 ## P04 — Cliente WSS del padre
 

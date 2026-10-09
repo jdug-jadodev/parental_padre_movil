@@ -1,5 +1,5 @@
 ﻿param(
-    [ValidateSet('todo', 'nucleo', 'app', 'relay')]
+    [ValidateSet('todo', 'nucleo', 'app')]
     [string]$Modulo = 'todo'
 )
 
@@ -25,17 +25,9 @@ try {
             ':app-parent:assembleDebugAndroidTest', ':app-parent:lintDebug', '--console=plain'
         )
     }
-    if ($Modulo -in @('todo', 'relay')) {
-        Push-Location 'relay'
-        try {
-            Ejecutar 'npm.cmd' @('ci')
-            Ejecutar 'npm.cmd' @('run', 'check')
-            Ejecutar 'npm.cmd' @('run', 'build')
-            Ejecutar 'npm.cmd' @('test')
-        } finally { Pop-Location }
-    }
     if ($Modulo -eq 'todo') {
         Ejecutar '.\gradlew.bat' @(':core-protocol:testInterop', '--console=plain')
+        Ejecutar 'node' @('--test', 'pruebas/interoperabilidad.test.mjs')
     }
     Ejecutar 'node' @('pruebas/verificar_vectores.mjs')
     Write-Host 'Verificación local terminada. No se ejecutaron pruebas en un dispositivo.'

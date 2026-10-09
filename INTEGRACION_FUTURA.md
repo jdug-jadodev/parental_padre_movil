@@ -1,4 +1,10 @@
-# Integración futura con OpenCode — Padre + Render
+# Integración futura con OpenCode — proyectos independientes
+
+Padre y servidor están separados: parental_padre y parental_render. Las
+verificaciones locales de cada uno no requieren el otro. Interoperabilidad
+opcional desde el padre mediante -PrutaRelay apunta al codec del servidor;
+no sustituye autenticación WSS ni integración física. Mantener copias CP/1
+congeladas con hashes iguales, sin sincronizar cambios unilateralmente.
 
 **Ahora:** este repo se desarrolla de manera independiente. No importar el proyecto hermano ni forzar sincronización de repositorios.
 
