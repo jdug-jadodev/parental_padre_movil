@@ -1,4 +1,7 @@
-plugins { alias(libs.plugins.kotlin.jvm) }
+plugins {
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.serialization)
+}
 
 kotlin {
     jvmToolchain(21)
@@ -10,4 +13,19 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
-dependencies { testImplementation(libs.junit) }
+sourceSets {
+    main {
+        resources.srcDir("../compartido")
+        resources.include("protocolo.schema.json")
+    }
+    test {
+        resources.srcDir("../compartido/ejemplos")
+        resources.srcDir("../pruebas")
+        resources.include("*.json")
+    }
+}
+
+dependencies {
+    implementation(libs.serialization.json)
+    testImplementation(libs.junit)
+}
