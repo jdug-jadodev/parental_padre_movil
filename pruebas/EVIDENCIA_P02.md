@@ -1,5 +1,29 @@
 # Evidencia P02 — vinculación QR parcial local
 
+## Actualización física más reciente — diez casos A56
+
+Autorización expresa para actualizar ambos APK y ejecutar los diez casos.
+Install -r de app padre e instrumentado correctos, selector explícito A56 en
+ambos. Runner filtrado a PantallaInicialTest, PantallaVinculoTest y
+VinculoPersistidoAndroidTest: **diez aprobados, cero fallos/omisiones**,
+status 0 cada uno, OK (10 tests), 15.071 s. Otros 15 tests no ejecutados.
+A13 conectado, sin operaciones dirigidas a él.
+
+Comprobado: recorrido/recuperación, FLAG_SECURE como flag de ventana; dos
+casillas necesarias/firma fallida no prepara vínculo; descarte al cambiar
+oferta/origen, salir y pasar a segundo plano; QR aislado persistente/env sin
+códigos y rechazo de nueva pareja/órdenes; migración v1 real conserva reserva
+y contador, nonce nuevo y reapertura consistente. Alias/directorios temporales
+limpiados por tests, sin identidad/vínculo cotidiano ni cambios de credenciales.
+App y APK instrumentado quedan actualizados.
+
+Limitaciones: firma JCA efímera de pruebas no demuestra autenticación/Keystore
+de autoridad al firmar PAIR_ACCEPT. No hubo integración con hijo/Render ni
+despliegue. No se probó cámara directa, selector real offline, rotación/texto
+grande ni intento real de captura bloqueada. No se considera terminado el
+vínculo. Referencias siguientes a estos diez casos/migración física pendientes
+corresponden al cierre local anterior y quedan resueltas por esta actualización.
+
 ## Seguimiento — pruebas aisladas y preparación descartada
 
 Se corrigió conservación de preparación anterior al cambiar una oferta mediante

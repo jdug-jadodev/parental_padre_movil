@@ -79,7 +79,8 @@ migración v1 física pendientes. Ver `pruebas/EVIDENCIA_P02.md`.
 Seguimiento más reciente del padre: 76 tests locales correctos. Se descartan
 preparaciones/códigos al cambiar entradas y PairChild no firma preparaciones
 descartadas. Diez casos Android de pantalla/persistencia/migración aislada
-compilados, pendientes de autorización/ejecución; no crean vínculo cotidiano.
+aprobados en A56 con autorización; no crearon vínculo cotidiano. La firma usada
+en el flujo aislado es JCA efímera de test, no autenticación real de autoridad.
 El padre aún no está listo para integración completa (cliente WSS/órdenes
 pendientes). Se avisará al propietario para coordinar servidor cuando proceda,
 con comunicación local probada antes de despliegue.

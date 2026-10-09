@@ -1,5 +1,20 @@
 # Relevo — P02 parcial local
 
+## Último resultado físico (prioritario)
+
+Con permiso nuevo se actualizaron ambos APK y ejecutaron solo las tres clases
+PantallaInicialTest/PantallaVinculoTest/VinculoPersistidoAndroidTest en A56:
+diez aprobados, cero fallos/omisiones, 15.071 s. Cleanup temporal completado,
+sin identidad/vínculo operativo ni cambios de credenciales. A13 sin operaciones.
+No repetir por pendientes históricos siguientes; no se ejecutaron otros 15 tests.
+
+Migración v1/persistencia QR/guardas UI/segundo plano/recuperación/FLAG_SECURE
+(flag solamente) comprobados. Firma JCA de test no acredita PAIR_ACCEPT
+autenticado con Keystore de autoridad. Próximo desarrollo P02: cámara directa
+CameraX/local de SPEC-P P4. Pendientes manuales: selector offline/rotación/texto
+grande/captura real bloqueada, aceptación con autoridad e integración hijo real.
+Nuevo acceso físico necesita aviso/permiso. App no lista para integración final.
+
 ## Seguimiento más reciente (prioritario)
 
 Se retoma P02 después de separar servidor. 76 tests locales correctos, APK
