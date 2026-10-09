@@ -22,7 +22,9 @@ internal data class ResultadoPolitica(
     val fase: FasePolitica = FasePolitica.SIN_ESTADO,
     val mensajeHijo: Mensaje? = null,
 )
-internal class ConfirmacionIntencion internal constructor(val action: Accion, val durationSec: Int?)
+internal class ConfirmacionIntencion internal constructor(val action: Accion, val durationSec: Int?, val intencionLocalId: String? = null)
+internal data class VistaPoliticas(val datos: MetadatosPadre, val evidencia: Mensaje?, val fresca: Boolean,
+    val antiguedadSeg: Long?, val puedeEnviar: Boolean)
 
 // Casos de uso serializados. La firma acredita bytes; el contexto se valida aquí.
 // No promociona PREPARADO ni certifica recuperación; P06 aportará la UI final.
@@ -47,6 +49,7 @@ internal class ControlPoliticas(
     private var intencion: ConfirmacionIntencion? = null
     private var vuelo: EnVuelo? = null
     private var ultimoEstado: EstadoDispositivo? = null
+    private var recibidaEn: Long? = null
     private val mutable = MutableStateFlow(ResultadoPolitica())
     val resultado = mutable.asStateFlow()
 
@@ -115,6 +118,7 @@ internal class ControlPoliticas(
                 if (coincide) vuelo = null
                 c.estado = mensaje
                 ultimoEstado = mensaje
+                recibidaEn = ahora()
                 // Una actualización no renueva la ventana ni rearma un desafío consumido.
                 mutable.value = ResultadoPolitica(if (coincide) fase(mensaje.lastResult)
                     else if (pendiente != null) FasePolitica.REQUIERE_CONFIRMACION else FasePolitica.ESTADO_VERIFICADO, mensaje)
@@ -127,6 +131,7 @@ internal class ControlPoliticas(
                 store.resolverIntencion(doc, mensaje.result != ResultadoAck.ACCEPTED_PENDING_ENFORCEMENT)
                 mismaConexion(c)
                 v.aceptada = true
+                recibidaEn = ahora()
                 if (mensaje.result != ResultadoAck.ACCEPTED_PENDING_ENFORCEMENT) vuelo = null
                 mutable.value = ResultadoPolitica(when (mensaje.result) {
                     ResultadoAck.APPLIED -> FasePolitica.APLICADA
@@ -149,7 +154,8 @@ internal class ControlPoliticas(
         CodecProtocolo.codificarPayload(OrdenPolitica(datos.pairId!!, e.bootId, e.childSessionId,
             UUID.randomUUID().toString(), e.commandNonce, "1", action, durationSec))
         vigente(c)
-        ConfirmacionIntencion(action, durationSec).also { intencion = it }
+        datos.intencionLocal?.let { check(it.action == action && it.durationSec == durationSec) }
+        ConfirmacionIntencion(action, durationSec, datos.intencionLocal?.id).also { intencion = it }
     }
 
     private fun comprobarOrden(c: Contexto) {
@@ -167,7 +173,7 @@ internal class ControlPoliticas(
         comprobarOrden(c); exigirAutoridad()
         intencion = null; c.utilizable = false
         val e = c.estado!!
-        val reserva = store.reservarIntencion(confirmacion.action, confirmacion.durationSec, e.lastAcceptedSeq)
+        val reserva = store.reservarIntencion(confirmacion.action, confirmacion.durationSec, e.lastAcceptedSeq, confirmacion.intencionLocalId)
         vigente(c)
         val orden = OrdenPolitica(c.datos.pairId!!, e.bootId, e.childSessionId, reserva.commandId,
             e.commandNonce, reserva.seq, reserva.action, reserva.durationSec)
@@ -212,9 +218,27 @@ internal class ControlPoliticas(
 
     suspend fun descartarPendiente(commandId: String) = mutex.withLock {
         exigirAutoridad()
+        val c = contexto ?: error("Sincroniza antes de descartar una orden incierta")
+        vigente(c); check(c.estado != null)
         store.cancelarIntencion(commandId)
         intencion = null; vuelo = null; contexto = null
         mutable.value = ResultadoPolitica(FasePolitica.REQUIERE_CONFIRMACION)
+    }
+
+    suspend fun descartarConfirmacion() = mutex.withLock { intencion = null }
+
+    suspend fun vista(): VistaPoliticas = mutex.withLock {
+        val datos = store.leer()
+        val evidencia = datos.ultimaEvidenciaFrameB64?.let {
+            CriptografiaProtocolo.verificarSobre(Base64.getUrlDecoder().decode(it),
+                ClaveVerificacion.desdeSpki(Rol.CHILD, datos.childPublicKeyB64!!), Proposito.MESSAGE).mensaje
+        }
+        val c = contexto
+        val misma = evidencia != null && evidencia == mutable.value.mensajeHijo && recibidaEn != null
+        val fresca = misma && c != null && runCatching { vigente(c) }.isSuccess
+        val puede = c != null && datos.vinculo == VinculoPersistido.VINCULADO && datos.pendiente == null &&
+            runCatching { comprobarOrden(c) }.isSuccess
+        VistaPoliticas(datos, evidencia, fresca, if (misma) maxOf(0, ahora() - recibidaEn!!) / 1000 else null, puede)
     }
 
     private fun verificarOrden(frameB64: String, c: Contexto) = CriptografiaProtocolo.verificarSobre(

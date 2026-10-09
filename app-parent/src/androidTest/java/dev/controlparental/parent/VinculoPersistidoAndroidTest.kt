@@ -42,7 +42,7 @@ class VinculoPersistidoAndroidTest {
             val reserva = store.reservarIntencion(Accion.LOCK, null, "7")
             store.cerrar()
             val v2 = e.cifrador.descifrar(e.ruta.readBytes()).toString(Charsets.UTF_8)
-            val v1 = v2.replace("\"schemaVersion\":2", "\"schemaVersion\":1")
+            val v1 = v2.replace("\"schemaVersion\":3", "\"schemaVersion\":1").replace(",\"intencionLocal\":null", "")
                 .replace(",\"pairAcceptanceFrameB64\":null", "")
             val cifradoV1 = e.cifrador.cifrar(v1.toByteArray())
             val atomico = AtomicFile(e.ruta)
@@ -51,7 +51,7 @@ class VinculoPersistidoAndroidTest {
             catch (error: Exception) { atomico.failWrite(salida); throw error }
             val reabierto = e.abrir()
             val migrados = reabierto.leer()
-            assertEquals(2, migrados.schemaVersion)
+            assertEquals(3, migrados.schemaVersion)
             assertEquals(reserva, migrados.pendiente)
             assertEquals("8", migrados.contadorLocal)
             assertNull(migrados.pairAcceptanceFrameB64)

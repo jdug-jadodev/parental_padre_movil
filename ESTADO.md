@@ -2,8 +2,8 @@
 
 Última actualización: 2026-10-09
 Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. P00: 37c74a3, 943082c. Primer bloque P01: 0f143c4; cierre local en el commit posterior, consultar git log.
-Tarea actual: P05 — sincronización y envío idempotente
-Estado: P05_IMPLEMENTADO_LOCAL_PARCIAL — casos de uso y ruta al relay compilados; 119 pruebas locales correctas; controles finales y validación integrada pendientes
+Tarea actual: P06 — interfaz de control final
+Estado: EN_CURSO_LOCAL — intención offline privada v3 y presentación pura probadas; pantalla/formularios y validación integrada pendientes
 
 ## Entorno observado
 
@@ -47,6 +47,8 @@ Node 24.21.0 / npm 11.19.0 / Windows 11 amd64
 SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Terminado y demostrado
+
+- P06 primer bloque: intención local offline sin firma/seq, única y excluyente de orden pendiente; reemplazo/descarte por id explícito. Formato privado v3 migra v1/v2 conservando contador, comando, evidencia y aceptación (sin cambios CP/1). Confirmación vincula id de intención local y rechaza reemplazos posteriores incluso con misma acción. Vista revalida frescura/canal; textos distinguen modo real, causa, ACK aplicado/pendiente/fallo/rechazo, antigüedad desconocida y tiempo reportado sin descontarlo. Once tests JVM nuevos correctos; 94 app total. UI final pendiente, sin ADB ni servidor externo.
 
 - P05 cierre local parcial: ControlPoliticas serializa sincronización, preparación/confirmación, reserva/firma/envío, ACK y reconciliación. STATE exige firma de pública vinculada, pareja/nonce actuales, stateSeq creciente y lastAcceptedSeq no decreciente en misma sesión; nueva sesión requiere nueva sincronización. Ventana local conservadora de 20 s desde petición (no recepción), sin inventar timestamp CP/1; desafío del hijo sigue regido por sus 30 s. Confirmación por referencia no reutilizable, sin órdenes nuevas con PREPARADO/hijo no apto/canal no sano.
 - P05 durabilidad: ParentStore.resolverIntencion valida nuevamente firma/id/seq/hash y guarda evidencia+resolución juntas. Comando y etapa ENVIADA_SIN_CONFIRMAR se persisten antes de encolar; el estado es conservador, no prueba entrega. Reintentos leen el comando duradero y transmiten exactamente los mismos bytes, máximo dos a intervalos de 5 s; después SYNC_REQUEST nuevo. Un ACK tardío correlacionado en la misma conexión puede confirmar el envío existente, pero no rearma el desafío para otra orden. Al reconectar/reabrir no se reproduce el comando anterior; resultado por STATE solo si id/seq/hash coinciden. Descartar pendiente es local, no cancela una orden ya recibida por el hijo, no reutiliza contador ni borra evidencia.

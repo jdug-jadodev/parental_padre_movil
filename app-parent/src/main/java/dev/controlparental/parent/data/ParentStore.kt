@@ -73,6 +73,20 @@ class ParentStore(
     suspend fun leer(): MetadatosPadre = transaccion { cargar() }
     suspend fun existe(): Boolean = transaccion { archivo.existe() }
 
+    // Selección offline: no firma, no reserva seq y nunca reemplaza un envío incierto.
+    suspend fun guardarIntencionLocal(action: Accion, durationSec: Int?, reemplazarId: String? = null): IntencionLocal = transaccion {
+        val datos = cargar()
+        check(datos.vinculo == VinculoPersistido.VINCULADO && datos.pendiente == null && datos.intencionLocal?.id == reemplazarId)
+        val local = IntencionLocal(UUID.randomUUID().toString(), action, durationSec)
+        guardar(datos.copy(intencionLocal = local))
+        local
+    }
+
+    suspend fun descartarIntencionLocal(id: String) = transaccion {
+        val datos = cargar(); check(datos.intencionLocal?.id == id)
+        guardar(datos.copy(intencionLocal = null))
+    }
+
     suspend fun prepararVinculo(frame: ByteArray) {
         require(frame.size <= CodecProtocolo.MAX_FRAME)
         val copia = frame.copyOf()
@@ -90,13 +104,16 @@ class ParentStore(
     }
 
     // P05 debe aportar secuencia de STATE autenticado/correlacionado, nunca presencia del relay.
-    suspend fun reservarIntencion(action: Accion, durationSec: Int?, secuenciaRemotaVerificada: String): PendingIntentRecord = transaccion {
+    suspend fun reservarIntencion(action: Accion, durationSec: Int?, secuenciaRemotaVerificada: String,
+        intencionLocalId: String? = null): PendingIntentRecord = transaccion {
         val datos = cargar()
         check(datos.vinculo == VinculoPersistido.VINCULADO && datos.pendiente == null)
+        check(datos.intencionLocal?.id == intencionLocalId)
+        datos.intencionLocal?.let { check(it.action == action && it.durationSec == durationSec) }
         val anterior = maxOf(secuenciaLocal(datos.contadorLocal), secuenciaLocal(secuenciaRemotaVerificada))
         check(anterior < Long.MAX_VALUE) { "Secuencia agotada; requiere nuevo vínculo" }
         val pendiente = PendingIntentRecord(UUID.randomUUID().toString(), action, durationSec, (anterior + 1).toString())
-        guardar(datos.copy(contadorLocal = pendiente.seq, pendiente = pendiente))
+        guardar(datos.copy(contadorLocal = pendiente.seq, pendiente = pendiente, intencionLocal = null))
         pendiente
     }
 
@@ -181,17 +198,21 @@ class ParentStore(
             require(claro.size <= MAX_BYTES)
             val texto = claro.toString(Charsets.UTF_8)
             val objeto = json.parseToJsonElement(texto).jsonObject
-            val anterior = objeto["schemaVersion"] == JsonPrimitive(1)
-            require(!anterior || "pairAcceptanceFrameB64" !in objeto)
-            val actual = if (anterior) JsonObject(objeto + ("schemaVersion" to JsonPrimitive(2))) else objeto
+            val version = objeto["schemaVersion"]?.jsonPrimitive?.int ?: error("Sin versión")
+            require(version in 1..3)
+            require(version != 1 || "pairAcceptanceFrameB64" !in objeto)
+            require(version == 3 || "intencionLocal" !in objeto)
+            val actual = JsonObject(objeto + ("schemaVersion" to JsonPrimitive(3)))
             val datos = json.decodeFromJsonElement<MetadatosPadre>(actual)
             val codificado = json.encodeToJsonElement(datos).jsonObject
-            val comparable = if (anterior) JsonObject((codificado - "pairAcceptanceFrameB64") +
-                ("schemaVersion" to JsonPrimitive(1))).toString() else codificado.toString()
-            require(comparable.toByteArray().contentEquals(claro)) { "Documento local no canónico" }
+            var comparable = codificado.toMap()
+            if (version < 3) comparable = comparable - "intencionLocal"
+            if (version == 1) comparable = comparable - "pairAcceptanceFrameB64"
+            val original = JsonObject(comparable + ("schemaVersion" to JsonPrimitive(version))).toString()
+            require(original.toByteArray().contentEquals(claro)) { "Documento local no canónico" }
             validarMetadatos(datos)
-            // Migración explícita del formato privado v1; conserva contador/evidencia/intención.
-            if (anterior) guardar(datos)
+            // Migración privada v1/v2 → v3: conserva reservas, evidencia y aceptación.
+            if (version < 3) guardar(datos)
             datos
         } catch (error: Exception) {
             incierto = true

@@ -384,6 +384,29 @@ class ControlPoliticasTest {
         e.store.cerrar()
     }
 
+    @Test fun vistaPierdeFrescuraAlDesconectarYConfirmacionLocalReemplazadaNoEnvia() = runTest {
+        val e = Entorno(backgroundScope); e.preparar()
+        val local = e.store.guardarIntencionLocal(Accion.ALLOW, null)
+        val confirmacion = e.control.prepararIntencion(local.action, local.durationSec)
+        e.store.guardarIntencionLocal(Accion.ALLOW, null, local.id)
+        assertTrue(runCatching { e.control.enviarConfirmada(confirmacion) }.isFailure)
+        assertEquals("0", e.store.leer().contadorLocal); assertEquals(1, e.enviados.size)
+        assertTrue(e.control.vista().fresca)
+        e.ticket = null
+        assertFalse(e.control.vista().fresca); assertFalse(e.control.vista().puedeEnviar)
+        e.store.cerrar()
+    }
+
+    @Test fun cerrarConfirmacionNoBorraIntencionOfflineNiLaEnvia() = runTest {
+        val e = Entorno(backgroundScope); e.preparar()
+        val local = e.store.guardarIntencionLocal(Accion.LOCK_FOR, 60)
+        val confirmacion = e.control.prepararIntencion(local.action, local.durationSec)
+        e.control.descartarConfirmacion()
+        assertTrue(runCatching { e.control.enviarConfirmada(confirmacion) }.isFailure)
+        assertEquals(local, e.store.leer().intencionLocal); assertEquals(1, e.enviados.size)
+        e.store.cerrar()
+    }
+
     companion object {
         const val ID = "00000000-0000-4000-8000-000000000002"
         const val BOOT = "00000000-0000-4000-8000-000000000003"

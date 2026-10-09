@@ -218,13 +218,61 @@ class ParentStoreTest {
             store.inicializar(e.datos())
             store.cerrar()
             val texto = e.cifrador.descifrar(e.archivo.bytes!!).toString(Charsets.UTF_8)
-            val invalido = if (duplicar) texto.replace("\"schemaVersion\":2", "\"schemaVersion\":2,\"schemaVersion\":2")
-                else texto.replace("\"schemaVersion\":2", "\"schemaVersion\":999")
+            val invalido = if (duplicar) texto.replace("\"schemaVersion\":3", "\"schemaVersion\":3,\"schemaVersion\":3")
+                else texto.replace("\"schemaVersion\":3", "\"schemaVersion\":999")
             e.archivo.bytes = e.cifrador.cifrar(invalido.toByteArray())
             val recuperado = ParentStore(e.archivo, e.cifrador, backgroundScope)
             assertTrue(runCatching { recuperado.leer() }.exceptionOrNull() is AlmacenNoDisponible)
             assertTrue(runCatching { recuperado.inicializar(e.datos()) }.isFailure)
             recuperado.cerrar()
         }
+    }
+
+    @Test fun intencionOfflinePersisteSinReservarFirmarNiReemplazarSinConfirmacion() = runTest {
+        val e = Entorno(); val store = ParentStore(e.archivo, e.cifrador, backgroundScope)
+        store.inicializar(e.datos())
+        val local = store.guardarIntencionLocal(Accion.ALLOW_FOR, 60)
+        assertEquals("0", store.leer().contadorLocal); assertNull(store.leer().pendiente)
+        assertTrue(runCatching { store.guardarIntencionLocal(Accion.LOCK, null) }.isFailure)
+        store.cerrar()
+        val reabierto = ParentStore(e.archivo, e.cifrador, backgroundScope)
+        assertEquals(local, reabierto.leer().intencionLocal)
+        val reemplazo = reabierto.guardarIntencionLocal(Accion.LOCK_FOR, 604800, local.id)
+        assertNotEquals(local.id, reemplazo.id)
+        assertTrue(runCatching { reabierto.reservarIntencion(Accion.LOCK_FOR, 604800, "9", local.id) }.isFailure)
+        val reserva = reabierto.reservarIntencion(Accion.LOCK_FOR, 604800, "9", reemplazo.id)
+        assertEquals("10", reserva.seq); assertNull(reabierto.leer().intencionLocal)
+        assertTrue(runCatching { reabierto.guardarIntencionLocal(Accion.ALLOW, null) }.isFailure)
+        reabierto.cerrar()
+    }
+
+    @Test fun descartarSeleccionLocalNoConsumeContadorYPreparadoNoLaHabilita() = runTest {
+        val e = Entorno(); val store = ParentStore(e.archivo, e.cifrador, backgroundScope)
+        store.inicializar(e.datos())
+        val local = store.guardarIntencionLocal(Accion.LOCK, null)
+        assertTrue(runCatching { store.descartarIntencionLocal("otro") }.isFailure)
+        store.descartarIntencionLocal(local.id)
+        assertNull(store.leer().intencionLocal); assertEquals("0", store.leer().contadorLocal)
+        store.cerrar()
+        val preparado = Entorno(); val otro = ParentStore(preparado.archivo, preparado.cifrador, backgroundScope)
+        otro.inicializar(preparado.datos().copy(vinculo = VinculoPersistido.PREPARADO))
+        assertTrue(runCatching { otro.guardarIntencionLocal(Accion.ALLOW, null) }.isFailure)
+        otro.cerrar()
+    }
+
+    @Test fun migraV2SinPerderComandoOEvidenciaNiInventarIntencionOffline() = runTest {
+        val e = Entorno(); val store = ParentStore(e.archivo, e.cifrador, backgroundScope)
+        store.inicializar(e.datos())
+        val reserva = store.reservarIntencion(Accion.LOCK, null, "8")
+        val frame = e.firmar(e.orden(reserva), Rol.PARENT)
+        store.guardarComandoFirmado(reserva.commandId, frame); store.marcarEnviada(reserva.commandId)
+        val antes = store.leer(); store.cerrar()
+        val v2 = e.cifrador.descifrar(e.archivo.bytes!!).toString(Charsets.UTF_8)
+            .replace("\"schemaVersion\":3", "\"schemaVersion\":2").replace(",\"intencionLocal\":null", "")
+        e.archivo.bytes = e.cifrador.cifrar(v2.toByteArray())
+        val reabierto = ParentStore(e.archivo, e.cifrador, backgroundScope)
+        assertEquals(antes, reabierto.leer()); assertNull(reabierto.leer().intencionLocal)
+        assertEquals(3, reabierto.leer().schemaVersion)
+        reabierto.cerrar()
     }
 }

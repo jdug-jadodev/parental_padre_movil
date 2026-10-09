@@ -16,10 +16,13 @@ data class PendingIntentRecord(
     val frameB64: String? = null,
 )
 
+@Serializable
+data class IntencionLocal(val id: String, val action: Accion, val durationSec: Int?)
+
 // Formato privado local, no modifica CP/1 ni serializa privadas/códigos.
 @Serializable
 data class MetadatosPadre(
-    val schemaVersion: Int = 2,
+    val schemaVersion: Int = 3,
     val signingAlias: String = "cp.parent.sign.v1",
     val parentPublicKeyB64: String,
     val pairId: String? = null,
@@ -30,6 +33,7 @@ data class MetadatosPadre(
     val pendiente: PendingIntentRecord? = null,
     val ultimaEvidenciaFrameB64: String? = null,
     val pairAcceptanceFrameB64: String? = null,
+    val intencionLocal: IntencionLocal? = null,
 )
 
 internal fun secuenciaLocal(valor: String): Long {
@@ -38,7 +42,13 @@ internal fun secuenciaLocal(valor: String): Long {
 }
 
 internal fun validarMetadatos(datos: MetadatosPadre) {
-    require(datos.schemaVersion == 2 && datos.signingAlias == "cp.parent.sign.v1")
+    require(datos.schemaVersion == 3 && datos.signingAlias == "cp.parent.sign.v1")
+    datos.intencionLocal?.let {
+        require(datos.vinculo == VinculoPersistido.VINCULADO && datos.pendiente == null)
+        CodecProtocolo.codificarPayload(OrdenPolitica(datos.pairId!!,
+            "00000000-0000-4000-8000-000000000001", "00000000-0000-4000-8000-000000000002",
+            it.id, "A".repeat(43), "1", it.action, it.durationSec))
+    }
     ClaveVerificacion.desdeSpki(Rol.PARENT, datos.parentPublicKeyB64)
     val contador = secuenciaLocal(datos.contadorLocal)
     if (datos.vinculo == VinculoPersistido.SIN_VINCULAR) {
