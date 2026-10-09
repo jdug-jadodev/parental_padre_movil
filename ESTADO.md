@@ -2,8 +2,8 @@
 
 Última actualización: 2026-10-08
 Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. Primer bloque C02: f120557; cierre en el commit posterior, consultar git log.
-Tarea actual: C02
-Estado: COMPLETADA_LOCAL — firma/verificación e interoperabilidad JVM/Node; Android y Keystore físico pendientes
+Tarea actual: P00
+Estado: EN_CURSO — navegación y estados separados implementados; falta cierre de pruebas y evidencia
 
 ## Entorno observado
 
@@ -12,6 +12,9 @@ Node 24.21.0 / npm 11.19.0 / Windows 11 amd64
 SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Terminado y demostrado
+
+- P00 primer bloque: MainActivity, AppContainer, ParentViewModel/StateFlow, cuatro pantallas y estados separados. Producción usa fuente no operativa, no un simulador; repositorio falso exclusivo de tests. Botones de órdenes deshabilitados, recuperación informativa siempre accesible.
+- P00: 9 tests JVM de la app correctos (8 nuevos). Compilación debug/instrumentada y lint correctos antes del último lote de tests; UI nueva instrumentada todavía pendiente de preparar/ejecutar. Se corrigió la limpieza de ViewModelStore antes de resetMain en las pruebas JVM, sin simular APIs Android.
 
 - Acuerdos del propietario persistidos en AGENTS.md y protegidos por un commit.
 - Base Android compilada: APK debug de la app y APK instrumentado de pruebas generados.

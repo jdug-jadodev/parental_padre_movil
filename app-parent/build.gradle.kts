@@ -22,6 +22,8 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
     buildFeatures { compose = true }
+    sourceSets.getByName("test").java.srcDir("src/soporteTest/kotlin")
+    sourceSets.getByName("androidTest").java.srcDir("src/soporteTest/kotlin")
 }
 
 kotlin {
@@ -34,7 +36,11 @@ dependencies {
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.material3)
     implementation(libs.activity.compose)
+    implementation(libs.lifecycle.viewmodel)
+    implementation(libs.lifecycle.runtime.compose)
+    implementation(libs.coroutines.core)
     testImplementation(libs.junit)
+    testImplementation(libs.coroutines.test)
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.compose.ui.test)
     androidTestImplementation(libs.androidx.test.runner)
