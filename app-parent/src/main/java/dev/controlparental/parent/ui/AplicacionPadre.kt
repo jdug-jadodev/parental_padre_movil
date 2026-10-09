@@ -16,7 +16,12 @@ import dev.controlparental.parent.presentation.*
 import dev.controlparental.protocol.Protocolo
 
 @Composable
-fun AplicacionPadre(estado: ParentUiState, navegar: (PantallaPadre) -> Unit, volver: () -> Unit) {
+fun AplicacionPadre(
+    estado: ParentUiState,
+    navegar: (PantallaPadre) -> Unit,
+    volver: () -> Unit,
+    identidad: @Composable () -> Unit = {},
+) {
     BackHandler(enabled = estado.puedeVolver, onBack = volver)
     Scaffold(bottomBar = {
         FlowRow(modifier = Modifier.fillMaxWidth()
@@ -38,7 +43,10 @@ fun AplicacionPadre(estado: ParentUiState, navegar: (PantallaPadre) -> Unit, vol
             ) {
                 Text(stringResource(R.string.app_name), style = MaterialTheme.typography.titleMedium)
                 when (estado.pantalla) {
-                    PantallaPadre.PRIMER_INICIO -> PrimerInicio { navegar(PantallaPadre.VINCULAR) }
+                    PantallaPadre.PRIMER_INICIO -> {
+                        PrimerInicio { navegar(PantallaPadre.VINCULAR) }
+                        identidad()
+                    }
                     PantallaPadre.VINCULAR -> Vincular { navegar(PantallaPadre.CONTROL) }
                     PantallaPadre.CONTROL -> Control(estado.datos)
                     PantallaPadre.RECUPERACION -> Recuperacion()

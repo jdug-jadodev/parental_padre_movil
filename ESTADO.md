@@ -2,8 +2,8 @@
 
 Última actualización: 2026-10-08
 Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. Primer bloque P00: 37c74a3; cierre en el commit posterior, consultar git log.
-Tarea actual: P00
-Estado: COMPLETADA_LOCAL — navegación y modelos comprobados en JVM; pruebas UI Android compiladas, pendientes de dispositivo
+Tarea actual: P01
+Estado: EN_CURSO — identidad y autenticación implementadas; validación física pendiente
 
 ## Entorno observado
 
@@ -12,6 +12,10 @@ Node 24.21.0 / npm 11.19.0 / Windows 11 amd64
 SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Terminado y demostrado
+
+- P01 primer bloque: ParentKeyStore con alias EC P-256 protegido, ventana de 60 segundos y ambos autenticadores fuertes/sistema. No reemplaza identidad incompatible ni crea clave durante firma. Alias de metadatos separado reservado, almacenamiento cifrado todavía pendiente.
+- P01 sesión de interfaz con reloj monotónico, invalidación en segundo plano/cancelación y rechazo de callbacks viejos/duplicados. LocalAuthentication usa BiometricPrompt oficial API 30. Pantalla inicial permite crear/cargar explícitamente y autenticar; no habilita órdenes ni crea vínculo.
+- P01: nueve tests JVM nuevos correctos (18 tests de app en total). Debug, APK instrumentado anterior y lint compilados/correctos; dos tests instrumentados de identidad recién añadidos pendientes de compilar y ejecutar. No se accedió al teléfono.
 
 - P00: MainActivity, AppContainer, ParentViewModel/StateFlow, cuatro pantallas y estados separados. Producción usa fuente no operativa, no un simulador; repositorio falso exclusivo de tests. Botones de órdenes deshabilitados, recuperación informativa siempre accesible. No se crea autoridad ni vinculación al explorar controles.
 - P00: 9 tests JVM de la app correctos (8 nuevos). Compilación debug/instrumentada/release sin firma de distribución y lint correctos. Cinco nuevos tests UI instrumentados preparados y compilados, no ejecutados. Se corrigió la limpieza de ViewModelStore antes de resetMain en las pruebas JVM, sin simular APIs Android.
