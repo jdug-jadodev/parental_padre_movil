@@ -3,7 +3,7 @@
 Última actualización: 2026-10-09
 Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. P00: 37c74a3, 943082c. Primer bloque P01: 0f143c4; cierre local en el commit posterior, consultar git log.
 Tarea actual: P02 — vinculación QR
-Estado: EN_CURSO — casos de uso/QR offline aprobados localmente; pantalla, pruebas ampliadas e integración reales pendientes
+Estado: IMPLEMENTADA_LOCAL_PARCIAL — QR desde imagen/pantalla/aceptación firmada listos; 99 pruebas locales aprobadas; revisión física e integración pendientes
 
 ## Entorno observado
 
@@ -13,8 +13,12 @@ SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Terminado y demostrado
 
+- P02 cierre local: pantalla en Vincular con selector oficial de imagen QR (no cámara directa), códigos solo en memoria y descartados al salir/pasar a segundo plano, huellas completas, casillas y autenticación antes de firmar. FLAG_SECURE en actividad. No se garantiza borrado físico de String JVM. QR/env pública recuperables tras cerrar la app; vínculo permanece PREPARADO, sin órdenes ni revinculación.
+- Metadatos privados v2: aceptación firmada persistida y validada; migración explícita v1 mantiene contador/intención/evidencia sin inventar aceptación. CP/1/esquema/fixtures intactos. Cinco tests P02 correctos (38 app total), incluida migración y casos negativos en simulador de hijo. No prueban APK real del hijo ni vencimiento: CHILD_OFFER no tiene timestamp y su vigencia la verifica el hijo localmente. Primer bloque 65b9184; cierre en commit posterior.
+- Rutas P02: gradle/libs.versions.toml, app-parent/build.gradle.kts; MainActivity.kt; pairing/{RecoveryCodeGenerator,PairChild,QrLocal,ImagenQrAndroid}.kt; ui/{PairingScreen,AplicacionPadre}.kt; data/{MetadatosPadre,ParentStore}.kt; res/values/strings.xml; test/{PairChildTest,ParentStoreTest}.kt; androidTest/ImagenQrAndroidTest.kt (todos bajo app-parent/src y paquete dev/controlparental/parent cuando corresponde). Documentación: ESTADO.md, README.md, BUILD_ENV.md y pruebas/{MATRIZ_ACEPTACION,EVIDENCIA_P02,HANDOFF_P02}.md.
+
 - P02 primer bloque: PairChild lee CHILD_OFFER estricto, prepara pairId/códigos, huellas SHA-256 completas y PAIR_ACCEPT firmado con propósito PAIR; persiste PREPARADO antes de mostrar QR y no permite nueva vinculación. Generador de tres códigos independientes de 160 bits Base32/hash por propósito; ningún código se serializa. Exportación con solo cuatro campos públicos. ZXing core 3.5.3 fijado para QR local, sin servicios remotos.
-- P02: tres nuevos tests JVM aprobados, 36 app en total. Roundtrip offline de ambos QR, firma, confirmación de huellas/códigos, bloqueo de revinculación/órdenes en PREPARADO y revisión automatizada de exportación. No demuestran vigencia ni aceptación por el hijo real. UI/cámara pendientes; no se usó ADB.
+- P02 primer bloque (histórico): tres nuevos tests JVM aprobados, 36 app entonces. Roundtrip offline de ambos QR, firma, confirmaciones y exportación probados. UI se incorporó después; cámara directa sigue sin implementar. No se usó ADB.
 
 - P03: ParentStore con una coroutine escritora, metadatos locales versionados, contador/intención en una transacción, comandos originales firmados y evidencia separada. AtomicFile y AES-256-GCM con alias Keystore distinto de firma y nonce generado por proveedor. No se conecta todavía a la UI ni crea archivos automáticamente al abrir la app. Primer bloque a20f025; cierre en el commit posterior.
 - P03: 15 tests nuevos aprobados (4 AES-GCM y 11 ParentStore), 33 tests app en total. Cierre antes de envío conserva reserva; cancelación no reutiliza contador ni borra evidencia; fallos antes/después de commit, concurrencia, corrupción y pérdida simulada de clave comprobados. Se implementó antes de P02 por su dependencia explícita; no se inició vinculación QR.
@@ -57,6 +61,8 @@ app-parent/src/androidTest/java/dev/controlparental/parent/AlmacenAndroidTest.kt
 pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P03.md y pruebas/HANDOFF_P03.md.
 
 ## Pruebas ejecutadas y resultado
+
+- P02: scripts/verificar.ps1 correcto; repetición Gradle --rerun-tasks de tests app/núcleo/interoperabilidad, APK debug/instrumentado/release sin firma de distribución y lint: 130 tareas correctas. 38 app, 30 núcleo, 1 interoperabilidad y 30 Node, total 99 locales; 78 comprobaciones documentales. Lint cero errores/16 avisos de versiones. Un test Android nuevo de imagen QR compilado/no ejecutado (18 instrumentados disponibles). No se instalaron APK nuevos, no hubo ADB ni despliegue público.
 
 - P03 cierre: scripts/verificar.ps1 correcto. Gradle tests app/núcleo/interoperabilidad, APK debug/instrumentado/release y lint repetidos con --rerun-tasks: 130 tareas ejecutadas correctamente. Reportes: 33 app, 30 núcleo y 1 interoperabilidad, sin fallos/errores; 30 Node correctos, total 94 pruebas locales aprobadas. Vectores documentales: 78 comprobaciones correctas. Lint: cero errores y 15 avisos de versiones nuevas.
 - P03 cierre local: tres nuevos tests Android compilados (17 instrumentados disponibles). En ese turno no se usó ADB; posteriormente se ejecutaron con autorización expresa: tres aprobados/ninguno omitido en A56, status 0 cada uno, OK (3 tests), 1.286 s. Ambas instalaciones con -r correctas. Runner dirigido solo a AlmacenAndroidTest y solo al A56; no se ejecutaron los otros 14 tests en este lote. Inspección local ZIP/DEX previa sin fixtures/dobles/clases/alias de tests examinados en app debug/release.
@@ -121,7 +127,7 @@ La referencia plantillas/HANDOFF.md de padre/AGENTS.md no existe; usar pruebas/H
 ## Próxima tarea y lectura mínima
 
 Próximo paso físico P03 completado: tres pruebas autorizadas/aprobadas en A56. No repetir por referencias históricas a pendientes. Antes de nuevas instalaciones/pruebas, avisar y esperar permiso; no tocar A13 ni ejecutar connected contra todos los dispositivos.
-Próxima tarea de desarrollo: P02 — PLAN_PADRE P02, CP/1 §5/§9 y SPEC-P P3.2/P4. P03, su dependencia, ya tiene validación local y de almacenamiento Android en A56; no se inició QR en este turno. Integrar explícitamente almacenamiento con casos de uso, sin autoenrolar al faltar/corromperse un archivo.
+Próximo paso P02: revisión física en A56 después de aviso/permiso nuevo. Empezar por ImagenQrAndroidTest y regresión AlmacenAndroidTest dirigidos explícitamente al A56; revisar pantalla/ciclo de vida/FLAG_SECURE sin crear vínculo cotidiano ficticio. No tocar A13. Evidencia física P03 anterior no valida migración v2/este APK. Ver pruebas/HANDOFF_P02.md. La integración conjunta sigue pendiente: no declarar vínculo completado sin estado firmado y recuperación local probada; no autoenrolar/borrar datos ante fallo ni avanzar otra tarea en este turno.
 
 ## Seguridad
 

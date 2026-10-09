@@ -1,4 +1,10 @@
-# Entorno de compilación — C00–C02, P00, P01 y P03
+# Entorno de compilación — C00–C02, P00, P01, P03 y P02 parcial
+
+P02 añade ZXing core 3.5.3 fijado, sin scanner remoto ni Play Services. Usa
+PickVisualMedia de Activity 1.10.1 ya disponible, con fallback oficial a documentos;
+no permisos de cámara/galería completa. Fuentes consultadas:
+https://developer.android.com/training/data-storage/shared/photopicker
+https://github.com/zxing/zxing/tree/zxing-3.5.3/core
 
 ## Herramientas observadas
 

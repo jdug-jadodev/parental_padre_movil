@@ -11,9 +11,9 @@
     <string name="volver">Volver</string>
     <string name="abrir_recuperacion">Recuperación sin internet</string>
     <string name="vincular_titulo">Vincular dispositivo</string>
-    <string name="vincular_descripcion">La vinculación será presencial mediante QR y comparación de huellas, sin cuenta en la nube.</string>
-    <string name="vincular_pendiente">Identidad y vinculación real todavía pendientes. Explorar controles no crea un vínculo.</string>
-    <string name="escanear_qr">Escanear QR del hijo</string>
+    <string name="vincular_descripcion">La vinculación es presencial mediante QR y comparación de huellas, sin cuenta en la nube.</string>
+    <string name="vincular_pendiente">La aceptación QR no completa por sí sola el vínculo. Faltan estado firmado del hijo y prueba de recuperación.</string>
+    <string name="escanear_qr">Leer imagen QR de la oferta</string>
     <string name="ver_controles">Ver controles</string>
     <string name="control_titulo">Control</string>
     <string name="acciones_no_operativas">Acciones todavía no operativas: no se envían ni firman órdenes.</string>

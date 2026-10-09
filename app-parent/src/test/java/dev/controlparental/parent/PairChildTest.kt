@@ -82,6 +82,7 @@ class PairChildTest {
             ClaveVerificacion.desdeSpki(Rol.PARENT, e.publica), Proposito.PAIR)
         assertEquals(preparacion.aceptacion, documento.mensaje)
         assertEquals(VinculoPersistido.PREPARADO, store.leer().vinculo)
+        assertArrayEquals(frame, Base64.getUrlDecoder().decode(store.leer().pairAcceptanceFrameB64))
         assertTrue(preparacion.codigos.mostrar().isEmpty())
         val env = flujo.exportarEnvPublica()
         assertEquals(setOf("ACTIVE_PAIR_ID", "PARENT_PUBLIC_KEY_B64", "CHILD_PUBLIC_KEY_B64", "PUBLIC_ORIGIN"),
@@ -91,6 +92,9 @@ class PairChildTest {
         assertTrue(runCatching { flujo.preparar(e.oferta, "https://prueba.invalid") }.isFailure)
         assertTrue(runCatching { store.reservarIntencion(Accion.LOCK, null, "0") }.isFailure)
         store.cerrar()
+        val reabierto = ParentStore(e.archivo, e.cifrador, backgroundScope)
+        assertArrayEquals(frame, Base64.getUrlDecoder().decode(reabierto.leer().pairAcceptanceFrameB64))
+        reabierto.cerrar()
     }
 
     @Test fun ofertaInvalidaOrigenInseguroYFallosFirmaNoPreparanVinculo() = runTest {
@@ -104,6 +108,64 @@ class PairChildTest {
         }
         val preparacion = flujo.preparar(e.oferta, "https://prueba.invalid")
         assertTrue(runCatching { flujo.aceptar(preparacion, true, true) }.isFailure)
+        assertEquals(VinculoPersistido.SIN_VINCULAR, store.leer().vinculo)
+        preparacion.codigos.descartar()
+        store.cerrar()
+    }
+
+    @Test fun migracionPrivadaV1ConservaReservaContadorYEvidenciaSinCrearVinculo() = runTest {
+        val e = Entorno()
+        val store = ParentStore(e.archivo, e.cifrador, backgroundScope)
+        val datos = MetadatosPadre(parentPublicKeyB64 = e.publica,
+            pairId = "00000000-0000-4000-8000-000000000002",
+            childPublicKeyB64 = e.b64(e.hijo.public.encoded), relayOrigin = "https://prueba.invalid",
+            vinculo = VinculoPersistido.VINCULADO)
+        store.inicializar(datos)
+        val reserva = store.reservarIntencion(Accion.LOCK, null, "7")
+        store.cerrar()
+        val v2 = e.cifrador.descifrar(e.archivo.bytes!!).toString(Charsets.UTF_8)
+        val v1 = v2.replace("\"schemaVersion\":2", "\"schemaVersion\":1")
+            .replace(",\"pairAcceptanceFrameB64\":null", "")
+        e.archivo.bytes = e.cifrador.cifrar(v1.toByteArray())
+        val recuperado = ParentStore(e.archivo, e.cifrador, backgroundScope)
+        val migrados = recuperado.leer()
+        assertEquals(2, migrados.schemaVersion)
+        assertEquals("8", migrados.contadorLocal)
+        assertEquals(reserva, migrados.pendiente)
+        assertEquals(VinculoPersistido.VINCULADO, migrados.vinculo)
+        assertNull(migrados.pairAcceptanceFrameB64)
+        assertTrue(e.cifrador.descifrar(e.archivo.bytes!!).toString(Charsets.UTF_8).contains("\"schemaVersion\":2"))
+        recuperado.cerrar()
+    }
+
+    @Test fun propositoFalsoClaveDistintaYOfertaNoVigenteSeRechazanEnSimulador() = runTest {
+        val e = Entorno()
+        val store = ParentStore(e.archivo, e.cifrador, backgroundScope)
+        val flujo = PairChild(store, { e.publica }, e::firma)
+        val preparacion = flujo.preparar(e.oferta, "https://prueba.invalid")
+        val sobre = e.firma(preparacion.aceptacion)
+        val frame = CodecProtocolo.codificarFrame(sobre)
+        // Simulador exclusivamente de pruebas: no demuestra comportamiento del APK real del hijo.
+        fun hijoAcepta(bytes: ByteArray, vigente: Boolean = true, configurado: Boolean = false): Boolean = runCatching {
+            check(vigente && !configurado)
+            val aceptacion = CriptografiaProtocolo.verificarSobre(bytes,
+                ClaveVerificacion.desdeSpki(Rol.PARENT, e.publica), Proposito.PAIR).mensaje as AceptacionVinculo
+            val oferta = CodecProtocolo.leerOferta(e.oferta)
+            require(aceptacion.childPublicKeyB64 == oferta.childPublicKeyB64 &&
+                aceptacion.enrollId == oferta.enrollId && aceptacion.enrollNonce == oferta.enrollNonce)
+        }.isSuccess
+        assertTrue(hijoAcepta(frame))
+        assertFalse(hijoAcepta(frame, vigente = false))
+        assertFalse(hijoAcepta(frame, configurado = true))
+        assertFalse(hijoAcepta(CodecProtocolo.codificarFrame(sobre.copy(purpose = Proposito.MESSAGE))))
+        assertFalse(hijoAcepta(CodecProtocolo.codificarFrame(e.firma(preparacion.aceptacion.copy(childPublicKeyB64 = e.publica)))))
+        assertFalse(hijoAcepta(CodecProtocolo.codificarFrame(e.firma(preparacion.aceptacion.copy(enrollId = preparacion.aceptacion.pairId)))))
+        val otroPadre = CriptografiaProtocolo.firmarSobre(preparacion.aceptacion, Proposito.PAIR,
+            ClaveVerificacion.desdeSpki(Rol.PARENT, e.b64(e.hijo.public.encoded))) { bytes ->
+            Signature.getInstance("SHA256withECDSA").run { initSign(e.hijo.private); update(bytes); sign() }
+        }
+        assertFalse(hijoAcepta(CodecProtocolo.codificarFrame(otroPadre)))
+        assertTrue(runCatching { store.prepararVinculo(CodecProtocolo.codificarFrame(otroPadre)) }.isFailure)
         assertEquals(VinculoPersistido.SIN_VINCULAR, store.leer().vinculo)
         preparacion.codigos.descartar()
         store.cerrar()

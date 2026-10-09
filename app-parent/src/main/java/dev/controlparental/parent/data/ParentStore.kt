@@ -7,7 +7,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.selects.select
 import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.*
 
 interface ArchivoMetadatos {
     fun existe(): Boolean
@@ -73,13 +73,20 @@ class ParentStore(
     suspend fun leer(): MetadatosPadre = transaccion { cargar() }
     suspend fun existe(): Boolean = transaccion { archivo.existe() }
 
-    suspend fun prepararVinculo(aceptacion: AceptacionVinculo) = transaccion {
-        CodecProtocolo.codificarPayload(aceptacion)
-        val datos = cargar()
-        check(datos.vinculo == VinculoPersistido.SIN_VINCULAR &&
-            datos.parentPublicKeyB64 == aceptacion.parentPublicKeyB64)
-        guardar(datos.copy(pairId = aceptacion.pairId, childPublicKeyB64 = aceptacion.childPublicKeyB64,
-            relayOrigin = aceptacion.relayOrigin, vinculo = VinculoPersistido.PREPARADO))
+    suspend fun prepararVinculo(frame: ByteArray) {
+        require(frame.size <= CodecProtocolo.MAX_FRAME)
+        val copia = frame.copyOf()
+        transaccion {
+            val datos = cargar()
+            val documento = CriptografiaProtocolo.verificarSobre(copia,
+                ClaveVerificacion.desdeSpki(Rol.PARENT, datos.parentPublicKeyB64), Proposito.PAIR)
+            val aceptacion = documento.mensaje as? AceptacionVinculo ?: error("No es aceptación")
+            check(datos.vinculo == VinculoPersistido.SIN_VINCULAR &&
+                datos.parentPublicKeyB64 == aceptacion.parentPublicKeyB64)
+            guardar(datos.copy(pairId = aceptacion.pairId, childPublicKeyB64 = aceptacion.childPublicKeyB64,
+                relayOrigin = aceptacion.relayOrigin, vinculo = VinculoPersistido.PREPARADO,
+                pairAcceptanceFrameB64 = Base64.getUrlEncoder().withoutPadding().encodeToString(copia)))
+        }
     }
 
     // P05 debe aportar secuencia de STATE autenticado/correlacionado, nunca presencia del relay.
@@ -148,9 +155,18 @@ class ParentStore(
             val claro = cifrador.descifrar(archivo.leer())
             require(claro.size <= MAX_BYTES)
             val texto = claro.toString(Charsets.UTF_8)
-            val datos = json.decodeFromString<MetadatosPadre>(texto)
-            require(json.encodeToString(datos).toByteArray().contentEquals(claro)) { "Documento local no canónico" }
+            val objeto = json.parseToJsonElement(texto).jsonObject
+            val anterior = objeto["schemaVersion"] == JsonPrimitive(1)
+            require(!anterior || "pairAcceptanceFrameB64" !in objeto)
+            val actual = if (anterior) JsonObject(objeto + ("schemaVersion" to JsonPrimitive(2))) else objeto
+            val datos = json.decodeFromJsonElement<MetadatosPadre>(actual)
+            val codificado = json.encodeToJsonElement(datos).jsonObject
+            val comparable = if (anterior) JsonObject((codificado - "pairAcceptanceFrameB64") +
+                ("schemaVersion" to JsonPrimitive(1))).toString() else codificado.toString()
+            require(comparable.toByteArray().contentEquals(claro)) { "Documento local no canónico" }
             validarMetadatos(datos)
+            // Migración explícita del formato privado v1; conserva contador/evidencia/intención.
+            if (anterior) guardar(datos)
             datos
         } catch (error: Exception) {
             incierto = true

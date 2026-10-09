@@ -14,6 +14,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.controlparental.parent.presentation.ParentViewModel
 import dev.controlparental.parent.ui.AplicacionPadre
 import dev.controlparental.parent.ui.IdentidadPadre
+import dev.controlparental.parent.ui.PairingScreen
+import dev.controlparental.parent.pairing.PairChild
+import dev.controlparental.parent.data.AlmacenPadreAndroid
+import dev.controlparental.protocol.Proposito
 import dev.controlparental.parent.security.*
 
 class MainActivity : ComponentActivity() {
@@ -28,13 +32,16 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         autoridad = AutoridadPadre(ParentKeyStore(applicationContext), sesion)
         autenticacion = LocalAuthentication(this, sesion)
+        window.addFlags(android.view.WindowManager.LayoutParams.FLAG_SECURE)
+        val store = AlmacenPadreAndroid.obtener(applicationContext)
+        val vinculacion = PairChild(store, autoridad::exportarPublica, { autoridad.firmar(it, Proposito.PAIR) })
         val modelo = ViewModelProvider(this, AppContainer().fabrica)[ParentViewModel::class.java]
         setContent {
             val estado by modelo.estado.collectAsStateWithLifecycle()
             MaterialTheme {
-                AplicacionPadre(estado, modelo::navegar, modelo::volver) {
-                    IdentidadPadre(aviso, publica, ::crearIdentidad, ::autenticar)
-                }
+                AplicacionPadre(estado, modelo::navegar, modelo::volver,
+                    identidad = { IdentidadPadre(aviso, publica, ::crearIdentidad, ::autenticar) },
+                    vinculacion = { PairingScreen(vinculacion, store, ::autenticar) })
             }
         }
     }

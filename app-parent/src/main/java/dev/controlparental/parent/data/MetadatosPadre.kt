@@ -19,7 +19,7 @@ data class PendingIntentRecord(
 // Formato privado local, no modifica CP/1 ni serializa privadas/códigos.
 @Serializable
 data class MetadatosPadre(
-    val schemaVersion: Int = 1,
+    val schemaVersion: Int = 2,
     val signingAlias: String = "cp.parent.sign.v1",
     val parentPublicKeyB64: String,
     val pairId: String? = null,
@@ -29,6 +29,7 @@ data class MetadatosPadre(
     val vinculo: VinculoPersistido = VinculoPersistido.SIN_VINCULAR,
     val pendiente: PendingIntentRecord? = null,
     val ultimaEvidenciaFrameB64: String? = null,
+    val pairAcceptanceFrameB64: String? = null,
 )
 
 internal fun secuenciaLocal(valor: String): Long {
@@ -37,12 +38,13 @@ internal fun secuenciaLocal(valor: String): Long {
 }
 
 internal fun validarMetadatos(datos: MetadatosPadre) {
-    require(datos.schemaVersion == 1 && datos.signingAlias == "cp.parent.sign.v1")
+    require(datos.schemaVersion == 2 && datos.signingAlias == "cp.parent.sign.v1")
     ClaveVerificacion.desdeSpki(Rol.PARENT, datos.parentPublicKeyB64)
     val contador = secuenciaLocal(datos.contadorLocal)
     if (datos.vinculo == VinculoPersistido.SIN_VINCULAR) {
         require(datos.pairId == null && datos.childPublicKeyB64 == null && datos.relayOrigin == null)
         require(contador == 0L && datos.pendiente == null && datos.ultimaEvidenciaFrameB64 == null)
+        require(datos.pairAcceptanceFrameB64 == null)
     } else {
         require(datos.pairId != null && datos.childPublicKeyB64 != null && datos.relayOrigin != null)
         ClaveVerificacion.desdeSpki(Rol.CHILD, datos.childPublicKeyB64)
@@ -52,6 +54,13 @@ internal fun validarMetadatos(datos: MetadatosPadre) {
         require(origen.scheme == "https" && origen.rawUserInfo == null && origen.host != null &&
             origen.rawPath.isEmpty() && origen.rawQuery == null && origen.rawFragment == null &&
             (origen.port == -1 || origen.port in 1..65535) && origen.toASCIIString() == datos.relayOrigin)
+    }
+    datos.pairAcceptanceFrameB64?.let { frame ->
+        val documento = CriptografiaProtocolo.verificarSobre(bytesFrameLocal(frame),
+            ClaveVerificacion.desdeSpki(Rol.PARENT, datos.parentPublicKeyB64), Proposito.PAIR)
+        val aceptacion = documento.mensaje as? AceptacionVinculo ?: error("No es aceptación")
+        require(aceptacion.pairId == datos.pairId && aceptacion.parentPublicKeyB64 == datos.parentPublicKeyB64 &&
+            aceptacion.childPublicKeyB64 == datos.childPublicKeyB64 && aceptacion.relayOrigin == datos.relayOrigin)
     }
     datos.pendiente?.let { pendiente ->
         require(datos.vinculo == VinculoPersistido.VINCULADO)

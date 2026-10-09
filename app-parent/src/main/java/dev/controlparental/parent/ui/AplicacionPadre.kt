@@ -21,6 +21,7 @@ fun AplicacionPadre(
     navegar: (PantallaPadre) -> Unit,
     volver: () -> Unit,
     identidad: @Composable () -> Unit = {},
+    vinculacion: @Composable () -> Unit = {},
 ) {
     BackHandler(enabled = estado.puedeVolver, onBack = volver)
     Scaffold(bottomBar = {
@@ -47,7 +48,11 @@ fun AplicacionPadre(
                         PrimerInicio { navegar(PantallaPadre.VINCULAR) }
                         identidad()
                     }
-                    PantallaPadre.VINCULAR -> Vincular { navegar(PantallaPadre.CONTROL) }
+                    PantallaPadre.VINCULAR -> {
+                        Vincular { navegar(PantallaPadre.CONTROL) }
+                        identidad()
+                        vinculacion()
+                    }
                     PantallaPadre.CONTROL -> Control(estado.datos)
                     PantallaPadre.RECUPERACION -> Recuperacion()
                 }
@@ -72,7 +77,6 @@ private fun Vincular(control: () -> Unit) {
     Text(stringResource(R.string.vincular_titulo), style = MaterialTheme.typography.headlineSmall)
     Text(stringResource(R.string.vincular_descripcion))
     Text(stringResource(R.string.vincular_pendiente))
-    Button(onClick = {}, enabled = false) { Text(stringResource(R.string.escanear_qr)) }
     OutlinedButton(onClick = control) { Text(stringResource(R.string.ver_controles)) }
 }
 

@@ -53,7 +53,8 @@ internal class PairChild(
             ClaveVerificacion.desdeSpki(Rol.PARENT, aceptacion.parentPublicKeyB64), Proposito.PAIR)
         require(verificado.mensaje == aceptacion)
         // Persistir ANTES de mostrar QR: no se permite crear otro vínculo por accidente.
-        store.prepararVinculo(aceptacion)
+        QrLocal.generar(frame.toString(Charsets.UTF_8)) // Comprueba capacidad antes del commit.
+        store.prepararVinculo(frame)
         preparacion.codigos.descartar()
         return frame
     }

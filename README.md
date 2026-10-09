@@ -4,7 +4,7 @@ Proyecto Android nativo en Kotlin y servicio Node/TypeScript. Este repositorio
 solo implementa el rol del padre y el relay. El APK del hijo pertenece a otro
 proyecto. La copia del protocolo CP/1 en `compartido/` permanece congelada.
 
-## Qué hay implementado (C00–C02, P00, P01 y P03 local)
+## Qué hay implementado (C00–C02, P00, P01, P03 y P02 local parcial)
 
 - `app-parent/`: navegación en español e identidad/autenticación Keystore implementadas, pendientes de validación física; sin vinculación real ni envío de órdenes.
 - `core-protocol/`: modelos, parser estricto, esquema congelado y serialización determinista CP/1, sin dependencias de Android.
@@ -51,9 +51,20 @@ P03 añade ParentStore: archivo privado atómico AES-256-GCM, nonce nuevo por
 escritura y una coroutine escritora. Contador y única intención se persisten
 juntos; cancelar conserva contador consumido y evidencia. Recuperar no envía
 ni reenvía órdenes. Datos corruptos/clave ausente fallan sin generar alternativas.
-El almacenamiento todavía no está conectado a la UI: P02/P05 deben integrarlo
-con vínculo real y contexto autenticado. Obtener el almacén no inicializa datos.
+P02 conecta almacenamiento con el flujo de vínculo preparado; P05 debe integrarlo
+con órdenes y contexto autenticado. Obtener el almacén no inicializa datos.
 El formato es local/versionado; no cambia CP/1 ni guarda privadas/códigos.
+
+P02 lee CHILD_OFFER desde una imagen QR local elegida con selector oficial, sin
+permisos de galería completa ni servicios remotos. No hay cámara directa. En
+Vincular prepara códigos independientes para guardar fuera del teléfono, huellas
+y PAIR_ACCEPT firmado tras autenticación. Códigos solo en memoria, descartados
+al salir/segundo plano; FLAG_SECURE protege la ventana. QR firmado/env pública
+copiable recuperables al reabrir, sin recrear códigos. Formato privado v2 migra v1
+sin reiniciar contador/intención/evidencia. Permanece PREPARADO, sin órdenes ni
+revinculación; faltan estado firmado del hijo y recuperación local comprobada.
+99 pruebas locales aprobadas; imagen Android/pantalla/migración v2 no probadas
+físicamente. Ver `pruebas/EVIDENCIA_P02.md`. No hubo ADB en este turno.
 
 El relay devuelve **503** en `/healthz` porque todavía no está listo para CP/1.
 Rechaza upgrades y ejecución en `NODE_ENV=production`. No es desplegable en
