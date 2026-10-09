@@ -14,7 +14,18 @@ No hay servidor ni dependencias npm en este proyecto. Las especificaciones/evide
 antiguas se conservan como historia, no como tareas de desarrollo del servidor aquí.
 El cliente Android WSS y CP/1 siguen formando parte de la app.
 
-## Qué hay implementado (C00–C02, P00–P04 local parcial)
+## Qué hay implementado (C00–C02, P00–P05 local parcial)
+
+P05 añade sincronización STATE firmada, confirmación de intención no reutilizable,
+reserva/firma/persistencia antes de enviar y correlación de ACK por id/seq/hash
+del payload/arranque/sesión. ACK perdido permite solo dos reenvíos idénticos,
+después estado fresco; reconexión/reapertura nunca reproduce una orden antigua.
+Pendiente de aplicación, fallo y rechazo no se confunden con APPLIED. Evidencia
+y resolución se guardan atómicamente. Red validada y PONG vigente son puertas
+independientes de envío; la nueva conexión sana solicita sincronización.
+119 pruebas locales correctas; no aplicación real demostrada. Órdenes finales
+todavía deshabilitadas hasta P06 y guardas de vínculo/recuperación; PREPARADO no
+se promociona aquí. Ver pruebas/EVIDENCIA_P05.md.
 
 P04 incorpora cliente WSS del padre con OkHttp, TLS/hostname del sistema y cp.v1,
 reto AUTH firmado con autoridad Keystore y latidos correlacionados. En Controles,

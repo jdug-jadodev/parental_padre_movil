@@ -8,6 +8,8 @@ import java.security.spec.ECGenParameterSpec
 import java.util.Base64
 import org.junit.Assert.*
 import org.junit.Test
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.flow.first
 
 class RelayConnectionTest {
     private class Socket(val eventos: EventosRelay) : SocketRelay {
@@ -163,5 +165,39 @@ class RelayConnectionTest {
         assertEquals(FaseRelay.DESCONECTADO, e.conexion.estado.value.fase)
         e.tiempo = 120_000; e.conexion.avanzarReloj()
         assertEquals(1, e.sockets.size)
+    }
+
+    private fun sobreMensaje(e: Entorno): SobreFirmado = CriptografiaProtocolo.firmarSobre(
+        SolicitudSincronizacion(e.config.pairId, "A".repeat(43)), Proposito.MESSAGE,
+        ClaveVerificacion.desdeSpki(Rol.PARENT, e.publica)) { bytes ->
+        Signature.getInstance("SHA256withECDSA").run { initSign(e.par.private); update(bytes); sign() }
+    }
+
+    @Test fun rutaP05ExigePongYTicketActualYEntregaSobreSinAcreditarPayload() = runTest {
+        val e = Entorno(); val socket = e.autenticar()
+        assertNull(e.conexion.sesionPoliticas())
+        socket.mensaje(RespuestaLatido((socket.enviados.last() as Latido).nonce))
+        val ticket = e.conexion.sesionPoliticas()!!
+        val sobre = sobreMensaje(e)
+        val frame = CodecProtocolo.codificarFrame(sobre)
+        assertTrue(e.conexion.enviarPolitica(ticket, frame))
+        // No se acredita rol/firma del hijo aquí: la verificadora P05 lo rechazará.
+        socket.mensaje(sobre)
+        val trama = e.conexion.mensajesHijo.first()
+        assertEquals(ticket, trama.ticket); assertArrayEquals(frame, trama.bytes())
+        e.conexion.segundoPlano()
+        assertNull(e.conexion.sesionPoliticas()); assertFalse(e.conexion.enviarPolitica(ticket, frame))
+    }
+
+    @Test fun rutaP05NoEnviaSiPongCaducaNiErrorRelayConfirmaOrden() {
+        val e = Entorno(); val socket = e.autenticar()
+        socket.mensaje(RespuestaLatido((socket.enviados.last() as Latido).nonce))
+        val ticket = e.conexion.sesionPoliticas()!!
+        socket.mensaje(ErrorProtocolo(Motivo.PEER_OFFLINE))
+        assertEquals(FaseRelay.AUTENTICADO, e.conexion.estado.value.fase)
+        e.tiempo = 10_000; e.conexion.avanzarReloj()
+        e.tiempo = 25_000 // Caduca incluso antes del siguiente tick de Android.
+        assertNull(e.conexion.sesionPoliticas())
+        assertFalse(e.conexion.enviarPolitica(ticket, CodecProtocolo.codificarFrame(sobreMensaje(e))))
     }
 }

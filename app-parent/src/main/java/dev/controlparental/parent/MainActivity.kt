@@ -26,6 +26,10 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.Lifecycle
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.CancellationException
+import dev.controlparental.parent.policy.ControlPoliticas
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 
 class MainActivity : ComponentActivity() {
     private val sesion = SesionAutoridad(SystemClock::elapsedRealtime)
@@ -34,6 +38,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var transporte: TransporteOkHttp
     private lateinit var conexion: RelayConnection
     private lateinit var red: RedAndroid
+    private lateinit var politicas: ControlPoliticas
     private var aviso by mutableStateOf("Identidad sin comprobar. Crear o cargar exige bloqueo seguro del sistema.")
     private var publica by mutableStateOf<String?>(null)
 
@@ -46,13 +51,39 @@ class MainActivity : ComponentActivity() {
         red = RedAndroid(applicationContext)
         conexion = RelayConnection(transporte, SystemClock::elapsedRealtime, sesion::exigirVigencia,
             { autoridad.firmar(it, Proposito.AUTH) })
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                while (true) { conexion.avanzarReloj(); delay(250) }
-            }
-        }
         window.addFlags(android.view.WindowManager.LayoutParams.FLAG_SECURE)
         val store = AlmacenPadreAndroid.obtener(applicationContext)
+        politicas = ControlPoliticas(store, CanalPoliticasRelay(conexion) { red.validada.value },
+            SystemClock::elapsedRealtime, sesion::exigirVigencia, { autoridad.firmar(it, Proposito.MESSAGE) })
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    combine(conexion.estado, red.validada) { _, validada ->
+                        if (validada) conexion.sesionPoliticas() else null
+                    }.distinctUntilChanged().collect { ticket ->
+                        if (ticket != null) {
+                            try { politicas.sincronizar() }
+                            catch (cancelacion: CancellationException) { throw cancelacion }
+                            catch (_: Exception) { /* Solicitud manual disponible sin bajar barreras. */ }
+                        }
+                    }
+                }
+                launch {
+                    conexion.mensajesHijo.collect { trama ->
+                        try { politicas.recibir(trama.ticket, trama.bytes()) }
+                        catch (cancelacion: CancellationException) { throw cancelacion }
+                        catch (_: Exception) { /* Sin evidencia aceptada; no confirmar por fallo. */ }
+                    }
+                }
+                while (true) {
+                    conexion.avanzarReloj()
+                    try { politicas.avanzarReloj() }
+                    catch (cancelacion: CancellationException) { throw cancelacion }
+                    catch (_: Exception) { /* Pendiente conservada; no firmar por vías alternativas. */ }
+                    delay(250)
+                }
+            }
+        }
         val vinculacion = PairChild(store, autoridad::exportarPublica, { autoridad.firmar(it, Proposito.PAIR) })
         val modelo = ViewModelProvider(this, AppContainer().fabrica)[ParentViewModel::class.java]
         setContent {
@@ -76,7 +107,7 @@ class MainActivity : ComponentActivity() {
                 AplicacionPadre(presentacion, modelo::navegar, modelo::volver,
                     identidad = { IdentidadPadre(aviso, publica, ::crearIdentidad, ::autenticar) },
                     vinculacion = { PairingScreen(vinculacion, store, ::autenticar) },
-                    conexion = { ConexionRelayScreen(conexion, store, redValidada, ::autenticar) })
+                    conexion = { ConexionRelayScreen(conexion, store, redValidada, ::autenticar, politicas) })
             }
         }
     }

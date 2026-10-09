@@ -46,12 +46,16 @@ internal class ControlPoliticas(
     private var contexto: Contexto? = null
     private var intencion: ConfirmacionIntencion? = null
     private var vuelo: EnVuelo? = null
+    private var ultimoEstado: EstadoDispositivo? = null
     private val mutable = MutableStateFlow(ResultadoPolitica())
     val resultado = mutable.asStateFlow()
 
     private fun vigente(c: Contexto) {
-        check(canal.actual() == c.ticket) { "Canal cambiado; sincroniza nuevamente" }
+        mismaConexion(c)
         check(ahora() - c.inicio in 0 until VIGENCIA_LOCAL_MS) { "Estado/desafío local caducado" }
+    }
+    private fun mismaConexion(c: Contexto) {
+        check(canal.actual() == c.ticket) { "Canal cambiado; sincroniza nuevamente" }
     }
     private fun identidad(datos: MetadatosPadre, c: Contexto) {
         check(datos.pairId == c.datos.pairId && datos.childPublicKeyB64 == c.datos.childPublicKeyB64 &&
@@ -84,14 +88,18 @@ internal class ControlPoliticas(
 
     suspend fun recibir(ticket: Long, frame: ByteArray) = mutex.withLock {
         val c = contexto ?: error("No hay sincronización actual")
-        vigente(c); check(ticket == c.ticket)
+        mismaConexion(c); check(ticket == c.ticket)
         val doc = CriptografiaProtocolo.verificarSobre(frame,
             ClaveVerificacion.desdeSpki(Rol.CHILD, c.datos.childPublicKeyB64!!), Proposito.MESSAGE)
         when (val mensaje = doc.mensaje) {
             is EstadoDispositivo -> {
+                vigente(c)
                 check(mensaje.pairId == c.datos.pairId && mensaje.syncNonce == c.nonce)
                 c.estado?.let { anterior ->
                     check(mensaje.bootId == anterior.bootId && mensaje.childSessionId == anterior.childSessionId)
+                }
+                ultimoEstado?.takeIf { it.pairId == mensaje.pairId && it.bootId == mensaje.bootId &&
+                    it.childSessionId == mensaje.childSessionId }?.let { anterior ->
                     check(secuenciaLocal(mensaje.stateSeq) > secuenciaLocal(anterior.stateSeq) &&
                         secuenciaLocal(mensaje.lastAcceptedSeq) >= secuenciaLocal(anterior.lastAcceptedSeq))
                 }
@@ -106,6 +114,7 @@ internal class ControlPoliticas(
                 intencion = null
                 if (coincide) vuelo = null
                 c.estado = mensaje
+                ultimoEstado = mensaje
                 // Una actualización no renueva la ventana ni rearma un desafío consumido.
                 mutable.value = ResultadoPolitica(if (coincide) fase(mensaje.lastResult)
                     else if (pendiente != null) FasePolitica.REQUIERE_CONFIRMACION else FasePolitica.ESTADO_VERIFICADO, mensaje)
@@ -116,7 +125,7 @@ internal class ControlPoliticas(
                     mensaje.childSessionId == v.orden.childSessionId && mensaje.commandId == v.orden.commandId &&
                     mensaje.seq == v.orden.seq && mensaje.commandPayloadSha256B64 == v.hash)
                 store.resolverIntencion(doc, mensaje.result != ResultadoAck.ACCEPTED_PENDING_ENFORCEMENT)
-                vigente(c)
+                mismaConexion(c)
                 v.aceptada = true
                 if (mensaje.result != ResultadoAck.ACCEPTED_PENDING_ENFORCEMENT) vuelo = null
                 mutable.value = ResultadoPolitica(when (mensaje.result) {
@@ -172,18 +181,26 @@ internal class ControlPoliticas(
             ClaveVerificacion.desdeSpki(Rol.PARENT, c.datos.parentPublicKeyB64), Proposito.MESSAGE)
         vuelo = EnVuelo(c.ticket, orden, frame.copyOf(), doc.payloadSha256B64, ahora() + ESPERA_ACK_MS)
         mutable.value = ResultadoPolitica(FasePolitica.ENVIADA_SIN_CONFIRMAR)
+        vigente(c); exigirAutoridad()
         if (!canal.enviar(c.ticket, frame)) vuelo = null // La intención duradera no se borra.
     }
 
     suspend fun avanzarReloj() = mutex.withLock {
         val c = contexto ?: return@withLock
-        if (canal.actual() != c.ticket || ahora() - c.inicio !in 0 until VIGENCIA_LOCAL_MS) {
+        val v = vuelo
+        if (canal.actual() != c.ticket || (ahora() - c.inicio !in 0 until VIGENCIA_LOCAL_MS &&
+                (v == null || v.aceptada))) {
             contexto = null; intencion = null; vuelo = null
-            mutable.value = ResultadoPolitica(FasePolitica.SIN_ESTADO)
+            mutable.value = mutable.value.copy(fase = FasePolitica.SIN_ESTADO)
             return@withLock
         }
-        val v = vuelo ?: return@withLock
+        if (v == null) return@withLock
         if (v.aceptada || ahora() < v.plazo) return@withLock
+        exigirAutoridad()
+        val datos = store.leer(); identidad(datos, c); mismaConexion(c)
+        val pendiente = datos.pendiente ?: error("Sin intención duradera para reintentar")
+        check(pendiente.commandId == v.orden.commandId &&
+            pendiente.frameB64 == Base64.getUrlEncoder().withoutPadding().encodeToString(v.frame))
         exigirAutoridad()
         if (v.reintentos >= 2) solicitarEstado()
         else {

@@ -7,6 +7,8 @@ import java.util.Base64
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 
 internal enum class FaseRelay { DESCONECTADO, CONECTANDO, ESPERANDO_RETO, ESPERANDO_AUTH_OK, AUTENTICADO, REINTENTO, AUTENTICACION_REQUERIDA, ERROR_SEGURO }
 internal data class EstadoRelay(
@@ -32,6 +34,10 @@ internal interface EventosRelay {
     fun fallo(permanente: Boolean)
 }
 internal fun interface TransporteRelay { fun abrir(endpoint: String, eventos: EventosRelay): SocketRelay }
+internal class TramaHijo(val ticket: Long, bytes: ByteArray) {
+    private val copia = bytes.copyOf()
+    fun bytes() = copia.copyOf()
+}
 
 // Estados del canal, nunca evidencia de restricciones aplicadas. Reloj monotónico inyectado.
 internal class RelayConnection(
@@ -44,6 +50,8 @@ internal class RelayConnection(
     private val visible = AtomicBoolean(false)
     private val mutable = MutableStateFlow(EstadoRelay())
     val estado = mutable.asStateFlow()
+    private val entradaHijo = Channel<TramaHijo>(16)
+    val mensajesHijo = entradaHijo.receiveAsFlow()
     private var configuracion: ConfiguracionRelay? = null
     private var solicitado = false
     private var socket: SocketRelay? = null
@@ -143,7 +151,15 @@ internal class RelayConnection(
                     require(mutable.value.fase == FaseRelay.AUTENTICADO)
                     mutable.value = mutable.value.copy(hijoIndicativo = false)
                 }
-                // P05 incorporará STATE/ACK y sincronización. No aplicar ni presentar estados aquí.
+                is SobreFirmado -> {
+                    require(mutable.value.fase == FaseRelay.AUTENTICADO && mensaje.purpose == Proposito.MESSAGE)
+                    // P05 verificará firma/pareja/contexto. El relay no acredita el payload.
+                    require(entradaHijo.trySend(TramaHijo(generacion, texto.toByteArray(Charsets.UTF_8))).isSuccess)
+                }
+                is ErrorProtocolo -> {
+                    require(mutable.value.fase == FaseRelay.AUTENTICADO)
+                    // Informativo: no confirma una orden ni cambia evidencia del hijo.
+                }
                 else -> terminar(true)
             }
         } catch (_: Exception) { terminar(true) }
@@ -164,6 +180,19 @@ internal class RelayConnection(
     }
     private fun enviar(texto: String) {
         if (visible.get() && socket?.enviar(texto) != true) terminar(false)
+    }
+    @Synchronized fun sesionPoliticas(): Long? {
+        if (!visible.get() || socket == null || mutable.value.fase != FaseRelay.AUTENTICADO ||
+            !mutable.value.canalSano || (ping != null && ahora() >= limite)) return null
+        return generacion
+    }
+    @Synchronized fun enviarPolitica(ticket: Long, frame: ByteArray): Boolean {
+        if (sesionPoliticas() != ticket) return false
+        val sobre = CodecProtocolo.leerFrame(frame) as? SobreFirmado ?: error("Falta firma")
+        require(sobre.purpose == Proposito.MESSAGE)
+        val mensaje = CodecProtocolo.leerPayloadSinVerificar(CodecProtocolo.bytesPayload(sobre), Proposito.MESSAGE)
+        require(mensaje is SolicitudSincronizacion || mensaje is OrdenPolitica)
+        return socket!!.enviar(frame.toString(Charsets.UTF_8)).also { if (!it) terminar(false) }
     }
     private fun terminar(permanente: Boolean) {
         cerrarSocket()

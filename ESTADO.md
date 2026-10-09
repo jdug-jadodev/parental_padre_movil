@@ -3,7 +3,7 @@
 Última actualización: 2026-10-09
 Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. P00: 37c74a3, 943082c. Primer bloque P01: 0f143c4; cierre local en el commit posterior, consultar git log.
 Tarea actual: P05 — sincronización y envío idempotente
-Estado: EN_CURSO_LOCAL — casos de uso compilados y cuatro pruebas iniciales correctas; conexión al transporte y negativos ampliados pendientes
+Estado: P05_IMPLEMENTADO_LOCAL_PARCIAL — casos de uso y ruta al relay compilados; 119 pruebas locales correctas; controles finales y validación integrada pendientes
 
 ## Entorno observado
 
@@ -47,6 +47,11 @@ Node 24.21.0 / npm 11.19.0 / Windows 11 amd64
 SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Terminado y demostrado
+
+- P05 cierre local parcial: ControlPoliticas serializa sincronización, preparación/confirmación, reserva/firma/envío, ACK y reconciliación. STATE exige firma de pública vinculada, pareja/nonce actuales, stateSeq creciente y lastAcceptedSeq no decreciente en misma sesión; nueva sesión requiere nueva sincronización. Ventana local conservadora de 20 s desde petición (no recepción), sin inventar timestamp CP/1; desafío del hijo sigue regido por sus 30 s. Confirmación por referencia no reutilizable, sin órdenes nuevas con PREPARADO/hijo no apto/canal no sano.
+- P05 durabilidad: ParentStore.resolverIntencion valida nuevamente firma/id/seq/hash y guarda evidencia+resolución juntas. Comando y etapa ENVIADA_SIN_CONFIRMAR se persisten antes de encolar; el estado es conservador, no prueba entrega. Reintentos leen el comando duradero y transmiten exactamente los mismos bytes, máximo dos a intervalos de 5 s; después SYNC_REQUEST nuevo. Un ACK tardío correlacionado en la misma conexión puede confirmar el envío existente, pero no rearma el desafío para otra orden. Al reconectar/reabrir no se reproduce el comando anterior; resultado por STATE solo si id/seq/hash coinciden. Descartar pendiente es local, no cancela una orden ya recibida por el hijo, no reutiliza contador ni borra evidencia.
+- P05 ruta Android: RelayConnection entrega sobres MESSAGE a una cola acotada etiquetada con generación; no acredita firma del hijo. CanalPoliticasRelay exige red validada y canal autenticado con PONG vigente. MainActivity solicita sincronización al disponer de nueva conexión sana/red validada, consume STATE/ACK y ejecuta reloj solo con lifecycle STARTED; alternativa manual para sincronización, sin servicio oculto. Controles finales siguen deshabilitados (P06); no se promociona vínculo PREPARADO ni certifica recuperación.
+- P05 evidencia JVM: veinte ControlPoliticasTest nuevos y dos RelayConnectionTest adicionales. Recorrido relay simulado → STATE → orden → ACK, firma impostora, respuestas ajenas/fuera de orden, máximo contador/duración, caducidad, fondo/cambio de canal durante reserva/firma/persistencia, cancelación de confirmación, dos reintentos, reconexión/reapertura, fallos atómicos de resolución, doble confirmación concurrente y temporizador de hijo simulado que no reinicia duración. No acreditan aplicación de políticas ni temporizadores en dispositivo real. Ver pruebas/EVIDENCIA_P05.md. Primer bloque 0531f94; cierre en commit posterior.
 
 - P05 primer bloque local: ControlPoliticas valida STATE firmado/nonce/pareja/secuencia/sesión, exige confirmación explícita por ticket no reutilizable, reserva max(local, remoto)+1 y persiste comando/etapa conservadora antes de encolar. ACK correlacionado por id/seq/hash del payload/boot/sesión; dos retransmisiones de bytes exactos y luego nueva sincronización, nunca duración nueva por ACK perdido. ParentStore.resolverIntencion guarda evidencia y resolución juntas. No promociona PREPARADO ni acredita recuperación. Cuatro tests iniciales aprobados (65 app total); integración al transporte/negativos ampliados pendientes. Sin ADB ni cambios de servidor/CP/1.
 
@@ -113,6 +118,13 @@ SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Archivos modificados en la última tarea
 
+P05 (prioritario): app-parent/src/main/java/dev/controlparental/parent/policy/ControlPoliticas.kt;
+app-parent/src/main/java/dev/controlparental/parent/data/ParentStore.kt;
+app-parent/src/main/java/dev/controlparental/parent/network/{RelayConnection,CanalPoliticasRelay}.kt;
+app-parent/src/main/java/dev/controlparental/parent/MainActivity.kt y ui/ConexionRelayScreen.kt;
+app-parent/src/test/java/dev/controlparental/parent/{ControlPoliticasTest,RelayConnectionTest}.kt;
+README.md, ESTADO.md y pruebas/EVIDENCIA_P05.md. Sin nuevas dependencias ni cambios de formato privado/CP/1.
+
 P04 (prioritario): app-parent/src/main/java/dev/controlparental/parent/network/{RelayConnection,TransporteOkHttp,RedAndroid}.kt;
 app-parent/src/main/java/dev/controlparental/parent/ui/{ConexionRelayScreen,AplicacionPadre}.kt y MainActivity.kt;
 app-parent/src/test/java/dev/controlparental/parent/{RelayConnectionTest,TransporteOkHttpTest}.kt;
@@ -128,6 +140,8 @@ app-parent/src/androidTest/java/dev/controlparental/parent/AlmacenAndroidTest.kt
 pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P03.md y pruebas/HANDOFF_P03.md.
 
 ## Pruebas ejecutadas y resultado
+
+- P05: scripts/verificar.ps1 correcto. Repetición Gradle --rerun-tasks de tests app/núcleo/interoperabilidad, debug/instrumentado/release sin firma de distribución y lint: 130 tareas ejecutadas correctamente. Tras ajustes finales de conexión automática/guardas y un test de concurrencia, script y release repetidos correctos. XML final: 83 app + 30 núcleo + 1 interop, cero fallos/errores/omisiones; cinco oráculo Node, total 119 locales. Diez vectores/78 comprobaciones documentales; lint cero errores/23 avisos. Un test de reapertura falló inicialmente porque el simulador retrocedía lastAcceptedSeq; se corrigió el simulador, conservando la guarda de producción. No ADB, APK instalados, pruebas físicas, servidor externo ni despliegue.
 
 - P04: scripts/verificar.ps1 correcto. Repetición Gradle --rerun-tasks de tests app/núcleo/interoperabilidad, APK debug/instrumentado/release sin firma de distribución y lint: 130 tareas ejecutadas correctamente. Reportes XML: 61 app + 30 núcleo + 1 interop, cero fallos/errores/omisiones; oráculo Node cinco aprobados, total 97 locales. Diez vectores/78 comprobaciones documentales; lint cero errores/23 avisos. No ADB, instalación, pruebas físicas, comunicación con APK hijo, servidor externo ni despliegue.
 
@@ -202,6 +216,9 @@ P01 aceptar con huella y PIN/contraseña pasó físicamente en A56, incluida cad
 La referencia plantillas/HANDOFF.md de padre/AGENTS.md no existe; usar pruebas/HANDOFF_PLANTILLA.md.
 
 ## Próxima tarea y lectura mínima
+
+P05 implementado localmente; integración externa H09/H10/R02 pendiente. Próxima tarea local: P06 de padre/PLAN_PADRE.md, SPEC-P P3/P6, interfaz final de acciones/duración/confirmación, última evidencia, causas y pendiente. No habilitar órdenes con PREPARADO ni fingir prueba de recuperación local. El descarte local debe avisar que no revoca una orden recibida; después exige sincronizar y confirmar de nuevo. Selección offline aún sin formulario/cola de nuevas órdenes; no firmar sin contexto válido. Padre todavía no preparado para integración completa: P06/P07 y aceptación física/integrada pendientes. El propietario orquestará el servidor; comunicación local antes de despliegue, sin agentes ni cambios externos desde aquí.
+P04 queda implementado localmente; pruebas físicas y autenticación conjunta siguen pendientes. La indicación histórica siguiente de próxima tarea P05 ya fue atendida en este turno.
 
 P04 local implementado, aceptación física/integrada pendiente. Próximo desarrollo: P05 de padre/PLAN_PADRE.md (CP/1 §7, SPEC-P P5), sincronización de STATE y envío idempotente; no se implementó en este turno. R02 del servidor es puerta externa para probar autenticación conjunta, no está acreditada por MockWebServer. Padre aún no preparado para integración completa: faltan P05 y controles/recuperación finales. Avisar al propietario al completar esa parte; él orquestará servidor e integración local antes de despliegue. No acceder por ADB sin aviso/autorización nueva, nunca operar A13.
 P02: la lectura óptica básica ya está confirmada por el propietario en A56; solo quedan las pruebas ampliadas descritas en HANDOFF_P02.md. Las referencias históricas siguientes a lectura básica pendiente no exigen repetirla.

@@ -7,11 +7,14 @@ import dev.controlparental.parent.data.*
 import dev.controlparental.parent.network.*
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
+import dev.controlparental.parent.policy.*
 
 @Composable
-internal fun ConexionRelayScreen(conexion: RelayConnection, store: ParentStore, redValidada: Boolean, autenticar: () -> Unit) {
+internal fun ConexionRelayScreen(conexion: RelayConnection, store: ParentStore, redValidada: Boolean,
+    autenticar: () -> Unit, politicas: ControlPoliticas) {
     val estado by conexion.estado.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
+    val resultado by politicas.resultado.collectAsStateWithLifecycle()
     var aviso by remember { mutableStateOf("Conexión explícita con vínculo guardado. El servidor externo aún requiere implementación; no hay órdenes operativas.") }
     DisposableEffect(conexion) { onDispose { conexion.desconectar() } }
     Text("Canal del padre", style = MaterialTheme.typography.titleMedium)
@@ -43,4 +46,12 @@ internal fun ConexionRelayScreen(conexion: RelayConnection, store: ParentStore, 
         }
     }) { Text("Conectar con vínculo guardado") }
     OutlinedButton(onClick = conexion::desconectar) { Text("Desconectar relay") }
+    OutlinedButton(onClick = {
+        scope.launch {
+            try { politicas.sincronizar(); aviso = "Solicitud firmada enviada; esperando STATE verificable del hijo." }
+            catch (cancelacion: CancellationException) { throw cancelacion }
+            catch (_: Exception) { aviso = "No se pudo sincronizar. Revisa autoridad, vínculo, red validada y latido del canal; no se crean órdenes." }
+        }
+    }) { Text("Solicitar estado firmado del hijo") }
+    Text("Diagnóstico de sincronización: ${resultado.fase}. No habilita órdenes ni acredita recuperación local.")
 }
