@@ -3,7 +3,7 @@
 Última actualización: 2026-10-09
 Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. P00: 37c74a3, 943082c. Primer bloque P01: 0f143c4; cierre local en el commit posterior, consultar git log.
 Tarea actual: P02 — escaneo directo con CameraX local
-Estado: CAMARA_IMPLEMENTADA_LOCAL — 81 pruebas locales aprobadas; permiso/cámara/lifecycle físicos del APK nuevo e integración pendientes
+Estado: CAMARA_VALIDADA_PARCIAL_A56 — 81 pruebas locales y lectura óptica del QR público confirmada por propietario; pruebas ampliadas e integración pendientes
 
 ## Entorno observado
 
@@ -47,6 +47,8 @@ Node 24.21.0 / npm 11.19.0 / Windows 11 amd64
 SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Terminado y demostrado
+
+- P02 cámara, resultado manual: tras actualizar APK y mostrar QR público en PC, el propietario respondió «sip, apareció un json con muchos datos» a la comprobación de escaneo. Lectura óptica y publicación de oferta en campo confirmadas por observación del propietario. No acredita prueba ampliada de denegación de permiso, cierre/reapertura/fondo/giros, enfoque en condiciones diversas ni integración con APK hijo. No se preparó vínculo de prueba; no usar ese QR para vinculación operativa.
 
 - P02 cámara, preparación física autorizada: app padre y APK instrumentado actualizados con install -r correctamente, solo en A56. App abierta sin crear identidad. QR PNG público del fixture 11_child_offer generado fuera del repositorio y abierto en PC. No hay datos de pareja real ni secretos; no se preparó vínculo. Lectura óptica/permiso pendientes de respuesta manual del propietario; no se declaran aprobados. No se ejecutaron instrumentados ni operaciones A13.
 

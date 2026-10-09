@@ -1,5 +1,21 @@
 # Evidencia P02 — vinculación QR parcial local
 
+## Resultado manual de lectura óptica — A56
+
+El propietario confirmó «sip, apareció un json con muchos datos» después de
+apuntar al QR público mostrado en PC con el escáner del padre. Se registra
+lectura óptica/publicación de CHILD_OFFER en campo confirmadas por el propietario,
+no por inspección remota. JSON esperado: oferta pública con pública P-256 e
+identificadores/nonce de fixture, sin privadas ni códigos de recuperación.
+
+No se creó vínculo ni se firmó aceptación. No afirmar pruebas ampliadas de
+denegación de permiso, fondo/reapertura, giros/rotación/texto grande ni captura
+bloqueada por esta respuesta. El cierre automático no se registró como
+comprobación separada. No se probó APK hijo, WSS ni servidor. A13 sin operaciones.
+Se indicó no pulsar Preparar huellas y códigos con la oferta ficticia.
+Las referencias siguientes a lectura óptica pendiente quedan actualizadas por
+esta confirmación básica; los demás pendientes siguen vigentes.
+
 ## Prueba de cámara — preparación autorizada, resultado pendiente
 
 Propietario autorizó actualizar ambos APK y comprobar escaneo en A56. Install -r

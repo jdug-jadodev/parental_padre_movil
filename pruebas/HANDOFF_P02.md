@@ -1,5 +1,17 @@
 # Relevo — P02 parcial local
 
+## Confirmación óptica posterior (prioritaria)
+
+App/APK instrumentado actualizados con autorización en A56; QR público de fixture
+mostrado en PC. Propietario confirmó aparición de JSON tras escanear, acreditando
+lectura óptica/publicación de CHILD_OFFER. No se creó identidad/vínculo cotidiano
+ni se firmó PAIR. No usar ese QR para vínculo real. A13 sin operaciones.
+
+No repetir como si faltara la lectura básica. Denegación de permiso, cierre/
+reapertura/fondo/giros y revisión visual ampliada aún pendientes; respuesta no
+acredita esas pruebas ni integración de dos APK. Cliente WSS/órdenes pendientes.
+Nuevo acceso ADB necesita aviso/permiso. Ver actualización EVIDENCIA_P02.md.
+
 ## Seguimiento CameraX (prioritario)
 
 Cámara directa implementada localmente, 81 tests locales correctos. CamaraOferta
