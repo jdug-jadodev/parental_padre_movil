@@ -25,6 +25,14 @@ android {
     buildFeatures { compose = true }
     sourceSets.getByName("test").java.srcDir("src/soporteTest/kotlin")
     sourceSets.getByName("androidTest").java.srcDir("src/soporteTest/kotlin")
+    testOptions.unitTests.all {
+        val rutaRelay = providers.gradleProperty("rutaRelayIntegracion").orNull
+        if (rutaRelay == null) it.exclude("**/IntegracionPoliticasRelayTest*")
+        else {
+            it.systemProperty("rutaRelayIntegracion", rutaRelay)
+            it.systemProperty("raizPadre", rootProject.projectDir.absolutePath)
+        }
+    }
 }
 
 kotlin {

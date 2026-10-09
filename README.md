@@ -16,11 +16,17 @@ El cliente Android WSS y CP/1 siguen formando parte de la app.
 
 ## Qué hay implementado (C00–C02, P00–P07 local parcial)
 
+P08-B añade integración JVM opcional de ControlPoliticas/ParentStore contra
+relay externo real WSS local, con hijo simulado. Comprueba guardas, persistencia
+antes de enviar, reintentos idénticos y reconciliación sin reproducción antigua.
+146 pruebas independientes + una opcional aprobadas. No acredita APK/hijo real
+ni aplicación de restricciones. Ver pruebas/EVIDENCIA_P08_B.md.
+
 P08-A revisa los latidos señalados por el servidor: PING cada 15 s desde envío
 y caducidad de canal de 45 s desde último PONG, comprobada también al enviar
 sin esperar al tick. Se conserva timeout conservador de respuesta de 15 s.
-146 pruebas locales correctas; integración ControlPoliticas/ParentStore con
-relay real pendiente como P08-B. Ver pruebas/EVIDENCIA_P08_A.md.
+146 pruebas locales correctas en ese bloque; la integración de políticas JVM
+se añadió después en P08-B. Ver pruebas/EVIDENCIA_P08_A.md.
 
 P07 incorpora desafío QR firmado del hijo guardado y respuesta OFFLINE tras
 autenticación, sin relay ni ALLOW. Conserva propósito/acción/boot/nonce; RETIRE
@@ -165,6 +171,19 @@ El APK debug se genera en `app-parent/build/outputs/apk/debug/`. Se excluye de
 Git, igual que claves, archivos `.env`, resultados y configuración local.
 
 ## Interoperabilidad opcional entre proyectos
+
+Para probar políticas contra el relay real **ya compilado y con dependencias
+instaladas por su propio proyecto**, sin modificarlo ni ejecutar npm aquí:
+
+```powershell
+.\gradlew.bat :app-parent:testDebugUnitTest '-PrutaRelayIntegracion=C:\Users\Usuario\Documents\parental_render' --tests '*IntegracionPoliticasRelayTest' --rerun-tasks
+```
+
+Node 24 y JDK 21; TLS efímero confiado solo por cliente JVM de test, con hostname
+validado. Compara hashes CP/1/esquema/vectores antes de abrir loopback; no LAN.
+Sin propiedad, este test queda excluido y verificar.ps1 sigue independiente.
+La propiedad rutaRelayIntegracion apunta a la raíz actual del servidor; no es
+la propiedad histórica rutaRelay del cruce opcional de codecs de abajo.
 
 El test predeterminado verifica cruce criptográfico JVM/Node contra los payloads
 congelados, no el codec del servidor. Para probar también el codec Node externo,

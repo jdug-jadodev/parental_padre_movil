@@ -2,8 +2,8 @@
 
 Última actualización: 2026-10-09
 Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. P00: 37c74a3, 943082c. Primer bloque P01: 0f143c4; cierre local en el commit posterior, consultar git log.
-Tarea actual: P08-A — revisión local de latidos antes de integración
-Estado: P08_A_VALIDADO_LOCAL — 146 pruebas locales correctas; cadencia/caducidad corregidas; integración de políticas contra relay y aceptación física pendientes
+Tarea actual: P08-B — integración JVM de políticas con relay real
+Estado: P08_B_VALIDADO_LOCAL_PARCIAL — 146 pruebas independientes y una integración opcional aprobadas; APK/hijo reales y entrega pendientes
 
 ## Entorno observado
 
@@ -47,6 +47,8 @@ Node 24.21.0 / npm 11.19.0 / Windows 11 amd64
 SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Terminado y demostrado
+
+- P08-B: ControlPoliticas + ParentStore + CanalPoliticasRelay + RelayConnection + TransporteOkHttp contra relay externo compilado (ce59ef6), WSS loopback/puerto efímero y hijo Node ficticio. Hashes CP/1/esquema/vectores iguales antes de escuchar. Hijo no apto y vínculo PREPARADO bloquean órdenes; señales de red/autoridad ficticias negativas bloquean sync/envío. Se comprueba comando persistido antes de cada envío, reserva seq=1 y dos retransmisiones de bytes exactos; ACK firmado con hash ajeno rechazado, ACK pendiente no es APPLIED. Reapertura de ParentStore cifrado en RAM y reconexión no reproducen orden; STATE nuevo correlacionado id/seq/hash resuelve como ENFORCEMENT_FAILED simulado. No hay mutaciones de producción, bypass ni promoción de vínculo operativo. Harness opcional -PrutaRelayIntegracion; prueba independiente no necesita servidor/npm. Evidencia: pruebas/EVIDENCIA_P08_B.md. Sin ADB ni cambios/despliegue en parental_render.
 
 - P08-A: atendida observación del handoff documentacion/INTEGRACION_LOCAL_PADRE.md del servidor (leído sin modificar ese repositorio). RelayConnection emite PING inicial tras AUTH_OK y siguientes cada 15 s desde envío, no 10 s desde PONG. Se comprueba caducidad de 45 s desde último PONG en tick y puerta de envío, incluso sin tick tras pausa; PONG tardío no resucita canal. Se conserva timeout conservador de respuesta de 15 s y un único desafío pendiente. Seis tests nuevos aprobados: cadencia con demora, caducidad sin tick, ausencia de ráfaga, renovación solo por PONG, contexto nuevo sin herencia y rechazo tardío. Evidencia: pruebas/EVIDENCIA_P08_A.md. Sin CP/1 cambiado, ADB, servidor modificado ni despliegue; no acredita todavía ControlPoliticas contra relay real.
 
@@ -130,6 +132,11 @@ SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Archivos modificados en la última tarea
 
+P08-B: app-parent/build.gradle.kts;
+app-parent/src/test/java/dev/controlparental/parent/IntegracionPoliticasRelayTest.kt;
+pruebas/relay-politicas.mjs y pruebas/EVIDENCIA_P08_B.md;
+README.md, ESTADO.md y pruebas/MATRIZ_ACEPTACION.md. Solo harness/pruebas/configuración opcional, sin fuentes de producción ni CP/1 cambiados.
+
 P08-A: app-parent/src/main/java/dev/controlparental/parent/network/RelayConnection.kt;
 app-parent/src/test/java/dev/controlparental/parent/RelayConnectionTest.kt;
 README.md, ESTADO.md y pruebas/EVIDENCIA_P08_A.md. Sin cambios de dependencias, permisos o CP/1.
@@ -170,6 +177,8 @@ app-parent/src/androidTest/java/dev/controlparental/parent/AlmacenAndroidTest.kt
 pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P03.md y pruebas/HANDOFF_P03.md.
 
 ## Pruebas ejecutadas y resultado
+
+- P08-B: prueba opcional focalizada repetida y suite completa con -PrutaRelayIntegracion/--rerun-tasks correctas; 130 tareas ejecutadas, XML 111 app (una integración real) + 30 núcleo + 1 interop, sin fallos/errores/omisiones. Después scripts/verificar.ps1 sin ruta externo: 110 app + 30 núcleo + 1 interop y cinco oráculo Node, 146 independientes; integración excluida, no omitida ni dependencia obligatoria. Total demostrado: 147 incluyendo la opcional. APK debug/instrumentado/release sin firma de distribución compilados; lint cero errores/23 avisos. Diez vectores/78 comprobaciones documentales. Repositorio externo limpio antes/después; no build/instalación/npm allí. Sin instrumentados ejecutados.
 
 - P08-A: tests app repetidos con --rerun-tasks correctos; Gradle completo repetido (app/núcleo/interoperabilidad, debug/instrumentado/release sin firma de distribución y lint): 130 tareas ejecutadas correctamente. scripts/verificar.ps1 correcto. XML: 110 app + 30 núcleo + 1 interop, cero fallos/errores/omisiones; cinco oráculo Node, total 146 locales. Diez vectores/78 comprobaciones documentales; lint cero errores/23 avisos. No instrumentados ejecutados ni harness externo en este turno.
 
@@ -252,6 +261,9 @@ P01 aceptar con huella y PIN/contraseña pasó físicamente en A56, incluida cad
 La referencia plantillas/HANDOFF.md de padre/AGENTS.md no existe; usar pruebas/HANDOFF_PLANTILLA.md.
 
 ## Próxima tarea y lectura mínima
+
+P08-B cerrada localmente; siguiente subtarea P08-C: acordar con propietario/rol hijo entorno para comunicación entre APK reales, confianza TLS local y recuperación presencial acreditada. Antes de instalar/probar A56, avisar y esperar habilitación nueva; A13 excluido. No usar 127.0.0.1 del PC como destino directo en un teléfono ni instalar CA de test sin acuerdo. La integración JVM no autoriza promocionar PREPARADO ni demuestra restricciones del hijo; no entrega/despliegue. P08 completa depende de evidencias reales G1/G3 y firma de distribución. Pendientes ampliables posteriormente en tests: reinicio del proceso relay/ACK totalmente perdido, no solo reconexión del padre y retención de ACK hasta tercer envío.
+La siguiente referencia histórica a P08-B ya fue atendida.
 
 P08-A cerrada localmente. Siguiente subtarea P08-B: probar ControlPoliticas/ParentStore contra relay real en JVM aislada con hijo simulado apto solo en tests. Consultar padre/PLAN_PADRE.md P08, SPEC-P P5/P6, CP/1 §7/8 y el handoff del servidor documentacion/INTEGRACION_LOCAL_PADRE.md. No modificar parental_render: acordar su punto de entrada para un harness opcional del padre; conservar verificación independiente y comparar hashes congelados antes de conectar. El driver externo documentado omite ControlPoliticas y no prueba sus guardas. Artefactos del padre recompilados tras corregir latidos. P08 completa/entrega, APK/hijo reales y recuperación física siguen pendientes; PREPARADO no se promociona ni autoriza órdenes. Sin ADB hasta aviso/autorización nueva A56, A13 excluido; no despliegue.
 Las próximas tareas descritas a continuación se conservan como historial, no sustituyen P08-B.
