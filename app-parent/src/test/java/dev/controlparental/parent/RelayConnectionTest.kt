@@ -195,9 +195,90 @@ class RelayConnectionTest {
         val ticket = e.conexion.sesionPoliticas()!!
         socket.mensaje(ErrorProtocolo(Motivo.PEER_OFFLINE))
         assertEquals(FaseRelay.AUTENTICADO, e.conexion.estado.value.fase)
-        e.tiempo = 10_000; e.conexion.avanzarReloj()
-        e.tiempo = 25_000 // Caduca incluso antes del siguiente tick de Android.
+        e.tiempo = 15_000; e.conexion.avanzarReloj()
+        e.tiempo = 30_000 // Caduca incluso antes del siguiente tick de Android.
         assertNull(e.conexion.sesionPoliticas())
         assertFalse(e.conexion.enviarPolitica(ticket, CodecProtocolo.codificarFrame(sobreMensaje(e))))
+    }
+
+    @Test fun latidosCadaQuinceSegundosDesdeEnvioAunquePongSeDemore() {
+        val e = Entorno(); val socket = e.autenticar()
+        e.tiempo = 2_000
+        socket.mensaje(RespuestaLatido((socket.enviados.last() as Latido).nonce))
+        for (instante in listOf(10_000L, 14_999L)) {
+            e.tiempo = instante; e.conexion.avanzarReloj()
+            assertEquals(1, socket.enviados.filterIsInstance<Latido>().size)
+        }
+        e.tiempo = 15_000; e.conexion.avanzarReloj()
+        assertEquals(2, socket.enviados.filterIsInstance<Latido>().size)
+        e.tiempo = 19_000
+        socket.mensaje(RespuestaLatido((socket.enviados.last() as Latido).nonce))
+        e.tiempo = 29_999; e.conexion.avanzarReloj()
+        assertEquals(2, socket.enviados.filterIsInstance<Latido>().size)
+        e.tiempo = 30_000; e.conexion.avanzarReloj()
+        assertEquals(3, socket.enviados.filterIsInstance<Latido>().size)
+    }
+
+    @Test fun canalCaducaALosCuarentaYCincoSegundosSinTickNiPingPendiente() {
+        val e = Entorno(); val socket = e.autenticar()
+        socket.mensaje(RespuestaLatido((socket.enviados.last() as Latido).nonce))
+        val ticket = e.conexion.sesionPoliticas()!!
+        e.tiempo = 44_999; assertEquals(ticket, e.conexion.sesionPoliticas())
+        e.tiempo = 45_000
+        assertNull(e.conexion.sesionPoliticas())
+        assertFalse(e.conexion.enviarPolitica(ticket, CodecProtocolo.codificarFrame(sobreMensaje(e))))
+        assertEquals(2, socket.enviados.size)
+        e.conexion.avanzarReloj()
+        assertTrue(socket.cancelado); assertFalse(e.conexion.estado.value.canalSano)
+        assertEquals(FaseRelay.REINTENTO, e.conexion.estado.value.fase)
+    }
+
+    @Test fun pausaBreveEnviaUnSoloLatidoSinRafagaYNoDuplicaDesafioPendiente() {
+        val e = Entorno(); val socket = e.autenticar()
+        socket.mensaje(RespuestaLatido((socket.enviados.last() as Latido).nonce))
+        e.tiempo = 40_000; repeat(5) { e.conexion.avanzarReloj() }
+        assertEquals(2, socket.enviados.filterIsInstance<Latido>().size)
+        socket.mensaje(RespuestaLatido((socket.enviados.last() as Latido).nonce))
+        e.tiempo = 54_999; e.conexion.avanzarReloj()
+        assertEquals(2, socket.enviados.filterIsInstance<Latido>().size)
+        e.tiempo = 55_000; e.conexion.avanzarReloj()
+        assertEquals(3, socket.enviados.filterIsInstance<Latido>().size)
+    }
+
+    @Test fun pongNuevoRenuevaCaducidadPeroPresenciaNoLaRenueva() {
+        val e = Entorno(); val socket = e.autenticar()
+        socket.mensaje(RespuestaLatido((socket.enviados.last() as Latido).nonce))
+        e.tiempo = 15_000; e.conexion.avanzarReloj()
+        e.tiempo = 20_000
+        socket.mensaje(RespuestaLatido((socket.enviados.last() as Latido).nonce))
+        e.tiempo = 45_000; socket.mensaje(Presencia(Rol.CHILD, true))
+        assertNotNull(e.conexion.sesionPoliticas())
+        e.tiempo = 64_999; assertNotNull(e.conexion.sesionPoliticas())
+        e.tiempo = 65_000; socket.mensaje(Presencia(Rol.CHILD, true))
+        assertNull(e.conexion.sesionPoliticas())
+    }
+
+    @Test fun nuevaConexionNoHeredaPongNiCadenciaDeLaAnterior() {
+        val e = Entorno(); val antiguo = e.autenticar()
+        antiguo.mensaje(RespuestaLatido((antiguo.enviados.last() as Latido).nonce))
+        e.conexion.desconectar(); e.tiempo = 100_000
+        val nuevo = e.autenticar()
+        assertNull(e.conexion.sesionPoliticas()); assertFalse(e.conexion.estado.value.canalSano)
+        nuevo.mensaje(RespuestaLatido((nuevo.enviados.last() as Latido).nonce))
+        assertNotNull(e.conexion.sesionPoliticas())
+        e.tiempo = 114_999; e.conexion.avanzarReloj()
+        assertEquals(1, nuevo.enviados.filterIsInstance<Latido>().size)
+        e.tiempo = 115_000; e.conexion.avanzarReloj()
+        assertEquals(2, nuevo.enviados.filterIsInstance<Latido>().size)
+    }
+
+    @Test fun pongTardioNoResucitaCanalCaducadoAunqueNoHayaTick() {
+        val e = Entorno(); val socket = e.autenticar()
+        socket.mensaje(RespuestaLatido((socket.enviados.last() as Latido).nonce))
+        e.tiempo = 40_000; e.conexion.avanzarReloj()
+        val pendiente = socket.enviados.last() as Latido
+        e.tiempo = 45_000; socket.mensaje(RespuestaLatido(pendiente.nonce))
+        assertTrue(socket.cancelado); assertNull(e.conexion.sesionPoliticas())
+        assertFalse(e.conexion.estado.value.canalSano)
     }
 }

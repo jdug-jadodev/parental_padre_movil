@@ -60,6 +60,7 @@ internal class RelayConnection(
     private var connectionId: String? = null
     private var ping: String? = null
     private var proximoPing = 0L
+    private var ultimoPong: Long? = null
     private var reintentoEn = 0L
     private var fallos = 0
 
@@ -139,8 +140,8 @@ internal class RelayConnection(
                     proximoPing = ahora(); avanzarReloj()
                 }
                 is RespuestaLatido -> {
-                    require(mutable.value.fase == FaseRelay.AUTENTICADO && mensaje.nonce == ping && ahora() < limite)
-                    ping = null; fallos = 0; proximoPing = ahora() + 10_000
+                    require(mutable.value.fase == FaseRelay.AUTENTICADO && mensaje.nonce == ping && ahora() < limite && !pongCaducado())
+                    ping = null; fallos = 0; ultimoPong = ahora()
                     mutable.value = mutable.value.copy(canalSano = true)
                 }
                 is Presencia -> {
@@ -170,9 +171,12 @@ internal class RelayConnection(
         if (fase == FaseRelay.REINTENTO && ahora() >= reintentoEn) iniciar()
         else if (fase in listOf(FaseRelay.CONECTANDO, FaseRelay.ESPERANDO_RETO, FaseRelay.ESPERANDO_AUTH_OK) && ahora() >= limite) terminar(false)
         else if (fase == FaseRelay.AUTENTICADO) {
-            if (ping != null && ahora() >= limite) terminar(false)
+            if (pongCaducado() || (ping != null && ahora() >= limite)) terminar(false)
             else if (ping == null && ahora() >= proximoPing) {
                 ping = Base64.getUrlEncoder().withoutPadding().encodeToString(ByteArray(32).also(aleatorio::nextBytes))
+                // Cadencia desde el envío, no desde la recepción (variable) del PONG.
+                // Tras una pausa se envía uno, nunca una ráfaga de latidos atrasados.
+                proximoPing = ahora() + INTERVALO_PING_MS
                 limite = ahora() + 15_000
                 enviar(CodecProtocolo.codificarFrame(Latido(ping!!)).toString(Charsets.UTF_8))
             }
@@ -183,7 +187,7 @@ internal class RelayConnection(
     }
     @Synchronized fun sesionPoliticas(): Long? {
         if (!visible.get() || socket == null || mutable.value.fase != FaseRelay.AUTENTICADO ||
-            !mutable.value.canalSano || (ping != null && ahora() >= limite)) return null
+            !mutable.value.canalSano || pongCaducado() || (ping != null && ahora() >= limite)) return null
         return generacion
     }
     @Synchronized fun enviarPolitica(ticket: Long, frame: ByteArray): Boolean {
@@ -206,7 +210,13 @@ internal class RelayConnection(
     }
     private fun cerrarSocket() {
         generacion++
-        val anterior = socket; socket = null; connectionId = null; ping = null
+        val anterior = socket; socket = null; connectionId = null; ping = null; ultimoPong = null
         anterior?.cancelar()
+    }
+    private fun pongCaducado(): Boolean = ultimoPong?.let { ahora() - it !in 0 until CADUCIDAD_CANAL_MS } ?: false
+
+    companion object {
+        private const val INTERVALO_PING_MS = 15_000L
+        private const val CADUCIDAD_CANAL_MS = 45_000L
     }
 }

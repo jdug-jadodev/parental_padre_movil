@@ -2,8 +2,8 @@
 
 Última actualización: 2026-10-09
 Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. P00: 37c74a3, 943082c. Primer bloque P01: 0f143c4; cierre local en el commit posterior, consultar git log.
-Tarea actual: P07 — autorización local sin internet
-Estado: P07_IMPLEMENTADO_LOCAL_PARCIAL — 140 pruebas locales correctas; APK compilados; recuperación física e integración pendientes
+Tarea actual: P08-A — revisión local de latidos antes de integración
+Estado: P08_A_VALIDADO_LOCAL — 146 pruebas locales correctas; cadencia/caducidad corregidas; integración de políticas contra relay y aceptación física pendientes
 
 ## Entorno observado
 
@@ -47,6 +47,8 @@ Node 24.21.0 / npm 11.19.0 / Windows 11 amd64
 SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Terminado y demostrado
+
+- P08-A: atendida observación del handoff documentacion/INTEGRACION_LOCAL_PADRE.md del servidor (leído sin modificar ese repositorio). RelayConnection emite PING inicial tras AUTH_OK y siguientes cada 15 s desde envío, no 10 s desde PONG. Se comprueba caducidad de 45 s desde último PONG en tick y puerta de envío, incluso sin tick tras pausa; PONG tardío no resucita canal. Se conserva timeout conservador de respuesta de 15 s y un único desafío pendiente. Seis tests nuevos aprobados: cadencia con demora, caducidad sin tick, ausencia de ráfaga, renovación solo por PONG, contexto nuevo sin herencia y rechazo tardío. Evidencia: pruebas/EVIDENCIA_P08_A.md. Sin CP/1 cambiado, ADB, servidor modificado ni despliegue; no acredita todavía ControlPoliticas contra relay real.
 
 - P07 cierre local: ocho tests JVM propios aprobados, incluidos ambos QR sintéticos y firma conservada. Dos PantallaRecuperacionTest aislados RAM/JCA compilados/no ejecutados (advertencia RETIRE y cambio de entrada). No modifican identidad cotidiana ni retiran dispositivos. El simulador comprueba rechazo de repetición, arranque distinto y acción cruzada, no acredita consumo duradero en el hijo. Evidencia: pruebas/EVIDENCIA_P07.md; primer commit 90d3eff, cierre en commit posterior. Base del padre preparada para coordinar integración local con servidor separado, no para entrega/despliegue ni para habilitar órdenes con PREPARADO. Propietario avisado; él organizará trabajo externo, sin agentes ni cambios de servidor aquí.
 
@@ -128,6 +130,10 @@ SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Archivos modificados en la última tarea
 
+P08-A: app-parent/src/main/java/dev/controlparental/parent/network/RelayConnection.kt;
+app-parent/src/test/java/dev/controlparental/parent/RelayConnectionTest.kt;
+README.md, ESTADO.md y pruebas/EVIDENCIA_P08_A.md. Sin cambios de dependencias, permisos o CP/1.
+
 P07: app-parent/src/main/java/dev/controlparental/parent/recovery/OfflineChallengeSigner.kt;
 app-parent/src/main/java/dev/controlparental/parent/ui/{RecoveryScreen,CamaraOferta,AplicacionPadre}.kt;
 app-parent/src/main/java/dev/controlparental/parent/MainActivity.kt;
@@ -164,6 +170,8 @@ app-parent/src/androidTest/java/dev/controlparental/parent/AlmacenAndroidTest.kt
 pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P03.md y pruebas/HANDOFF_P03.md.
 
 ## Pruebas ejecutadas y resultado
+
+- P08-A: tests app repetidos con --rerun-tasks correctos; Gradle completo repetido (app/núcleo/interoperabilidad, debug/instrumentado/release sin firma de distribución y lint): 130 tareas ejecutadas correctamente. scripts/verificar.ps1 correcto. XML: 110 app + 30 núcleo + 1 interop, cero fallos/errores/omisiones; cinco oráculo Node, total 146 locales. Diez vectores/78 comprobaciones documentales; lint cero errores/23 avisos. No instrumentados ejecutados ni harness externo en este turno.
 
 - P07: scripts/verificar.ps1 correcto; Gradle completo --rerun-tasks, 130 tareas ejecutadas correctamente (tests app/núcleo/interoperabilidad, debug/instrumentado/release sin firma de distribución y lint). XML: 104 app + 30 núcleo + 1 interop, cero fallos/errores/omisiones; cinco oráculo Node, total 140 locales. Diez vectores/78 comprobaciones documentales; lint cero errores/23 avisos. Dos tests instrumentados nuevos compilados/no ejecutados. Sin ADB, instalaciones, restablecimientos, servidor externo ni despliegue.
 
@@ -244,6 +252,9 @@ P01 aceptar con huella y PIN/contraseña pasó físicamente en A56, incluida cad
 La referencia plantillas/HANDOFF.md de padre/AGENTS.md no existe; usar pruebas/HANDOFF_PLANTILLA.md.
 
 ## Próxima tarea y lectura mínima
+
+P08-A cerrada localmente. Siguiente subtarea P08-B: probar ControlPoliticas/ParentStore contra relay real en JVM aislada con hijo simulado apto solo en tests. Consultar padre/PLAN_PADRE.md P08, SPEC-P P5/P6, CP/1 §7/8 y el handoff del servidor documentacion/INTEGRACION_LOCAL_PADRE.md. No modificar parental_render: acordar su punto de entrada para un harness opcional del padre; conservar verificación independiente y comparar hashes congelados antes de conectar. El driver externo documentado omite ControlPoliticas y no prueba sus guardas. Artefactos del padre recompilados tras corregir latidos. P08 completa/entrega, APK/hijo reales y recuperación física siguen pendientes; PREPARADO no se promociona ni autoriza órdenes. Sin ADB hasta aviso/autorización nueva A56, A13 excluido; no despliegue.
+Las próximas tareas descritas a continuación se conservan como historial, no sustituyen P08-B.
 
 P07 implementado localmente. Próxima tarea: P08, coordinación de integración y entrega privada, bloqueada por servidor autenticado e hijo compatible y por aceptación física pendiente. El propietario debe orquestar el servidor en parental_render; probar comunicación local antes de cualquier despliegue. Base padre preparada para iniciar esa coordinación, no producto terminado. P-UI-01/02, texto grande/rotación/fondo, QR/autenticación OFFLINE reales y recuperación presencial siguen pendientes. No promocionar PREPARADO automáticamente ni certificar funciones del hijo por simuladores. Antes de actualizar/probar A56, avisar y esperar autorización nueva. No operar A13: la referencia histórica de P08 a ese teléfono no autoriza su uso. No restablecer teléfonos ni desarrollar servidor aquí.
 La indicación histórica siguiente de próxima tarea P07 ya fue atendida en este turno.

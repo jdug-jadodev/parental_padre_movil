@@ -16,6 +16,12 @@ El cliente Android WSS y CP/1 siguen formando parte de la app.
 
 ## Qué hay implementado (C00–C02, P00–P07 local parcial)
 
+P08-A revisa los latidos señalados por el servidor: PING cada 15 s desde envío
+y caducidad de canal de 45 s desde último PONG, comprobada también al enviar
+sin esperar al tick. Se conserva timeout conservador de respuesta de 15 s.
+146 pruebas locales correctas; integración ControlPoliticas/ParentStore con
+relay real pendiente como P08-B. Ver pruebas/EVIDENCIA_P08_A.md.
+
 P07 incorpora desafío QR firmado del hijo guardado y respuesta OFFLINE tras
 autenticación, sin relay ni ALLOW. Conserva propósito/acción/boot/nonce; RETIRE
 exige advertencia explícita de borrado y confirmación posterior en el hijo.
