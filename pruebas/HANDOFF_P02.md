@@ -1,5 +1,29 @@
 # Relevo — P02 parcial local
 
+## Seguimiento CameraX (prioritario)
+
+Cámara directa implementada localmente, 81 tests locales correctos. CamaraOferta
+pide CAMERA tras botón explícito, usa preview trasero/analizador plano Y + ZXing
+offline y solo entrega CHILD_OFFER estricto. No fotos/archivos/red. Al pausar
+cierra UI y al desmontar limpia/cierra proxies/desasocia casos propios. Hardware
+opcional; permiso/cámara fallida mantiene imagen/recuperación. No autoabre al
+regresar ni unbindAll. Callback único y descartado fuera de RESUMED/efecto activo.
+
+LuminanciaQr acota plano/strides/posición, submuestrea si >2048; cinco tests
+sintéticos correctos, incluidos cuatro giros QR. Debug/instrumentado/release sin
+firma compilados, lint cero errores/20 avisos de versiones. No ADB este turno;
+los 25 instrumentados están recompilados, no se ejecutaron en APK nuevo.
+
+Próximo: avisar/esperar permiso para actualizar ambos APK y probar cámara real
+en A56, con QR público de prueba en pantalla PC, sin preparar vínculo cotidiano.
+Aceptar/denegar permiso, lectura, cancelar/cerrar, giro/salida/fondo y no reapertura
+automática. No cambiar permisos por ADB sin acuerdo expreso. Si se autoriza,
+regresión de diez tests aislados. A13 excluido. No afirmar cámara aprobada por
+lectura sintética de luminancia. PAIR con autoridad real, manual texto grande/
+FLAG_SECURE y aceptación APK hijo pendientes. Cliente WSS/órdenes también faltan.
+No modificar proyecto servidor ni lanzar IA: propietario coordinará después,
+con conexiones locales probadas antes de desplegar.
+
 ## Último resultado físico (prioritario)
 
 Con permiso nuevo se actualizaron ambos APK y ejecutaron solo las tres clases

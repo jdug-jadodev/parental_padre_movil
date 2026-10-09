@@ -2,8 +2,8 @@
 
 Última actualización: 2026-10-09
 Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. P00: 37c74a3, 943082c. Primer bloque P01: 0f143c4; cierre local en el commit posterior, consultar git log.
-Tarea actual: P02 — pruebas aisladas y descarte seguro de preparación
-Estado: VALIDADA_PARCIAL_LOCAL_Y_A56 — 76 pruebas locales y diez casos Android de pantalla/persistencia/migración aprobados; cámara directa e integración pendientes
+Tarea actual: P02 — escaneo directo con CameraX local
+Estado: CAMARA_IMPLEMENTADA_LOCAL — 81 pruebas locales aprobadas; permiso/cámara/lifecycle físicos del APK nuevo e integración pendientes
 
 ## Entorno observado
 
@@ -47,6 +47,10 @@ Node 24.21.0 / npm 11.19.0 / Windows 11 amd64
 SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Terminado y demostrado
+
+- P02 cámara: CameraX 1.4.2 (camera-core/camera2/lifecycle/view) y ZXing local. Botón explícito, permiso CAMERA solo a petición, hardware opcional; preview trasero y plano Y con KEEP_ONLY_LATEST en escritor/executor único. No fotos, archivos ni solicitudes remotas. Solo entrega un CHILD_OFFER estructuralmente válido, no confirma identidad/vigencia. Imagen QR sigue disponible como alternativa.
+- CamaraOferta cierra UI al pausar, desasocia solo sus casos al salir, cierra cada ImageProxy en finally y descarta callbacks al salir/no RESUMED. No unbindAll ni servicio oculto; errores de permiso/cámara conservan alternativa/recuperación. LuminanciaQr respeta posición/límite/strides y acota planos/submuestreo. Pruebas sintéticas correctas no acreditan cámara óptica real ni liberación física.
+- Rutas cámara: gradle/libs.versions.toml, app-parent/build.gradle.kts, app-parent/src/main/AndroidManifest.xml; app-parent/src/main/java/dev/controlparental/parent/{pairing/LuminanciaQr.kt,pairing/QrLocal.kt,ui/CamaraOferta.kt,ui/PairingScreen.kt}; app-parent/src/test/java/dev/controlparental/parent/LuminanciaQrTest.kt; README.md, BUILD_ENV.md, ESTADO.md, pruebas/EVIDENCIA_P02.md y pruebas/HANDOFF_P02.md. CP/1 y proyecto servidor sin cambios; no ADB.
 
 - P02 lote físico nuevo autorizado: ambos APK actualizados con install -r solo en A56. PantallaInicialTest (4), PantallaVinculoTest (4) y VinculoPersistidoAndroidTest (2): diez aprobados, cero fallos/omisiones, 15.071 s. Recorrido/recuperación, flag FLAG_SECURE, casillas/firma fallida, descarte por entradas/salida/segundo plano, QR aislado persistente/env sin códigos y migración v1 real con reserva/nonce nuevo comprobados. Cleanup temporal completado, sin identidad/vínculo cotidiano ni cambios de credenciales. A13 conectado pero sin operaciones dirigidas a él.
 
@@ -105,6 +109,8 @@ app-parent/src/androidTest/java/dev/controlparental/parent/AlmacenAndroidTest.kt
 pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P03.md y pruebas/HANDOFF_P03.md.
 
 ## Pruebas ejecutadas y resultado
+
+- P02 cámara: scripts/verificar.ps1 correcto tras corregir ruta de fixture inexistente en test nuevo (ahora pública JCA efímera en test). 45 app + 30 núcleo + 1 interop + 5 oráculo Node = 81 pruebas locales correctas; 78 comprobaciones documentales. Cinco tests LuminanciaQr nuevos: strides/padding/posición, límites/truncado, submuestreo, oferta en cuatro giros y rechazo de QR no oferta. Debug/instrumentado/release sin firma de distribución compilados; lint cero errores/20 avisos de versiones. No se instalaron APK nuevos ni se ejecutaron tests físicos; los diez A56 anteriores son evidencia del APK anterior.
 
 - P02 A56: instalaciones app/APK instrumentado correctas; runner AndroidJUnitRunner filtrado a tres clases y selector explícito A56. Diez status 0, OK (10 tests), 15.071 s. No se ejecutaron los otros 15 instrumentados. Firma de aceptación fue JCA efímera exclusivamente de test; no acredita firma Keystore autenticada de PAIR_ACCEPT. Migración/cifrado/archivo usaron Android reales y alias/directorio temporal propio. FLAG_SECURE verificado como flag, no captura real bloqueada.
 
@@ -177,7 +183,7 @@ La referencia plantillas/HANDOFF.md de padre/AGENTS.md no existe; usar pruebas/H
 ## Próxima tarea y lectura mínima
 
 Próximo paso físico P03 completado: tres pruebas autorizadas/aprobadas en A56. No repetir por referencias históricas a pendientes. Antes de nuevas instalaciones/pruebas, avisar y esperar permiso; no tocar A13 ni ejecutar connected contra todos los dispositivos.
-Próximo paso de desarrollo P02: cámara directa CameraX/local conforme SPEC-P P4 (imagen es la vía actual). Los diez casos aislados de pantalla/persistencia/migración ya aprobaron en A56, no repetir por referencias históricas a pendientes. Siguen pendientes revisión manual selector/texto grande/rotación/captura real bloqueada, aceptación PAIR con autoridad autenticada y APK hijo real. Nuevo acceso dispositivo requiere aviso/permiso; no tocar A13. Ver HANDOFF_P02.md. No declarar vínculo completo ni app lista para integración hasta cumplir pasos pendientes; avisar al propietario cuando proceda orquestar servidor, con integración local antes de desplegar.
+Próximo paso P02: pedir autorización para actualizar APK y probar cámara/permiso reales en A56 con QR público de pruebas mostrado en PC, sin crear identidad ni vínculo cotidiano. Comprobar aceptar/denegar permiso, cancelar, lectura, giros, salir/fondo y ausencia de cámara al regresar hasta apertura explícita; regresión de diez casos aislados si se autoriza. No cambiar permisos por ADB sin acuerdo ni operar A13. Cámara local implementada pero pendiente físicamente; revisión selector/texto grande/FLAG_SECURE real y PAIR autenticado/hijo real siguen pendientes. Ver HANDOFF_P02.md. Aún falta cliente WSS/órdenes para integrar; avisar al propietario cuando esté preparada parte padre, con integración local antes de despliegue.
 
 ## Seguridad
 

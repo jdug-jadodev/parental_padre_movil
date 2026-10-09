@@ -65,7 +65,10 @@ con órdenes y contexto autenticado. Obtener el almacén no inicializa datos.
 El formato es local/versionado; no cambia CP/1 ni guarda privadas/códigos.
 
 P02 lee CHILD_OFFER desde una imagen QR local elegida con selector oficial, sin
-permisos de galería completa ni servicios remotos. No hay cámara directa. En
+permisos de galería completa ni servicios remotos. También incorpora CameraX
+local con permiso CAMERA al abrir escáner; no guarda fotos, filtra CHILD_OFFER
+y cierra al salir/pausar. Cámara real/permiso/lifecycle pendientes de probar en A56.
+En
 Vincular prepara códigos independientes para guardar fuera del teléfono, huellas
 y PAIR_ACCEPT firmado tras autenticación. Códigos solo en memoria, descartados
 al salir/segundo plano; FLAG_SECURE protege la ventana. QR firmado/env pública
@@ -76,7 +79,7 @@ Antes de separar servidor aprobaron 99 pruebas locales. Después, con autorizaci
 pruebas de imagen Android y regresión de almacenamiento. Pantalla/aceptación y
 migración v1 física pendientes. Ver `pruebas/EVIDENCIA_P02.md`.
 
-Seguimiento más reciente del padre: 76 tests locales correctos. Se descartan
+Seguimiento más reciente del padre: 81 tests locales correctos. Se descartan
 preparaciones/códigos al cambiar entradas y PairChild no firma preparaciones
 descartadas. Diez casos Android de pantalla/persistencia/migración aislada
 aprobados en A56 con autorización; no crearon vínculo cotidiano. La firma usada

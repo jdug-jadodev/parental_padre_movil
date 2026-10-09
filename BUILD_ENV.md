@@ -1,5 +1,13 @@
 # Entorno de compilación — C00–C02, P00, P01, P03 y P02 parcial
 
+P02 cámara: CameraX 1.4.2 fijado (core/camera2/lifecycle/view) con ZXing local.
+CAMERA runtime explícito, hardware/autofocus opcionales. CameraX vinculado a
+lifecycle; solo nuestros casos se desasocian, cada ImageProxy se cierra, sin
+ImageCapture ni archivos. Compilación no certifica hardware/enfoque/permiso.
+Fuentes primarias consultadas:
+https://developer.android.com/media/camera/camerax/analyze
+https://developer.android.com/media/camera/camerax/preview
+
 Separación del servidor: este proyecto no requiere npm, tsx, ws ni Ajv. Node 24
 solo para verificadores/oráculo criptográfico de tests. Servidor/dependencias
 en parental_render/relay; su verificación está en su proyecto. Interop por

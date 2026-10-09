@@ -1,5 +1,39 @@
 # Evidencia P02 — vinculación QR parcial local
 
+## Seguimiento más reciente — CameraX local
+
+Implementado CamaraOferta: botón explícito y CAMERA runtime, permiso denegado
+mantiene alternativa de imagen/recuperación; hardware opcional en manifest.
+Preview trasero compatible/FIT_CENTER, ImageAnalysis YUV con KEEP_ONLY_LATEST,
+resolución preferida 1280x720 y análisis en executor único. Cada proxy se cierra
+en finally. Solo ZXing local, sin ImageCapture, foto/archivo/red. Valida con
+CodecProtocolo.leerOferta antes de entregar un resultado; no confirma identidad
+ni vigencia contextual. Sin uso de API remota/Play ni código servidor.
+
+Plano Y respeta rowStride/pixelStride y posición/límite de buffer sin mutarlos.
+Se acotan dimensiones a 4096/submuestreo a 2048; lectura QR soporta giro por
+detectores ZXing sin transformar bytes del protocolo. Entrega única por apertura;
+si se desmonta/pausa el lector, callbacks no publican resultados. ON_PAUSE cierra
+UI de cámara, onDispose limpia analizador y desasocia solo preview/análisis
+propios, nunca unbindAll; executor termina tras cerrar frame en curso. Provider
+asíncrono no vincula si efecto cerrado o lifecycle no RESUMED. No reabre al
+volver hasta acción explícita. Esto es implementación, no evidencia óptica física.
+
+scripts/verificar.ps1 correcto: 45 app, 30 núcleo, 1 interop y 5 oráculo Node,
+81 pruebas locales correctas, 78 comprobaciones documentales. Cinco tests nuevos
+de luminancia: padding/strides/posición, límites/plano truncado, submuestreo,
+CHILD_OFFER sintético en cuatro giros y rechazo QR no oferta. Primera ejecución
+falló por recurso JVM inexistente; corregido generando pública P-256 efímera
+en test, sin usar/mover fixtures. Ejecución final correcta. Debug/instrumentado
+y release sin firma compilados; lint cero errores/20 avisos de versiones.
+
+No ADB ni instalación/ejecución física en este turno. 25 tests instrumentados
+anteriores recompilados, resultados anteriores no aprueban APK nuevo. Pendiente
+permiso/cámara/enfoque/lectura real/lifecycle/giros/negación y regresión en A56 con
+aviso/permiso nuevo. Solo QR público de pruebas mostrado en PC, no identidad o
+vínculo cotidiano ficticio; no usar A13. No declarar vínculo terminado ni apps
+conectadas. Cliente WSS/órdenes/PAIR autenticado e integración hijo siguen pendientes.
+
 ## Actualización física más reciente — diez casos A56
 
 Autorización expresa para actualizar ambos APK y ejecutar los diez casos.

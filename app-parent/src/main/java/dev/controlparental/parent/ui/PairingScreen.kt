@@ -82,6 +82,7 @@ internal fun PairingScreen(flujo: PairChild, store: ParentStore, autenticar: () 
     Text("Vinculación presencial", style = MaterialTheme.typography.titleMedium)
     Text(aviso)
     if (!bloqueado && frame == null) {
+        if (!ocupado) CamaraOferta { texto -> descartar(); oferta = texto }
         Button(enabled = !ocupado, onClick = { selector.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly)) }) {
             Text(stringResource(dev.controlparental.parent.R.string.escanear_qr))
         }
