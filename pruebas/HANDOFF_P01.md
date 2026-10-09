@@ -1,5 +1,14 @@
 # Relevo — P01
 
+## Actualización cancelación A56
+
+Modalidad cancelar autorizada y aprobada: un test sin fallos, 21.311 s. El prompt
+cancelado no autorizó firma; pública temporal conservada, alias eliminado al
+terminar. Solo A56 seleccionado explícitamente; A13 sin operaciones.
+No repetir cancelación por las referencias históricas siguientes. Próximo paso:
+acordar aceptar con PIN/contraseña; huella/caducidad y cancelación ya aprobadas.
+Persistencia tras reiniciar proceso y revisión manual todavía pendientes.
+
 ## Actualización interactiva A56
 
 El propietario autorizó aceptar: prueba real aprobada, un test sin fallos en

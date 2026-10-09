@@ -1,5 +1,18 @@
 # Evidencia P01 — identidad y autenticación
 
+## Actualización física: cancelación
+
+El propietario autorizó la modalidad cancelar. Ejecución dirigida únicamente al
+A56 con filtro AutenticacionRealTest y autenticacionReal=cancelar: **un test
+aprobado, cero fallos**, status 0/OK (1 test), 21.311 segundos.
+
+El adulto canceló físicamente el prompt; no se confirmó autenticación y
+AutoridadPadre rechazó la firma con AutenticacionRequerida. La pública temporal
+se conservó al reabrir almacén y el alias se eliminó en finally. No hubo firma
+alternativa, orden al relay ni operación sobre A13. PIN/contraseña, reinicio real
+del proceso y pérdida/invalidación segura siguen pendientes. Las referencias
+posteriores a cancelación pendiente pertenecen a etapas históricas previas.
+
 ## Actualización física: autenticación, firma y caducidad
 
 Prueba interactiva aceptar autorizada por el propietario y ejecutada exclusivamente
