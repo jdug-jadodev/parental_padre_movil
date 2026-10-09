@@ -16,6 +16,8 @@
 
 ## Acuerdos con el propietario — obligatorios para futuras sesiones
 
+- El propietario designó a la IA de parental_render como coordinadora del trabajo restante entre roles. Handoff del padre en COORDINACION_PROYECTOS.md. Coordinar no autoriza editar otros repositorios, lanzar subagentes, acceder a dispositivos ni desplegar; cada rol conserva su implementación y debe comunicar tareas/evidencias sin secretos.
+
 - Comunicación, documentación, comentarios, textos de la app y mensajes de commit en español claro. Conservar los nombres exigidos por CP/1, APIs y herramientas; no traducir campos del protocolo.
 - Separación realizada: servidor y sus tests en parental_render/relay, contrato/fixtures congelados copiados a ese proyecto. No desarrollar ni añadir servidor aquí. Las referencias históricas a «Padre + Render» no autorizan mezclar proyectos. Verificación local del padre independiente de npm/servidor; cruce con codec del servidor solo opcional mediante -PrutaRelay. No cambiar CP/1 unilateralmente. Desarrollar servidor posteriormente solo en parental_render.
 - Al completar la parte del padre preparada para integración, avisar al propietario para que orqueste una IA en parental_render. La comunicación entre ambas apps debe probarse primero en entorno local antes del despliegue. No lanzar agentes ni desplegar por este acuerdo; el propietario organizará ese trabajo. Mantener los permisos de dispositivo y la exclusión del A13.

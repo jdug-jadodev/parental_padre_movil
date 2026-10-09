@@ -262,6 +262,8 @@ La referencia plantillas/HANDOFF.md de padre/AGENTS.md no existe; usar pruebas/H
 
 ## Próxima tarea y lectura mínima
 
+Handoff de coordinación añadido en COORDINACION_PROYECTOS.md por petición del propietario: IA de parental_render orquestará trabajo restante, sin transferir permisos de dispositivo/despliegue ni autorizar edición cruzada. Incluye estado, comandos, dependencias hijo/TLS, límites y puerta operativa PREPARADO→VINCULADO todavía pendiente. Cambios documentales: COORDINACION_PROYECTOS.md, AGENTS.md y ESTADO.md; no código, ADB ni pruebas nuevas en este turno. Próximo paso: recibir asignación concreta del coordinador tras identificar hijo y entorno autorizado.
+
 P08-B cerrada localmente; siguiente subtarea P08-C: acordar con propietario/rol hijo entorno para comunicación entre APK reales, confianza TLS local y recuperación presencial acreditada. Antes de instalar/probar A56, avisar y esperar habilitación nueva; A13 excluido. No usar 127.0.0.1 del PC como destino directo en un teléfono ni instalar CA de test sin acuerdo. La integración JVM no autoriza promocionar PREPARADO ni demuestra restricciones del hijo; no entrega/despliegue. P08 completa depende de evidencias reales G1/G3 y firma de distribución. Pendientes ampliables posteriormente en tests: reinicio del proceso relay/ACK totalmente perdido, no solo reconexión del padre y retención de ACK hasta tercer envío.
 La siguiente referencia histórica a P08-B ya fue atendida.
 
