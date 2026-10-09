@@ -23,16 +23,28 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import dev.controlparental.parent.pairing.*
 import dev.controlparental.protocol.CodecProtocolo
+import dev.controlparental.protocol.*
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
 
 @Composable
 internal fun CamaraOferta(onOferta: (String) -> Unit) {
+    CamaraQr(onOferta, offline = false)
+}
+
+@Composable
+internal fun CamaraRetoOffline(onReto: (String) -> Unit, habilitada: Boolean) {
+    CamaraQr(onReto, offline = true, habilitada = habilitada)
+}
+
+@Composable
+private fun CamaraQr(onQr: (String) -> Unit, offline: Boolean, habilitada: Boolean = true) {
     val contexto = LocalContext.current
     val propietario = LocalLifecycleOwner.current
     var abierta by remember { mutableStateOf(false) }
-    var aviso by remember { mutableStateOf("Apunta al QR CHILD_OFFER. Cámara solo mientras escaneas: no se guardan fotos ni se envían imágenes.") }
-    val callback by rememberUpdatedState(onOferta)
+    var aviso by remember { mutableStateOf(if (offline) "Apunta al desafío firmado de recuperación del hijo. Sin fotos ni envíos por red."
+        else "Apunta al QR CHILD_OFFER. Cámara solo mientras escaneas: no se guardan fotos ni se envían imágenes.") }
+    val callback by rememberUpdatedState(onQr)
     val permiso = rememberLauncherForActivityResult(RequestPermission()) { concedido ->
         abierta = concedido && propietario.lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)
         if (!concedido) aviso = "Sin permiso de cámara. Puedes leer una imagen QR o volver a intentarlo; recuperación sigue disponible."
@@ -46,10 +58,10 @@ internal fun CamaraOferta(onOferta: (String) -> Unit) {
     }
     Text(aviso)
     if (!abierta) {
-        Button(onClick = {
+        Button(enabled = habilitada, onClick = {
             if (ContextCompat.checkSelfPermission(contexto, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) abierta = true
             else permiso.launch(Manifest.permission.CAMERA)
-        }) { Text("Escanear oferta con cámara") }
+        }) { Text(if (offline) "Escanear desafío de recuperación" else "Escanear oferta con cámara") }
     } else {
         OutlinedButton(onClick = { abierta = false }) { Text("Cerrar cámara") }
         val visor = remember { PreviewView(contexto).apply {
@@ -75,12 +87,17 @@ internal fun CamaraOferta(onOferta: (String) -> Unit) {
                         val plano = imagen.planes[0]
                         val gris = LuminanciaQr.copiar(plano.buffer, imagen.width, imagen.height, plano.rowStride, plano.pixelStride)
                         val texto = QrLocal.leerLuminancia(gris.ancho, gris.alto, gris.bytes)
-                        CodecProtocolo.leerOferta(texto.toByteArray()) // Nunca acepta otro tipo de QR.
+                        if (offline) {
+                            val sobre = CodecProtocolo.leerFrame(texto.toByteArray()) as? SobreFirmado ?: error("Falta firma")
+                            require(sobre.purpose == Proposito.OFFLINE &&
+                                CodecProtocolo.leerPayloadSinVerificar(CodecProtocolo.bytesPayload(sobre), Proposito.OFFLINE) is RetoOffline)
+                        } else CodecProtocolo.leerOferta(texto.toByteArray())
                         if (entregado.compareAndSet(false, true)) principal.execute {
                             if (activo.get() && propietario.lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
                                 abierta = false
                                 callback(texto)
-                                aviso = "Oferta QR leída localmente. Comprueba huellas y que sigue vigente en el hijo."
+                                aviso = if (offline) "Desafío leído; falta verificar firma y pareja guardadas."
+                                    else "Oferta QR leída localmente. Comprueba huellas y que sigue vigente en el hijo."
                             }
                         }
                     }

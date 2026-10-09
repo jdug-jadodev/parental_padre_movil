@@ -32,6 +32,8 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import dev.controlparental.parent.presentation.AccionesControlReal
 import dev.controlparental.parent.ui.ControlScreen
+import dev.controlparental.parent.ui.RecoveryScreen
+import dev.controlparental.parent.recovery.OfflineChallengeSigner
 
 class MainActivity : ComponentActivity() {
     private val sesion = SesionAutoridad(SystemClock::elapsedRealtime)
@@ -58,6 +60,8 @@ class MainActivity : ComponentActivity() {
         politicas = ControlPoliticas(store, CanalPoliticasRelay(conexion) { red.validada.value },
             SystemClock::elapsedRealtime, sesion::exigirVigencia, { autoridad.firmar(it, Proposito.MESSAGE) })
         val accionesControl = AccionesControlReal(store, politicas)
+        val recuperacion = OfflineChallengeSigner(store, SystemClock::elapsedRealtime, sesion::exigirVigencia,
+            { autoridad.firmar(it, Proposito.OFFLINE) })
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
@@ -112,7 +116,8 @@ class MainActivity : ComponentActivity() {
                     vinculacion = { PairingScreen(vinculacion, store, ::autenticar) },
                     conexion = { ConexionRelayScreen(conexion, store, redValidada, ::autenticar, politicas) },
                     controles = { ControlScreen(accionesControl, ::autenticar,
-                        redValidada && canal.fase == FaseRelay.AUTENTICADO && canal.canalSano) })
+                        redValidada && canal.fase == FaseRelay.AUTENTICADO && canal.canalSano) },
+                    recuperacion = { RecoveryScreen(recuperacion, store, ::autenticar) })
             }
         }
     }

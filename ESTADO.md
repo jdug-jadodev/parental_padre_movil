@@ -2,8 +2,8 @@
 
 Última actualización: 2026-10-09
 Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. P00: 37c74a3, 943082c. Primer bloque P01: 0f143c4; cierre local en el commit posterior, consultar git log.
-Tarea actual: P06 — interfaz de control final
-Estado: P06_IMPLEMENTADO_LOCAL_PARCIAL — controles con confirmación y selección offline compilados; 132 pruebas locales correctas; UI física e integración pendientes
+Tarea actual: P07 — autorización local sin internet
+Estado: EN_CURSO_LOCAL — firmante OFFLINE y pantalla/lectores locales compilados; pruebas instrumentadas y cierre de verificación pendientes
 
 ## Entorno observado
 
@@ -47,6 +47,8 @@ Node 24.21.0 / npm 11.19.0 / Windows 11 amd64
 SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Terminado y demostrado
+
+- P07 primer bloque: OfflineChallengeSigner verifica OFFLINE_CHALLENGE con pública del hijo guardada y pairId, autentica antes/después de firmar OFFLINE_RESPONSE exacta (acción/boot/nonce). Referencia de preparación única, revisión contra salida/cambio de entrada, margen local 4 min sin timestamp inventado; hijo decide sus 5 min/consumo/boot. RecoveryScreen muestra advertencia de borrado para RETIRE, QR solo en memoria/con autoridad vigente, descarte al salir/fondo, cámara e imagen locales sin relay. PREPARADO permite recuperación firmada necesaria para integración, pero no se promociona ni habilita uso normal. Siete tests JVM iniciales correctos (103 app total); no ADB, restablecimientos ni servidor externo. Retiro/aplicación reales y QR/autenticación físicos pendientes.
 
 - P06 cierre local parcial: ControlScreen sustituye controles de recorrido en MainActivity con acciones reales inyectadas desde AccionesControlReal. Formularios de 60–604800 s, advertencias de las cuatro acciones, guardado local sin envío, reemplazo explícito y confirmación separada (también ALLOW/ALLOW_FOR). Guardia síncrona de operación; salida/fondo descartan diálogos y cancelan operación UI, conservando intención duradera. Vínculo PREPARADO no habilita acciones ni se promociona por STATE; recuperación siempre en barra inferior.
 - P06 evidencia: modo/causa y última respuesta firmada se presentan separados de intención, relay y presencia. APPLIED con NETWORK_LOST/LOCKED informa bloqueo por red, nunca pinta permitido por pulsar ALLOW. Caída del canal/red degrada presentación inmediatamente; sincronizar no rejuvenece evidencia previa. Antigüedad conocida solo en instancia que recibió evidencia, desconocida tras reabrir; remainingSec no se descuenta como confirmación remota. Descartar un comando exige sincronización fresca y advierte que no revoca órdenes recibidas; no se afirma cancelación remota.

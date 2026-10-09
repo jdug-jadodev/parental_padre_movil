@@ -24,6 +24,7 @@ fun AplicacionPadre(
     vinculacion: @Composable () -> Unit = {},
     conexion: @Composable () -> Unit = {},
     controles: (@Composable () -> Unit)? = null,
+    recuperacion: (@Composable () -> Unit)? = null,
 ) {
     BackHandler(enabled = estado.puedeVolver, onBack = volver)
     Scaffold(bottomBar = {
@@ -56,7 +57,7 @@ fun AplicacionPadre(
                         vinculacion()
                     }
                     PantallaPadre.CONTROL -> { if (controles == null) Control(estado.datos) else controles(); conexion() }
-                    PantallaPadre.RECUPERACION -> Recuperacion()
+                    PantallaPadre.RECUPERACION -> Recuperacion(recuperacion)
                 }
             }
         }
@@ -96,11 +97,13 @@ private fun Control(datos: DatosPadre) {
 }
 
 @Composable
-private fun Recuperacion() {
+private fun Recuperacion(contenido: (@Composable () -> Unit)?) {
     Text(stringResource(R.string.recuperacion_titulo), style = MaterialTheme.typography.headlineSmall)
     Text(stringResource(R.string.recuperacion_descripcion))
     Text(stringResource(R.string.recuperacion_padre_perdido))
     Text(stringResource(R.string.recuperacion_retirada))
-    Button(onClick = {}, enabled = false) { Text(stringResource(R.string.escanear_desafio)) }
-    Text(stringResource(R.string.recuperacion_pendiente))
+    if (contenido != null) contenido() else {
+        Button(onClick = {}, enabled = false) { Text(stringResource(R.string.escanear_desafio)) }
+        Text(stringResource(R.string.recuperacion_pendiente))
+    }
 }
