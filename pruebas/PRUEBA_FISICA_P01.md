@@ -4,7 +4,7 @@
 fallos. **Interactivo aceptar también aprobado:** firma y caducidad tras 61 s,
 un test sin fallos, 76.324 s. El propietario confirmó huella. **Cancelar también
 aprobado:** firma rechazada, un test sin fallos, 21.311 s. Segunda ejecución aceptar
-solicitando PIN/contraseña aprobada (72.282 s); falta confirmar modalidad física.
+con PIN/contraseña aprobada (72.282 s), modalidad confirmada por el propietario.
 Reinicio del proceso y revisión manual pendientes. A13 excluido por ambos AGENTS.md.
 Avisar y esperar habilitación expresa de ADB antes de listar
 dispositivos, instalar o probar. Usar solo el teléfono del padre, Android 11+.

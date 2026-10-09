@@ -3,7 +3,7 @@
 Última actualización: 2026-10-08
 Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. P00: 37c74a3, 943082c. Primer bloque P01: 0f143c4; cierre local en el commit posterior, consultar git log.
 Tarea actual: P01
-Estado: VALIDADA_PARCIAL_A56 — lote de 12 pruebas, huella/firma/caducidad y cancelación reales aprobados; PIN/contraseña y reinicio de proceso pendientes
+Estado: VALIDADA_PARCIAL_A56 — lote de 12 pruebas, huella, PIN/contraseña, firma/caducidad y cancelación reales aprobados; reinicio de proceso pendiente
 
 ## Entorno observado
 
@@ -52,7 +52,7 @@ pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P01.md, pruebas/HANDOFF_P01.md, 
 
 ## Pruebas ejecutadas y resultado
 
-- A56: segunda ejecución aceptar, solicitando al propietario usar PIN/contraseña y no huella. Un test aprobado, status 0/OK (1 test), cero fallos, 72.282 s. Firma protegida y caducidad Keystore/sesión tras 61 segundos comprobadas de nuevo. El runner no distingue modalidad física: falta confirmación del propietario de que usó credencial. A13 excluido, sin operaciones.
+- A56: segunda ejecución aceptar con PIN/contraseña, confirmado expresamente por el propietario (sin huella). Un test aprobado, status 0/OK (1 test), cero fallos, 72.282 s. Firma protegida y caducidad Keystore/sesión tras 61 segundos comprobadas de nuevo. A13 excluido, sin operaciones.
 
 - A56 interactivo cancelar autorizado: runner ADB con selector explícito del A56, filtro AutenticacionRealTest y autenticacionReal=cancelar. Un test aprobado, status 0/OK (1 test), cero fallos, 21.311 s. Cancelación física recibida como no autenticada; AutoridadPadre rechazó firmar. Pública temporal conservada al reabrir almacén, alias eliminado en finally. Ninguna operación en A13 ni firma/orden enviada.
 
@@ -104,7 +104,7 @@ La referencia plantillas/HANDOFF.md de padre/AGENTS.md no existe; usar pruebas/H
 
 ## Próxima tarea y lectura mínima
 
-Próximo paso inmediato: confirmar que en la segunda ejecución aceptar aprobada (72.282 s) el propietario usó PIN/contraseña, como se solicitó. Huella/caducidad y cancelación ya aprobaron. Acordar aparte reinicio de proceso y revisión visual. Usar siempre selección explícita del A56; no tocar A13. No requiere Device Owner, vinculación ni restablecimiento. Alias temporales se eliminan; no reemplazan identidad.
+Próximo paso inmediato: acordar reinicio de proceso y revisión visual. Huella, PIN/contraseña, firma/caducidad y cancelación ya aprobaron y las modalidades fueron confirmadas por el propietario. Usar siempre selección explícita del A56; no tocar A13. No requiere Device Owner, vinculación ni restablecimiento. Alias temporales se eliminan; no reemplazan identidad.
 Tras validar P01, siguiente tarea de desarrollo P02 — vinculación QR. No se inició P02 ni almacenamiento de metadatos en este turno. P00 y C02 conservan aceptación física pendiente.
 
 ## Seguridad
