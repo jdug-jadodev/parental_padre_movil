@@ -29,3 +29,16 @@ dependencies {
     implementation(libs.serialization.json)
     testImplementation(libs.junit)
 }
+
+// El test puro JVM no exige Node. La interoperabilidad se ejecuta explícitamente.
+tasks.test { exclude("**/InteroperabilidadTest.class") }
+
+tasks.register<Test>("testInterop") {
+    description = "Verifica firmas nuevas entre JVM y Node sin guardar claves privadas"
+    group = "verification"
+    dependsOn(tasks.testClasses)
+    testClassesDirs = sourceSets.test.get().output.classesDirs
+    classpath = sourceSets.test.get().runtimeClasspath
+    include("**/InteroperabilidadTest.class")
+    systemProperty("raiz.proyecto", rootProject.projectDir.absolutePath)
+}
