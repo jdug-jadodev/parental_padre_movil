@@ -2,8 +2,8 @@
 
 Última actualización: 2026-10-09
 Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. P00: 37c74a3, 943082c. Primer bloque P01: 0f143c4; cierre local en el commit posterior, consultar git log.
-Tarea actual: P03 (dependencia necesaria antes de P02)
-Estado: VALIDADA_LOCAL_Y_A56 — 94 pruebas locales y tres pruebas Android de almacenamiento aprobadas; integración UI/QR pendiente
+Tarea actual: P02 — vinculación QR
+Estado: EN_CURSO — casos de uso/QR offline aprobados localmente; pantalla, pruebas ampliadas e integración reales pendientes
 
 ## Entorno observado
 
@@ -12,6 +12,9 @@ Node 24.21.0 / npm 11.19.0 / Windows 11 amd64
 SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Terminado y demostrado
+
+- P02 primer bloque: PairChild lee CHILD_OFFER estricto, prepara pairId/códigos, huellas SHA-256 completas y PAIR_ACCEPT firmado con propósito PAIR; persiste PREPARADO antes de mostrar QR y no permite nueva vinculación. Generador de tres códigos independientes de 160 bits Base32/hash por propósito; ningún código se serializa. Exportación con solo cuatro campos públicos. ZXing core 3.5.3 fijado para QR local, sin servicios remotos.
+- P02: tres nuevos tests JVM aprobados, 36 app en total. Roundtrip offline de ambos QR, firma, confirmación de huellas/códigos, bloqueo de revinculación/órdenes en PREPARADO y revisión automatizada de exportación. No demuestran vigencia ni aceptación por el hijo real. UI/cámara pendientes; no se usó ADB.
 
 - P03: ParentStore con una coroutine escritora, metadatos locales versionados, contador/intención en una transacción, comandos originales firmados y evidencia separada. AtomicFile y AES-256-GCM con alias Keystore distinto de firma y nonce generado por proveedor. No se conecta todavía a la UI ni crea archivos automáticamente al abrir la app. Primer bloque a20f025; cierre en el commit posterior.
 - P03: 15 tests nuevos aprobados (4 AES-GCM y 11 ParentStore), 33 tests app en total. Cierre antes de envío conserva reserva; cancelación no reutiliza contador ni borra evidencia; fallos antes/después de commit, concurrencia, corrupción y pérdida simulada de clave comprobados. Se implementó antes de P02 por su dependencia explícita; no se inició vinculación QR.

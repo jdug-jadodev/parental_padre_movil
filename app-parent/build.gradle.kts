@@ -41,6 +41,7 @@ dependencies {
     implementation(libs.lifecycle.runtime.compose)
     implementation(libs.coroutines.core)
     implementation(libs.serialization.json)
+    implementation(libs.zxing.core)
     testImplementation(libs.junit)
     testImplementation(libs.coroutines.test)
     androidTestImplementation(platform(libs.compose.bom))

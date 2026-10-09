@@ -73,6 +73,15 @@ class ParentStore(
     suspend fun leer(): MetadatosPadre = transaccion { cargar() }
     suspend fun existe(): Boolean = transaccion { archivo.existe() }
 
+    suspend fun prepararVinculo(aceptacion: AceptacionVinculo) = transaccion {
+        CodecProtocolo.codificarPayload(aceptacion)
+        val datos = cargar()
+        check(datos.vinculo == VinculoPersistido.SIN_VINCULAR &&
+            datos.parentPublicKeyB64 == aceptacion.parentPublicKeyB64)
+        guardar(datos.copy(pairId = aceptacion.pairId, childPublicKeyB64 = aceptacion.childPublicKeyB64,
+            relayOrigin = aceptacion.relayOrigin, vinculo = VinculoPersistido.PREPARADO))
+    }
+
     // P05 debe aportar secuencia de STATE autenticado/correlacionado, nunca presencia del relay.
     suspend fun reservarIntencion(action: Accion, durationSec: Int?, secuenciaRemotaVerificada: String): PendingIntentRecord = transaccion {
         val datos = cargar()
