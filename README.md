@@ -96,9 +96,12 @@ Consultar `http://127.0.0.1:10000/healthz`. Detener con Ctrl+C.
 
 Se avisará antes de necesitar ADB. Cuando el propietario habilite el **teléfono
 del padre**, se podrá instalar el APK debug y ejecutar
-`:app-parent:connectedDebugAndroidTest`. No ejecutar ese comando todavía.
+`:app-parent:connectedDebugAndroidTest` con selección de dispositivo verificada.
+El primer lote ya se ejecutó en el A56: 12 aprobados y 1 interactivo omitido.
+El A13 queda excluido; con ambos conectados se usó runner ADB dirigido
+explícitamente al A56, no Gradle contra todos los teléfonos.
 Además de la pantalla, el APK instrumentado verifica el parser y el acceso al
-esquema dentro de Android. Está compilado, pero esas pruebas no se han ejecutado.
+esquema dentro de Android. Estas pruebas aprobaron en el A56.
 Incluye además pruebas de navegación y presentación con hijo ausente, estado
 confirmado, desconexión e intención sin confirmar. Son datos ficticios exclusivos
 del APK instrumentado, no evidencias de un dispositivo hijo.

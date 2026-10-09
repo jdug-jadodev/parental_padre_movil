@@ -3,7 +3,7 @@
 Última actualización: 2026-10-08
 Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. P00: 37c74a3, 943082c. Primer bloque P01: 0f143c4; cierre local en el commit posterior, consultar git log.
 Tarea actual: P01
-Estado: IMPLEMENTADA_LOCAL_PENDIENTE_ANDROID — no aceptada físicamente; esperando habilitación de ADB
+Estado: VALIDADA_PARCIAL_A56 — 12 pruebas Android aprobadas; autenticación interactiva y reinicio de proceso pendientes
 
 ## Entorno observado
 
@@ -12,6 +12,9 @@ Node 24.21.0 / npm 11.19.0 / Windows 11 amd64
 SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Terminado y demostrado
+
+- Primer lote físico autorizado por el propietario en el padre A56 (SM-A566E, Android 16/API 36): APK debug y de pruebas instalados con éxito, 12 tests aprobados y 1 interactivo omitido expresamente. Se verificaron navegación/estados, parser/esquema, vectores, firma con clave temporal no exportable y parámetros de identidad protegida/reapertura del almacén. No acredita autenticación física ni persistencia tras reiniciar proceso.
+- El A13 estaba conectado pero quedó excluido: ningún comando shell, instalación ni prueba dirigido a él. Se usó ADB con selector explícito del A56; no Gradle connected contra todos los teléfonos. Identificadores de dispositivo no se guardan en documentación.
 
 - P01: ParentKeyStore con alias EC P-256 protegido, ventana de 60 segundos y ambos autenticadores fuertes/sistema. No reemplaza identidad incompatible ni crea clave durante firma. Alias de metadatos separado reservado, almacenamiento cifrado todavía pendiente.
 - P01 sesión de interfaz con reloj monotónico, invalidación en segundo plano/cancelación y rechazo de callbacks viejos/duplicados. LocalAuthentication usa BiometricPrompt oficial API 30. Pantalla inicial permite crear/cargar explícitamente y autenticar; no habilita órdenes ni crea vínculo.
@@ -45,6 +48,9 @@ app-parent/src/androidTest/java/dev/controlparental/parent/IdentidadKeystoreTest
 pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P01.md, pruebas/HANDOFF_P01.md, pruebas/PRUEBA_FISICA_P01.md.
 
 ## Pruebas ejecutadas y resultado
+
+- A56: adb install -r para app debug y APK instrumentado, ambos correctos. Runner AndroidJUnitRunner ejecutado directamente con adb -s dirigido al A56: 13 casos descubiertos, 12 status 0 y 1 status -4 (AssumptionViolatedException del test interactivo sin argumento). Resumen del runner OK (13 tests), interpretado correctamente como 12 aprobados/1 omitido; duración 8.571 s. Sin fallos.
+- Dos tests de identidad protegida y los diez tests anteriores efectivamente aprobados en el A56. El test de identidad reabre el almacén dentro del mismo proceso; no prueba reinicio. No se cambiaron credenciales, biometría, timeout, restricciones ni configuración de administración. Solo se crean/eliminan alias temporales de tests.
 
 - `node pruebas/verificar_vectores.mjs`: 10 vectores y 78 comprobaciones documentales correctas en Node 24.21.0.
 - `python -B pruebas/verificar_esquema.py`: no ejecutó validación; falta el paquete jsonschema.
@@ -89,7 +95,7 @@ La referencia plantillas/HANDOFF.md de padre/AGENTS.md no existe; usar pruebas/H
 
 ## Próxima tarea y lectura mínima
 
-Próximo paso inmediato: esperar habilitación explícita de ADB del teléfono del padre y ejecutar pruebas físicas según pruebas/PRUEBA_FISICA_P01.md. Primero lote no interactivo; acordar aparte aceptación/cancelación real y persistencia. No requiere Device Owner, vinculación ni restablecimiento. Android 11/API 30+. Alias temporales de tests se eliminan; no reemplazan identidad.
+Próximo paso inmediato: acordar con el propietario la prueba interactiva aceptar/cancelar en el A56 según pruebas/PRUEBA_FISICA_P01.md. ADB del A56 ya autorizado para el lote no interactivo, completado. Usar siempre selección explícita del A56; no tocar A13. Acordar aparte reinicio de proceso y revisión visual. No requiere Device Owner, vinculación ni restablecimiento. Alias temporales de tests se eliminan; no reemplazan identidad.
 Tras validar P01, siguiente tarea de desarrollo P02 — vinculación QR. No se inició P02 ni almacenamiento de metadatos en este turno. P00 y C02 conservan aceptación física pendiente.
 
 ## Seguridad

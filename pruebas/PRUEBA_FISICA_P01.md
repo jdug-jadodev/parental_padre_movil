@@ -1,6 +1,8 @@
 # Pruebas físicas del padre — P01 (pendientes)
 
-**No ejecutadas.** Avisar y esperar habilitación expresa de ADB antes de listar
+**Lote no interactivo ejecutado en A56:** 12 aprobados/1 interactivo omitido, sin
+fallos. Autenticación interactiva y revisión manual siguen pendientes. A13 excluido.
+Avisar y esperar habilitación expresa de ADB antes de listar
 dispositivos, instalar o probar. Usar solo el teléfono del padre, Android 11+.
 Si hay varios dispositivos, confirmar el objetivo antes de instalar.
 No administrar, aprovisionar, restablecer ni modificar credencial/biometría.
@@ -8,6 +10,9 @@ No administrar, aprovisionar, restablecer ni modificar credencial/biometría.
 ## 1. Lote no interactivo
 
 Tras autorización, ejecutar `:app-parent:connectedDebugAndroidTest`. Hay 13 tests;
+Con varios teléfonos conectados, no ejecutar connected sin filtro verificado:
+instalar y ejecutar el runner por ADB con selector explícito del A56, como se
+hizo en este lote. Nunca instalar/probar en el A13.
 el interactivo se omite sin argumento. Los dos de identidad exigen bloqueo seguro;
 registrar cualquier omisión por separado, no como aprobada. Cada test elimina solo
 su alias único cp.test.*, nunca cp.parent.sign.v1.
@@ -22,6 +27,11 @@ Filtrar AutenticacionRealTest y aportar explícitamente el argumento acordado:
 ```powershell
 .\gradlew.bat :app-parent:connectedDebugAndroidTest "-Pandroid.testInstrumentationRunnerArguments.class=dev.controlparental.parent.AutenticacionRealTest" "-Pandroid.testInstrumentationRunnerArguments.autenticacionReal=aceptar"
 ```
+
+El comando Gradle anterior solo se usa con selección de dispositivo verificada.
+Con A13 conectado, preferir runner ADB ya instalado con `-s <A56>` y argumentos
+`-e class dev.controlparental.parent.AutenticacionRealTest -e autenticacionReal
+aceptar` (o cancelar). Acordar cada modalidad con el adulto antes de iniciarla.
 
 El adulto responde al prompt en 120 segundos con credencial del dispositivo o
 biometría fuerte. Después espera 61 segundos **sin autenticar/desbloquear de nuevo**

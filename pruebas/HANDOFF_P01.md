@@ -1,5 +1,18 @@
 # Relevo — P01
 
+## Actualización A56
+
+Lote no interactivo ejecutado con autorización explícita: SM-A566E, Android 16/
+API 36. App y APK instrumentado instalados mediante ADB dirigido solo al A56.
+Doce tests aprobados, uno interactivo omitido por falta de opt-in, sin fallos;
+runner OK (13 tests) no significa trece aprobados. A13 excluido, sin operaciones.
+No guardar números de serie ni usar connected contra todos los dispositivos.
+
+Pendientes: acordar respuesta física aceptar/cancelar, caducidad real, reinicio
+de proceso y revisión manual. No pedir que habilite otra vez ADB salvo que se
+desconecte o pierda autorización. Ambos APK permanecen en el A56. Detalles en
+EVIDENCIA_P01.md; lo que sigue es el cierre local anterior.
+
 Estado: implementada localmente, **pendiente de aceptación Android**. Primer
 bloque `0f143c4`; cierre local en commit posterior. No iniciar P02 sin resolver
 la comprobación física acordada; siguiente paso es habilitación expresa de ADB.

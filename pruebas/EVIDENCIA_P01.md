@@ -1,5 +1,34 @@
 # Evidencia P01 — identidad y autenticación
 
+## Actualización física: lote no interactivo del A56
+
+El propietario habilitó ADB e identificó el A56 como padre, prohibiendo operar
+el A13. Se verificó SM-A566E, Android 16/API 36 y se seleccionó explícitamente
+el A56 en todos los comandos de dispositivo. El A13 no recibió shell,
+instalaciones ni pruebas. No se registran números de serie en el repositorio.
+
+Instalación `adb -s <A56> install -r` de app debug y APK instrumentado: ambas
+correctas. Ejecución dirigida `adb -s <A56> shell am instrument -w -r
+dev.controlparental.parent.test/androidx.test.runner.AndroidJUnitRunner`:
+**12 aprobados, 1 omitido, cero fallos**, 8.571 segundos.
+
+El runner imprime OK (13 tests), pero el test AutenticacionRealTest informó
+status -4 por ausencia del argumento opt-in: no cuenta como aprobado. Los otros
+12 informaron status 0: tres de inicio/navegación, tres de presentación, dos de
+parser/esquema, dos de criptografía y dos de identidad protegida.
+
+Se demuestra ejecución real del esquema/parser/vectores en Android, firma con
+clave temporal no exportable, parámetros de identidad protegida y conservación
+de pública al reabrir almacén. No se demuestra aún biometría/credencial real,
+caducidad de Keystore, persistencia tras reiniciar proceso, invalidación real
+ni revisión manual con texto grande/rotación. No se modificaron credenciales,
+biometría, administración ni restricciones; alias de prueba temporales eliminados
+por sus finally. App y APK instrumentado permanecen instalados en el A56.
+
+Las secciones siguientes conservan el cierre local previo; sus referencias a
+pruebas físicas pendientes se actualizan con este lote, sin dar por aprobadas
+las comprobaciones interactivas todavía pendientes.
+
 Primer bloque `0f143c4`; cierre local en commit posterior. **Implementada localmente,
 pendiente de aceptación Android**. CP/1, esquema y fixtures intactos.
 
