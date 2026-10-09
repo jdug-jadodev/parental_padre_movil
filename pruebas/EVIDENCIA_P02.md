@@ -1,5 +1,20 @@
 # Evidencia P02 — vinculación QR parcial local
 
+## Prueba de cámara — preparación autorizada, resultado pendiente
+
+Propietario autorizó actualizar ambos APK y comprobar escaneo en A56. Install -r
+de padre/instrumentado correctos, selector explícito A56. MainActivity abierta;
+no se creó identidad/vínculo ni se cambiaron permisos por ADB. A13 sin operaciones.
+No se ejecutaron instrumentados en este lote.
+
+Se generó PNG local del fixture público 11_child_offer.frame.json usando ZXing
+y JDK21, en carpeta temporal opencode fuera del repo, y se abrió en PC. Sin
+secretos/códigos reales, sin app del hijo ni comunicación con servidor.
+El propietario debe ir a Vincular, abrir cámara, conceder permiso y apuntar al
+QR; no pulsar Crear identidad ni Preparar huellas y códigos. Esperado: cámara
+se cierra automáticamente al leer y campo CHILD_OFFER se llena. Resultado
+óptico/permiso aún pendiente de confirmar; no se infiere por instalación.
+
 ## Seguimiento más reciente — CameraX local
 
 Implementado CamaraOferta: botón explícito y CAMERA runtime, permiso denegado
