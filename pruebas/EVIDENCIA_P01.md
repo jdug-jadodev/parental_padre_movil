@@ -14,8 +14,8 @@ con UserNotAuthenticatedException y AutoridadPadre rechazó por sesión caducada
 No se inyectó éxito biométrico, no hubo red ni clave alternativa. El alias temporal
 se eliminó en finally; no se creó cp.parent.sign.v1 por este test.
 
-La modalidad concreta usada (credencial o biometría fuerte) queda pendiente de
-confirmación del adulto. No afirmar que ambas aprobaron. También siguen pendientes
+El propietario confirmó que usó **huella** en esta ejecución. Credencial del
+dispositivo PIN/contraseña no probada; no afirmar que ambas aprobaron. Siguen pendientes
 cancelación física, reinicio del proceso, revisión manual y pérdida/invalidación
 de clave en entorno seguro. El resultado demuestra el flujo aceptar en este A56,
 no compatibilidad universal ni puertas G0–G4.

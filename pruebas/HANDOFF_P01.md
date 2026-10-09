@@ -6,7 +6,7 @@ El propietario autorizó aceptar: prueba real aprobada, un test sin fallos en
 76.324 s. Prompt oficial confirmado físicamente, firma con clave protegida temporal
 verificada y, tras 61 segundos, rechazo Keystore por UserNotAuthenticatedException
 y rechazo de sesión por caducidad. Sin simulación ni mensaje al relay; alias temporal
-eliminado. Falta confirmar si usó credencial o biometría; no atribuir a ambas.
+eliminado. El propietario confirmó huella; PIN/contraseña no probado.
 
 Pendiente acordar cancelar físicamente, probar la otra modalidad, persistencia tras
 reinicio de proceso y revisión manual. No operar A13: acuerdo obligatorio ya en

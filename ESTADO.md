@@ -13,7 +13,7 @@ SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Terminado y demostrado
 
-- A56, prueba interactiva aceptar autorizada y ejecutada: autenticación oficial confirmada, firma CP/1 con clave protegida temporal y verificación correctas. Tras 61 segundos Keystore lanzó UserNotAuthenticatedException y la sesión rechazó otra firma. Un test aprobado, cero fallos, 76.324 segundos. La modalidad física usada (credencial o biometría) aún debe confirmarla el propietario; no se atribuye el resultado a ambas.
+- A56, prueba interactiva aceptar autorizada y ejecutada: autenticación oficial confirmada, firma CP/1 con clave protegida temporal y verificación correctas. Tras 61 segundos Keystore lanzó UserNotAuthenticatedException y la sesión rechazó otra firma. Un test aprobado, cero fallos, 76.324 segundos. El propietario confirmó que usó huella; credencial PIN/contraseña todavía no probada.
 - Exclusión del A13 persistida como acuerdo obligatorio en AGENTS.md y padre/AGENTS.md. Ningún comando de dispositivo ni instalación dirigido a A13. Las futuras sesiones deben usar selector explícito de A56.
 
 - Primer lote físico autorizado por el propietario en el padre A56 (SM-A566E, Android 16/API 36): APK debug y de pruebas instalados con éxito, 12 tests aprobados y 1 interactivo omitido expresamente. Se verificaron navegación/estados, parser/esquema, vectores, firma con clave temporal no exportable y parámetros de identidad protegida/reapertura del almacén. No acredita autenticación física ni persistencia tras reiniciar proceso.
@@ -100,7 +100,7 @@ La referencia plantillas/HANDOFF.md de padre/AGENTS.md no existe; usar pruebas/H
 
 ## Próxima tarea y lectura mínima
 
-Próximo paso inmediato: confirmar qué modalidad física usó el propietario al aceptar (credencial/biometría) y acordar prueba de cancelación. La modalidad aceptar ya pasó. Acordar aparte la otra modalidad, reinicio de proceso y revisión visual. Usar siempre selección explícita del A56; no tocar A13. No requiere Device Owner, vinculación ni restablecimiento. Alias temporales se eliminan; no reemplazan identidad.
+Próximo paso inmediato: acordar prueba de cancelación. Aceptar con huella ya pasó y fue confirmado por el propietario. Acordar aparte credencial PIN/contraseña, reinicio de proceso y revisión visual. Usar siempre selección explícita del A56; no tocar A13. No requiere Device Owner, vinculación ni restablecimiento. Alias temporales se eliminan; no reemplazan identidad.
 Tras validar P01, siguiente tarea de desarrollo P02 — vinculación QR. No se inició P02 ni almacenamiento de metadatos en este turno. P00 y C02 conservan aceptación física pendiente.
 
 ## Seguridad
