@@ -4,9 +4,9 @@ Proyecto Android nativo en Kotlin y servicio Node/TypeScript. Este repositorio
 solo implementa el rol del padre y el relay. El APK del hijo pertenece a otro
 proyecto. La copia del protocolo CP/1 en `compartido/` permanece congelada.
 
-## Qué hay implementado (C00–C02 y P00, alcance local)
+## Qué hay implementado (C00–C02, P00 y P01 local)
 
-- `app-parent/`: navegación Primer inicio → Vincular → Control → Recuperación en español; sin identidad, vinculación real ni envío de órdenes.
+- `app-parent/`: navegación en español e identidad/autenticación Keystore implementadas, pendientes de validación física; sin vinculación real ni envío de órdenes.
 - `core-protocol/`: modelos, parser estricto, esquema congelado y serialización determinista CP/1, sin dependencias de Android.
 - `relay/`: servidor **local** ligado a `127.0.0.1`, sin WebSocket operativo.
 - `relay/test/soporte/`: cliente hijo simulado limitado a loopback y lectura de un fixture congelado; no prueba políticas reales.
@@ -19,7 +19,7 @@ SPKI/DER, propósito y coherencia de los campos del estado.
 
 C02 añade firma SHA-256/ECDSA DER en Kotlin mediante un firmante inyectado y
 verificación estándar en JVM/Node sobre los bytes originales. La privada del
-padre y su autenticación se implementarán en P01 con Android Keystore. El relay
+padre y su autenticación usan en P01 Android Keystore. El relay
 no firma ni recibe privadas.
 
 `leerPayloadSinVerificar` sigue siendo solo estructural. Para verificar firmas
@@ -36,6 +36,15 @@ vínculo. Explorar el recorrido no crea autoridad. El repositorio de producción
 no operativo y muestra datos desconocidos; el falso se compila solo en tests JVM
 e instrumentados. P05 deberá alimentar evidencia autenticada/correlacionada y
 calcular su antigüedad/frescura; P00 no implementa ese cálculo ni un reloj remoto.
+
+P01 añade creación/carga explícita de EC P-256 no exportable, autenticación del
+sistema (credencial o biometría fuerte), ventana de 60 segundos y bloqueo de
+interfaz al ir a segundo plano. Un error no sustituye claves ni habilita firma
+alternativa. Se muestra exclusivamente pública SPKI, sin copiarla al portapapeles.
+El alias de cifrado de metadatos está reservado por separado; su almacenamiento
+cifrado/transaccional todavía no se implementó. El botón del recorrido no crea
+identidad: hay un botón explícito separado. Las órdenes siguen deshabilitadas.
+La persistencia tras reiniciar proceso y la autenticación real están pendientes.
 
 El relay devuelve **503** en `/healthz` porque todavía no está listo para CP/1.
 Rechaza upgrades y ejecución en `NODE_ENV=production`. No es desplegable en
@@ -93,6 +102,10 @@ esquema dentro de Android. Está compilado, pero esas pruebas no se han ejecutad
 Incluye además pruebas de navegación y presentación con hijo ausente, estado
 confirmado, desconexión e intención sin confirmar. Son datos ficticios exclusivos
 del APK instrumentado, no evidencias de un dispositivo hijo.
+P01 incluye dos pruebas de identidad con alias temporales y una prueba interactiva
+de autenticación real, desactivada salvo argumento explícito. No habilitarla sin
+acordar la interacción física. Un test omitido por ausencia de bloqueo seguro o
+de argumento no cuenta como aprobado. Ver `pruebas/PRUEBA_FISICA_P01.md`.
 También comprueba vectores criptográficos y una clave temporal no exportable en
 Keystore. Esa clave existe solo en el test instrumentado y se elimina en su
 `finally`; no es identidad de producción ni prueba autenticación del adulto.
@@ -103,3 +116,4 @@ Estado real y próxima tarea: `ESTADO.md`. Herramientas: `BUILD_ENV.md`.
 Acuerdos del propietario, idioma y frecuencia de commits: `AGENTS.md`.
 Evidencia criptográfica local: `pruebas/EVIDENCIA_C02.md`.
 Evidencia de navegación y estados: `pruebas/EVIDENCIA_P00.md`.
+Evidencia de identidad/autenticación: `pruebas/EVIDENCIA_P01.md`.

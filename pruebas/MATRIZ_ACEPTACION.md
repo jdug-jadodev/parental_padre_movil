@@ -22,7 +22,7 @@ G0 = administración/quiosco y emergencia en A13. G1 = identidad, protocolo y re
 
 | ID | Caso y preparación | Resultado esperado | Entorno | Estado |
 |---|---|---|---|---|
-| P-KEY-01 | **Autenticación y pérdida de clave.** Cancelar credencial, expirar ventana, invalidar clave de prueba. | No firma ni crea una autoridad de reemplazo silenciosa. | Android padre | PENDIENTE |
+| P-KEY-01 | **Autenticación y pérdida de clave.** Cancelar credencial, expirar ventana, invalidar clave de prueba. | No firma ni crea una autoridad de reemplazo silenciosa. | Android padre | PENDIENTE; coordinación JVM comprobada en P01, tests de identidad y autenticación física preparados/compilados, no ejecutados |
 | P-PAIR-01 | **Exportación y datos mínimos.** Inspeccionar QR/archivo público/env y logs de pruebas. | No contienen privadas ni códigos en claro; solo públicas/hashes/configuración. | Automática + manual | PENDIENTE |
 | P-STORE-01 | **Persistencia ante cierre.** Fallar después de reservar seq y antes de enviar. | No reutiliza secuencia para otra intención; archivo sigue consistente. | Automática | PENDIENTE |
 | P-ACK-01 | **ACK impostor.** Enviar ACK falso/otro hijo/otro hash o solo PEER_STATUS. | No muestra aplicado. | Automática | PENDIENTE |

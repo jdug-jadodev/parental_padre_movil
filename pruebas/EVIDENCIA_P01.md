@@ -1,0 +1,68 @@
+# Evidencia P01 — identidad y autenticación
+
+Primer bloque `0f143c4`; cierre local en commit posterior. **Implementada localmente,
+pendiente de aceptación Android**. CP/1, esquema y fixtures intactos.
+
+## Implementación
+
+ParentKeyStore crea/carga explícitamente EC P-256 en `cp.parent.sign.v1`, con
+autenticación requerida, SHA-256, propósito SIGN y 60 segundos para credencial del
+sistema o biometría fuerte. Comprueba KeyInfo y pública SPKI antes de usarla.
+Privada no exportada; no StrongBox obligatorio ni promesa de hardware específico.
+Un alias existente incompatible o inaccesible no se elimina/reemplaza; firmar
+nunca crea identidad. El alias de metadatos está reservado por separado, **sin
+implementar todavía archivo cifrado/transacciones**.
+
+AutoridadPadre integra el firmante con CP/1 y comprueba sesión antes, durante y
+después de firmar. Errores invalidan la sesión sin generar alternativas.
+SesionAutoridad usa reloj monotónico y exige primer plano: caduca exactamente a
+60 segundos, descarta callbacks anteriores/duplicados y bloquea en segundo plano.
+Esto es una barrera adicional: Keystore debe imponer su propia autenticación.
+
+LocalAuthentication usa BiometricPrompt oficial API 30, sin autenticadores débiles,
+PIN propio ni simulación en producción. MainActivity cancela el prompt/invalida
+sesión en onStop. Pantalla inicial permite creación/carga explícita y autenticación,
+y muestra solo pública SPKI sin portapapeles/logs. Explorar controles no crea
+autoridad. Crear explícitamente identidad y luego cancelar autenticación conserva
+la misma clave protegida, no una clave alternativa. Órdenes siguen deshabilitadas.
+
+## Comprobaciones ejecutadas
+
+- `scripts/verificar.ps1`: correcto; npm ci/check/build/test correctos; 30 tests
+  Node y diez vectores/78 comprobaciones documentales correctos. Cero
+  vulnerabilidades reportadas; aviso de postinstall de esbuild sin autorización
+  individual, sin cambiar permisos npm.
+- Gradle app/núcleo/interoperabilidad + APK debug/instrumentado/release + lint
+  repetidos con `--rerun-tasks`: 130 tareas ejecutadas con éxito.
+- XML: 18 tests app (nueve nuevos), 30 núcleo y uno de interoperabilidad, cero
+  fallos/errores. Con 30 Node: **79 pruebas locales aprobadas**.
+- Lint: cero errores y 15 avisos de versiones. Último ajuste del test interactivo
+  compilado nuevamente con assembleDebugAndroidTest y lintDebug correctos.
+- Release sin firma de distribución compilada, no entrega operativa aprobada.
+- Inspección limitada ZIP/DEX de app debug/release no encuentra fixture,
+  RepositorioPadreFalso, AlmacenFalso, IdentidadKeystoreTest, AutenticacionRealTest
+  ni alias cp.test.auth/cp.test.identity. No reemplaza análisis de seguridad completo.
+
+Nueve tests nuevos prueban frontera de caducidad, cancelación/background, callbacks
+viejos/duplicados, reloj regresivo, reinicio de sesión, ausencia de firma sin
+autenticación, adaptación CP/1 y rechazo sin crear alternativas. Sus almacenes y
+claves efímeras son exclusivos de tests; **no prueban Keystore/biometría reales**.
+
+## Pruebas físicas pendientes
+
+Trece tests Android compilados y no ejecutados. Dos nuevos de identidad prueban
+parámetros/no exportabilidad, reabrir el almacén y no reemplazar alias incompatible.
+Un tercero opt-in solicita autenticación/cancelación física del adulto, firma
+con clave protegida temporal y comprueba caducidad; jamás inyecta éxito biométrico.
+Sin argumento se omite; sin credencial segura los tests pertinentes se omiten.
+No contabilizar omisiones como aprobadas.
+
+Reabrir el almacén no prueba reiniciar proceso. Persistencia real, bloqueo al
+salir de la app, credencial sin biometría, cancelación real, expiración Keystore
+y clave invalidada siguen pendientes. Validar especialmente interacción entre
+prompt de credencial y onStop en el fabricante: cancelar conservadoramente podría
+interrumpir ese flujo. Si ocurre, registrar/corregir sin eludir autenticación.
+
+No usar el teléfono cotidiano para retirar credenciales, invalidar claves o
+restablecer. No hubo ADB, teléfono, Render ni otro repositorio. P-KEY-01 y G0–G4
+siguen pendientes. Próximo paso: habilitación de ADB y PRUEBA_FISICA_P01.md.

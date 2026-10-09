@@ -1,4 +1,4 @@
-# Entorno de compilación — C00–C02 y P00
+# Entorno de compilación — C00–C02, P00 y P01
 
 ## Herramientas observadas
 
@@ -48,6 +48,14 @@ https://developer.android.com/develop/ui/compose/state-hoisting
 P00 conserva inyección manual y no añade Hilt ni biblioteca de navegación.
 El recorrido simple vive en ParentViewModel. Reiniciar el proceso vuelve al
 primer inicio; la persistencia de autoridad/vínculo corresponde a tareas futuras.
+
+P01 usa APIs oficiales de plataforma API 30, sin dependencias adicionales:
+https://developer.android.com/reference/android/security/keystore/KeyGenParameterSpec.Builder#setUserAuthenticationParameters(int,%20int)
+https://developer.android.com/reference/android/hardware/biometrics/BiometricPrompt.Builder#setAllowedAuthenticators(int)
+
+No requiere StrongBox ni afirma respaldo de hardware específico. El contrato de
+KeyInfo se comprueba al usar la clave; propiedades reales y funcionamiento del
+prompt con credencial/biometría quedan pendientes del teléfono.
 
 ## Límites de la verificación
 

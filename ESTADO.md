@@ -1,9 +1,9 @@
 # Estado de implementación
 
 Última actualización: 2026-10-08
-Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. Primer bloque P00: 37c74a3; cierre en el commit posterior, consultar git log.
+Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. P00: 37c74a3, 943082c. Primer bloque P01: 0f143c4; cierre local en el commit posterior, consultar git log.
 Tarea actual: P01
-Estado: EN_CURSO — identidad y autenticación implementadas; validación física pendiente
+Estado: IMPLEMENTADA_LOCAL_PENDIENTE_ANDROID — no aceptada físicamente; esperando habilitación de ADB
 
 ## Entorno observado
 
@@ -13,9 +13,9 @@ SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Terminado y demostrado
 
-- P01 primer bloque: ParentKeyStore con alias EC P-256 protegido, ventana de 60 segundos y ambos autenticadores fuertes/sistema. No reemplaza identidad incompatible ni crea clave durante firma. Alias de metadatos separado reservado, almacenamiento cifrado todavía pendiente.
+- P01: ParentKeyStore con alias EC P-256 protegido, ventana de 60 segundos y ambos autenticadores fuertes/sistema. No reemplaza identidad incompatible ni crea clave durante firma. Alias de metadatos separado reservado, almacenamiento cifrado todavía pendiente.
 - P01 sesión de interfaz con reloj monotónico, invalidación en segundo plano/cancelación y rechazo de callbacks viejos/duplicados. LocalAuthentication usa BiometricPrompt oficial API 30. Pantalla inicial permite crear/cargar explícitamente y autenticar; no habilita órdenes ni crea vínculo.
-- P01: nueve tests JVM nuevos correctos (18 tests de app en total). Debug, APK instrumentado anterior y lint compilados/correctos; dos tests instrumentados de identidad recién añadidos pendientes de compilar y ejecutar. No se accedió al teléfono.
+- P01: nueve tests JVM nuevos correctos (18 tests de app en total). Debug, instrumentado y release sin firma de distribución compilados; lint correcto. Dos pruebas nuevas de identidad y una interactiva real compiladas, no ejecutadas. No se accedió al teléfono ni se acredita persistencia tras muerte de proceso.
 
 - P00: MainActivity, AppContainer, ParentViewModel/StateFlow, cuatro pantallas y estados separados. Producción usa fuente no operativa, no un simulador; repositorio falso exclusivo de tests. Botones de órdenes deshabilitados, recuperación informativa siempre accesible. No se crea autoridad ni vinculación al explorar controles.
 - P00: 9 tests JVM de la app correctos (8 nuevos). Compilación debug/instrumentada/release sin firma de distribución y lint correctos. Cinco nuevos tests UI instrumentados preparados y compilados, no ejecutados. Se corrigió la limpieza de ViewModelStore antes de resetMain en las pruebas JVM, sin simular APIs Android.
@@ -36,15 +36,13 @@ SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Archivos modificados en la última tarea
 
-README.md, BUILD_ENV.md, ESTADO.md, gradle/libs.versions.toml, app-parent/build.gradle.kts.
-app-parent/src/main/java/dev/controlparental/parent/MainActivity.kt y AppContainer.kt.
-app-parent/src/main/java/dev/controlparental/parent/presentation/ParentUiState.kt y ParentViewModel.kt.
-app-parent/src/main/java/dev/controlparental/parent/data/RepositorioPadre.kt.
-app-parent/src/main/java/dev/controlparental/parent/ui/AplicacionPadre.kt y ResumenEstado.kt.
-app-parent/src/main/res/values/strings.xml; app-parent/src/soporteTest/kotlin/dev/controlparental/parent/RepositorioPadreFalso.kt.
-app-parent/src/test/java/dev/controlparental/parent/ParentUiStateTest.kt y ParentViewModelTest.kt.
-app-parent/src/androidTest/java/dev/controlparental/parent/PantallaInicialTest.kt y EstadoPantallaTest.kt.
-pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P00.md, pruebas/HANDOFF_P00.md.
+README.md, BUILD_ENV.md, ESTADO.md, app-parent/src/main/AndroidManifest.xml.
+app-parent/src/main/java/dev/controlparental/parent/MainActivity.kt.
+app-parent/src/main/java/dev/controlparental/parent/security/SesionAutoridad.kt, AutoridadPadre.kt, ParentKeyStore.kt, LocalAuthentication.kt.
+app-parent/src/main/java/dev/controlparental/parent/ui/AplicacionPadre.kt e IdentidadPadre.kt.
+app-parent/src/test/java/dev/controlparental/parent/SesionAutoridadTest.kt y AutoridadPadreTest.kt.
+app-parent/src/androidTest/java/dev/controlparental/parent/IdentidadKeystoreTest.kt y AutenticacionRealTest.kt.
+pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P01.md, pruebas/HANDOFF_P01.md, pruebas/PRUEBA_FISICA_P01.md.
 
 ## Pruebas ejecutadas y resultado
 
@@ -70,6 +68,9 @@ pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P00.md, pruebas/HANDOFF_P00.md.
 - P00 lint: cero errores y 15 avisos de versiones más recientes; sin suprimir comprobaciones. npm ci/check/build/test correctos; 78 comprobaciones documentales correctas. npm informó cero vulnerabilidades y aviso de script postinstall de esbuild sin autorización individual; no se alteraron permisos de npm.
 - P00: inspección ZIP/DEX de app debug y release no encuentra fixture ni identificadores RepositorioPadreFalso, EstadoPantallaTest o cp.test.crypto. No reemplaza análisis de seguridad completo.
 - Ahora hay diez pruebas instrumentadas compiladas (tres de inicio/navegación, tres de estados, dos de parser, dos de criptografía/Keystore). Ninguna ejecutada. La validación visual, botón Atrás, rotación, texto grande y acceso físico a recuperación siguen pendientes de Android.
+- P01 cierre local: scripts/verificar.ps1 correcto; Gradle tests del núcleo/interoperabilidad actualizados en esa ejecución. Se repitieron tests de app/núcleo/interoperabilidad y compilaciones debug/instrumentado/release/lint con --rerun-tasks: 130 tareas ejecutadas con éxito. Reportes: 18 app + 30 núcleo + 1 interoperabilidad, cero fallos/errores; 30 Node correctos, total 79 pruebas locales aprobadas. Vectores: 78 comprobaciones correctas.
+- P01 lint: cero errores y 15 avisos de versiones. El último ajuste del test interactivo se volvió a compilar con assembleDebugAndroidTest y lintDebug correctos. Inspección limitada ZIP/DEX de debug/release no encuentra fixture ni fake/tests/alias temporales examinados.
+- Ahora hay trece tests instrumentados compilados, ninguno ejecutado: los diez anteriores, dos de identidad y uno interactivo opt-in. Los de identidad requieren credencial segura; el interactivo requiere argumento aceptar/cancelar y actuación real del adulto. Omitidos no equivalen a aprobados. Persistencia tras reinicio del proceso y recuperación de clave invalidada siguen pendientes.
 
 ## Decisiones locales sin cambiar ADR
 
@@ -83,12 +84,13 @@ pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P00.md, pruebas/HANDOFF_P00.md.
 G0–G4 pendientes. No hay validación física del A13 ni del teléfono del padre.
 Falta jsonschema para el verificador estructural Python.
 Antes de usar ADB, avisar y esperar habilitación expresa del propietario.
+P01 requiere validar el comportamiento del prompt y onStop en el fabricante, especialmente la credencial del dispositivo sin biometría. Se cancela y bloquea conservadoramente en segundo plano; si el flujo oficial produce una parada, registrar el fallo y corregir sin eliminar la barrera. No se declara ese flujo aprobado por compilación.
 La referencia plantillas/HANDOFF.md de padre/AGENTS.md no existe; usar pruebas/HANDOFF_PLANTILLA.md.
 
 ## Próxima tarea y lectura mínima
 
-Próxima tarea de desarrollo: P01 — padre/PLAN_PADRE.md, SPEC_PADRE P4 y CP/1 §4; autoridad Keystore, credencial segura y autenticación. No se inició P01 en esta tarea. La aceptación física de P00 sigue pendiente de UI Android.
-Comprobación física disponible: cuando el propietario habilite el teléfono del padre por ADB, ejecutar :app-parent:connectedDebugAndroidTest y registrar resultados de pantalla/parser/esquema/criptografía. No requiere Device Owner, vinculación, órdenes ni restablecimiento. La app requiere Android 11/API 30 o superior. La clave Keystore del test es temporal y se elimina; no reemplaza ninguna identidad.
+Próximo paso inmediato: esperar habilitación explícita de ADB del teléfono del padre y ejecutar pruebas físicas según pruebas/PRUEBA_FISICA_P01.md. Primero lote no interactivo; acordar aparte aceptación/cancelación real y persistencia. No requiere Device Owner, vinculación ni restablecimiento. Android 11/API 30+. Alias temporales de tests se eliminan; no reemplazan identidad.
+Tras validar P01, siguiente tarea de desarrollo P02 — vinculación QR. No se inició P02 ni almacenamiento de metadatos en este turno. P00 y C02 conservan aceptación física pendiente.
 
 ## Seguridad
 
