@@ -30,7 +30,7 @@ class FormatosAvanzadosTest {
     @Test
     fun `origen no permite rutas credenciales ni puertos imposibles`() {
         FormatosAvanzados.origenHttps("https://relay.example:443")
-        for (origen in listOf("http://relay.example", "https://u@relay.example", "https://relay.example/", "https://relay.example:65536", "https://relay.example?x=1")) {
+        for (origen in listOf("http://relay.example", "https://u@relay.example", "https://relay.example/", "https://relay.example:65536", "https://relay.example?x=1", "https://a-.example", "https://a..example")) {
             assertThrows(MensajeInvalido::class.java) { FormatosAvanzados.origenHttps(origen) }
         }
     }

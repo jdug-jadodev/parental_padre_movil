@@ -1,6 +1,6 @@
 # Matriz de aceptación — CP/1
 
-Todos los casos del producto se entregan **PENDIENTES**. Completar evidencia con versión, entorno, resultado observado y archivo/commit. La verificación de fixtures adjunta es documental/criptográfica; no aprueba estos casos de la aplicación.
+Los casos sin evidencia permanecen **PENDIENTES**. Una validación local parcial no aprueba Android, integración ni las puertas físicas. Completar evidencia con versión, entorno, resultado observado y archivo/commit. La verificación de fixtures adjunta es documental/criptográfica; no aprueba por sí sola estos casos de la aplicación.
 
 ## Puertas
 
@@ -11,7 +11,7 @@ G0 = administración/quiosco y emergencia en A13. G1 = identidad, protocolo y re
 | ID | Caso y preparación | Resultado esperado | Entorno | Estado |
 |---|---|---|---|---|
 | C-CRYPTO-01 | **Firma válida y verificación cruzada.** Firmar/verificar fixtures P-256 DER en JVM, Android y Node. | Se aceptan bytes originales y se rechazan cambios/clave/propósito incorrectos. | Automática | PENDIENTE |
-| C-SCHEMA-01 | **Parser estricto.** Probar campos extra, UTF-8/base64 inválidos, duplicados, números y tamaños fuera de límites. | Todos se rechazan antes de aplicar políticas. | Automática | PENDIENTE |
+| C-SCHEMA-01 | **Parser estricto.** Probar campos extra, UTF-8/base64 inválidos, duplicados, números y tamaños fuera de límites. | Todos se rechazan antes de aplicar políticas. | JVM/Node automáticos; Android pendiente | VALIDADA_LOCAL; evidencia en EVIDENCIA_C01.md; no se aplicaron políticas |
 | C-PAIR-01 | **Vinculación física.** QR vencido, clave del hijo diferente, otra pareja, cancelación y segunda vinculación sin permiso. | No cambian claves; solo oferta física vigente y confirmada crea vínculo. | Automática + A13 | PENDIENTE |
 | C-SEQ-01 | **Repetición exacta.** Reenviar último comando en la misma sesión tras perder ACK. | Devuelve resultado, conserva inicio y duración; no vuelve a liberar. | Automática | PENDIENTE |
 | C-SEQ-02 | **Secuencia conflictiva.** Mismo seq con otro payload/id; después un seq menor. | SEQUENCE_CONFLICT o STALE_SEQUENCE, sin cambiar estado aceptado. | Automática | PENDIENTE |
@@ -45,4 +45,3 @@ G0 = administración/quiosco y emergencia en A13. G1 = identidad, protocolo y re
 | R-FAIL-01 | **Reinicio/despliegue.** Reiniciar servicio con móviles conectados. | Sockets reconectan, políticas locales se conservan, sin colas recuperadas. | Render + móviles | PENDIENTE |
 | R-LIMIT-01 | **Abuso de frames.** Binarios, >16KiB, compresión, campos desconocidos, inundación. | Cierre/rate limit, sin caída del proceso ni memoria sin límite. | Automática | PENDIENTE |
 | R-LIMIT-02 | **Socket lento y memoria.** Receptor deja de leer; muchas reconexiones. | Backpressure y limpieza; mapa no borra el socket nuevo por cierre del viejo. | Automática | PENDIENTE |
-

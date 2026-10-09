@@ -22,3 +22,4 @@
 - Antes de instalar, ejecutar pruebas o cambiar algo en un dispositivo por ADB, avisar y esperar a que el propietario lo habilite. Las compilaciones y pruebas locales no necesitan ese dispositivo.
 - No restablecer ni aprovisionar teléfonos sin autorización específica. No usar el teléfono cotidiano como banco de pruebas destructivas.
 - Mantener `ESTADO.md` actualizado con lo demostrado, lo pendiente, los archivos afectados y la próxima tarea. No declarar pruebas físicas aprobadas sin ejecutarlas.
+- El propietario autoriza avanzar autónomamente con edición, compilación, pruebas locales y commits, sin pedir permiso por cada paso. Respetar una tarea por turno y detener el acceso al dispositivo hasta que habilite ADB; no extender esta autorización a restablecimientos, aprovisionamiento, despliegue público o cambios de CP/1.

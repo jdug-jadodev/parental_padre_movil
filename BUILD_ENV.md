@@ -1,4 +1,4 @@
-# Entorno de compilación — C00
+# Entorno de compilación — C00 y C01
 
 ## Herramientas observadas
 
@@ -10,12 +10,14 @@
 | Gradle | Wrapper 8.13, distribución bin con SHA-256 fijado |
 | Android Gradle Plugin | 8.11.1 |
 | Kotlin y plugin Compose | 2.2.0 |
+| Plugin serialization / kotlinx.serialization | 2.2.0 / 1.9.0 |
 | Compose BOM | 2025.06.01 |
 | Android | minSdk 30; compileSdk y targetSdk 36; Build Tools 35.0.0 |
 | Node | 24.21.0 |
 | npm | 11.19.0 |
 | TypeScript | 5.9.3 |
 | ws / tsx | 8.22.0 / 4.23.15 |
+| Ajv (JSON Schema 2020-12) | 8.20.0 |
 
 Las versiones Android están fijadas en `gradle/libs.versions.toml`. Las de Node
 están fijadas en `relay/package.json` y `relay/package-lock.json`.

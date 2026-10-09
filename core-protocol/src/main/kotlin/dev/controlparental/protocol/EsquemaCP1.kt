@@ -7,7 +7,11 @@ import kotlinx.serialization.json.*
 internal object EsquemaCP1 {
     private val raiz: JsonObject = EsquemaCP1::class.java
         .getResourceAsStream("/protocolo.schema.json")!!.use {
-            Json.parseToJsonElement(it.readBytes().toString(Charsets.UTF_8)).jsonObject
+            val bytes = it.readBytes()
+            val huella = java.security.MessageDigest.getInstance("SHA-256").digest(bytes)
+                .joinToString("") { byte -> "%02x".format(byte) }
+            exigir(huella == "eccf964fbb41869c47d86ddb0bfda6585136430bab297568d3c20b56607372bb", "La huella del esquema no coincide con CP/1")
+            Json.parseToJsonElement(bytes.toString(Charsets.UTF_8)).jsonObject
         }
 
     fun validar(valor: JsonObject) {

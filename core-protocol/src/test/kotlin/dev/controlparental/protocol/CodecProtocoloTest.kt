@@ -100,4 +100,22 @@ class CodecProtocoloTest {
         assertTrue(CodecProtocolo.leerFrame(frame.toByteArray()) is Latido)
         assertThrows(MensajeInvalido::class.java) { CodecProtocolo.leerFrame(frame.replace("\"v\":1", "\"v\":1,\"v\":1").toByteArray()) }
     }
+
+    @Test
+    fun `BOM UTF8 no se elimina silenciosamente`() {
+        val bom = byteArrayOf(0xef.toByte(), 0xbb.toByte(), 0xbf.toByte())
+        assertThrows(MensajeInvalido::class.java) { CodecProtocolo.leerFrame(bom + recurso("14_ping.frame.json")) }
+    }
+
+    @Test
+    fun `acepta los limites exactos de frame y payload decodificado`() {
+        val ping = recurso("14_ping.frame.json")
+        val alLimite = ByteArray(16384 - ping.size) { 32 } + ping
+        assertTrue(CodecProtocolo.leerFrame(alLimite) is Latido)
+        val sobre = CodecProtocolo.leerFrame(recurso("04_lock_for.signed.json")) as SobreFirmado
+        val maximo = sobre.copy(payloadB64 = Formatos.codificar(ByteArray(8192) { 65 }))
+        assertEquals(8192, CodecProtocolo.bytesPayload(CodecProtocolo.leerFrame(CodecProtocolo.codificarFrame(maximo)) as SobreFirmado).size)
+        val excedido = sobre.copy(payloadB64 = Formatos.codificar(ByteArray(8193) { 65 }))
+        assertThrows(MensajeInvalido::class.java) { CodecProtocolo.codificarFrame(excedido) }
+    }
 }
