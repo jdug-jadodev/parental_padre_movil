@@ -1,5 +1,13 @@
 # Relevo — P01
 
+## Segunda aceptación A56
+
+Prueba aceptar solicitando PIN/contraseña aprobada: un test sin fallos, 72.282 s,
+firma protegida y caducidad real comprobadas. Falta confirmación del propietario
+de que eligió credencial, ya que el runner no distingue modalidad. No repetir
+por asumir que esta ejecución sigue pendiente. A13 sin operaciones. Reinicio
+del proceso y revisión manual requieren acuerdo aparte.
+
 ## Actualización cancelación A56
 
 Modalidad cancelar autorizada y aprobada: un test sin fallos, 21.311 s. El prompt

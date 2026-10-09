@@ -52,6 +52,8 @@ pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P01.md, pruebas/HANDOFF_P01.md, 
 
 ## Pruebas ejecutadas y resultado
 
+- A56: segunda ejecución aceptar, solicitando al propietario usar PIN/contraseña y no huella. Un test aprobado, status 0/OK (1 test), cero fallos, 72.282 s. Firma protegida y caducidad Keystore/sesión tras 61 segundos comprobadas de nuevo. El runner no distingue modalidad física: falta confirmación del propietario de que usó credencial. A13 excluido, sin operaciones.
+
 - A56 interactivo cancelar autorizado: runner ADB con selector explícito del A56, filtro AutenticacionRealTest y autenticacionReal=cancelar. Un test aprobado, status 0/OK (1 test), cero fallos, 21.311 s. Cancelación física recibida como no autenticada; AutoridadPadre rechazó firmar. Pública temporal conservada al reabrir almacén, alias eliminado en finally. Ninguna operación en A13 ni firma/orden enviada.
 
 - A56 interactivo: runner ADB dirigido al A56, filtro AutenticacionRealTest y autenticacionReal=aceptar: status 0, OK (1 test), 76.324 s. Adulto respondió físicamente; sin éxito biométrico simulado. Firma temporal verificada y caducidad del proveedor/sesión comprobadas. Alias temporal eliminado por finally. No se enviaron mensajes al relay ni se creó identidad operativa.
@@ -102,7 +104,7 @@ La referencia plantillas/HANDOFF.md de padre/AGENTS.md no existe; usar pruebas/H
 
 ## Próxima tarea y lectura mínima
 
-Próximo paso inmediato: acordar prueba de aceptar mediante credencial PIN/contraseña, todavía pendiente. Huella/caducidad y cancelación ya aprobaron. Acordar aparte reinicio de proceso y revisión visual. Usar siempre selección explícita del A56; no tocar A13. No requiere Device Owner, vinculación ni restablecimiento. Alias temporales se eliminan; no reemplazan identidad.
+Próximo paso inmediato: confirmar que en la segunda ejecución aceptar aprobada (72.282 s) el propietario usó PIN/contraseña, como se solicitó. Huella/caducidad y cancelación ya aprobaron. Acordar aparte reinicio de proceso y revisión visual. Usar siempre selección explícita del A56; no tocar A13. No requiere Device Owner, vinculación ni restablecimiento. Alias temporales se eliminan; no reemplazan identidad.
 Tras validar P01, siguiente tarea de desarrollo P02 — vinculación QR. No se inició P02 ni almacenamiento de metadatos en este turno. P00 y C02 conservan aceptación física pendiente.
 
 ## Seguridad

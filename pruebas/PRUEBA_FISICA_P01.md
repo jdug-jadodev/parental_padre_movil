@@ -3,8 +3,9 @@
 **Lote no interactivo ejecutado en A56:** 12 aprobados/1 interactivo omitido, sin
 fallos. **Interactivo aceptar también aprobado:** firma y caducidad tras 61 s,
 un test sin fallos, 76.324 s. El propietario confirmó huella. **Cancelar también
-aprobado:** firma rechazada, un test sin fallos, 21.311 s. PIN/contraseña,
-reinicio del proceso y revisión manual pendientes. A13 excluido por ambos AGENTS.md.
+aprobado:** firma rechazada, un test sin fallos, 21.311 s. Segunda ejecución aceptar
+solicitando PIN/contraseña aprobada (72.282 s); falta confirmar modalidad física.
+Reinicio del proceso y revisión manual pendientes. A13 excluido por ambos AGENTS.md.
 Avisar y esperar habilitación expresa de ADB antes de listar
 dispositivos, instalar o probar. Usar solo el teléfono del padre, Android 11+.
 Si hay varios dispositivos, confirmar el objetivo antes de instalar.

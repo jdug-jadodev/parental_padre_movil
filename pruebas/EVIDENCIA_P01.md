@@ -1,5 +1,17 @@
 # Evidencia P01 — identidad y autenticación
 
+## Segunda aceptación: credencial solicitada
+
+El propietario autorizó probar PIN/contraseña, sin huella. Se ejecutó únicamente
+en A56 el test aceptar: **un test aprobado, cero fallos**, status 0/OK (1 test),
+72.282 segundos. Firma protegida verificada y, tras 61 segundos, Keystore y sesión
+rechazaron otra firma. Alias temporal eliminado; sin operaciones sobre A13.
+
+El runner no identifica qué modalidad física eligió el adulto: se solicitó
+credencial del dispositivo, pero su uso concreto queda pendiente de confirmación.
+No registrar PIN ni atribuir esta ejecución a credencial sin esa confirmación.
+Las referencias posteriores a probar credencial corresponden al historial.
+
 ## Actualización física: cancelación
 
 El propietario autorizó la modalidad cancelar. Ejecución dirigida únicamente al
