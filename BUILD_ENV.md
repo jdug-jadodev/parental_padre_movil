@@ -1,0 +1,36 @@
+# Entorno de compilación — C00
+
+## Herramientas observadas
+
+| Herramienta | Versión/configuración |
+|---|---|
+| Sistema | Windows 11, amd64 |
+| Android Studio | AI-253.32098.37.2534.15232325; directorio AndroidStudio2025.3.4 |
+| JDK instalado y usado por Gradle | Oracle 21.0.6; compilación con destino JVM 17 |
+| Gradle | Wrapper 8.13, distribución bin con SHA-256 fijado |
+| Android Gradle Plugin | 8.11.1 |
+| Kotlin y plugin Compose | 2.2.0 |
+| Compose BOM | 2025.06.01 |
+| Android | minSdk 30; compileSdk y targetSdk 36; Build Tools 35.0.0 |
+| Node | 24.21.0 |
+| npm | 11.19.0 |
+| TypeScript | 5.9.3 |
+| ws / tsx | 8.22.0 / 4.23.15 |
+
+Las versiones Android están fijadas en `gradle/libs.versions.toml`. Las de Node
+están fijadas en `relay/package.json` y `relay/package-lock.json`.
+El JDK 21 ejecuta las herramientas; el bytecode del proyecto tiene destino 17.
+
+SDK local detectado: `C:/Users/Usuario/AppData/Local/Android/Sdk`.
+La ruta particular vive en `local.properties`, excluido de Git. En otro equipo,
+Android Studio puede crear ese archivo al abrir el proyecto.
+
+Compatibilidad AGP 8.11, Gradle 8.13 y API 36 consultada en la fuente oficial:
+https://developer.android.com/build/releases/past-releases/agp-8-11-0-release-notes
+
+## Límites de la verificación
+
+- La compilación local no demuestra funcionamiento en un teléfono.
+- No se ha usado ADB ni instalado APK alguno: requiere aviso y habilitación del propietario.
+- Python está disponible, pero `jsonschema` no está instalado. El verificador estructural permanece pendiente; no se instalaron paquetes globales.
+- No se han comprobado biometría, Keystore, compatibilidad del hijo ni Render.

@@ -1,0 +1,22 @@
+{
+  "name": "control-parental-relay",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Base local del relay del padre; todavía sin tráfico CP/1",
+  "type": "module",
+  "engines": { "node": ">=24.0.0 <25" },
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/src/server.js",
+    "test": "tsx --test test/*.test.ts",
+    "check": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": { "ws": "8.22.0" },
+  "devDependencies": {
+    "@types/node": "24.19.1",
+    "@types/ws": "8.18.2",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3"
+  }
+}

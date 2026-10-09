@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Control parental · Padre</string>
+    <string name="inicio_titulo">Este teléfono será el administrador</string>
+    <string name="inicio_descripcion">El teléfono del hijo requiere configuración como dispositivo administrado.</string>
+    <string name="inicio_aviso">Base inicial de desarrollo. Todavía no hay vinculación, conexión ni envío de órdenes.</string>
+    <string name="inicio_protocolo">Protocolo CP/%1$d</string>
+</resources>
