@@ -1,7 +1,9 @@
 # Pruebas físicas del padre — P01 (pendientes)
 
 **Lote no interactivo ejecutado en A56:** 12 aprobados/1 interactivo omitido, sin
-fallos. Autenticación interactiva y revisión manual siguen pendientes. A13 excluido.
+fallos. **Interactivo aceptar también aprobado:** firma y caducidad tras 61 s,
+un test sin fallos, 76.324 s. Modalidad física pendiente de confirmar; cancelar,
+reinicio del proceso y revisión manual pendientes. A13 excluido por ambos AGENTS.md.
 Avisar y esperar habilitación expresa de ADB antes de listar
 dispositivos, instalar o probar. Usar solo el teléfono del padre, Android 11+.
 Si hay varios dispositivos, confirmar el objetivo antes de instalar.

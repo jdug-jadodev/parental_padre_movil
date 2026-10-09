@@ -21,6 +21,8 @@ Emergencia del sistema siempre accesible. App y servicio visibles, sin espionaje
 
 Implementa una tarea pequeña por turno. Propón división antes de modificar muchos módulos. Mantén las funciones puras separadas de Android. Usa interfaces/fakes en tests y jamás una clave maestra, bypass o simulación de APPLIED en release. No ejecutes restablecimientos ni restricciones que corten recuperación en un teléfono diario.
 
+Acuerdo obligatorio del propietario: probar solo en el padre A56 con autorización y selector explícito. **No tocar el A13**, aunque esté conectado por ADB: ninguna instalación, comando de dispositivo, prueba ni cambio. No ejecutar contra todos los teléfonos; solo una autorización expresa nueva puede cambiar esta exclusión.
+
 Prueba el cambio. Si no hay SDK/dispositivo/permisos, reporta exactamente qué no pudiste verificar y deja la tarea como pendiente de esa prueba. No marques pruebas manuales como aprobadas por inspección del código.
 
 Entrega: breve resultado, rutas cambiadas, pruebas realmente ejecutadas, pendientes y siguiente tarea. Actualiza `ESTADO.md` sin guardar claves, códigos o información personal. Para continuar usa `plantillas/HANDOFF.md`.

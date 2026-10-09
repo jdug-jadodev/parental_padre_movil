@@ -1,5 +1,19 @@
 # Relevo — P01
 
+## Actualización interactiva A56
+
+El propietario autorizó aceptar: prueba real aprobada, un test sin fallos en
+76.324 s. Prompt oficial confirmado físicamente, firma con clave protegida temporal
+verificada y, tras 61 segundos, rechazo Keystore por UserNotAuthenticatedException
+y rechazo de sesión por caducidad. Sin simulación ni mensaje al relay; alias temporal
+eliminado. Falta confirmar si usó credencial o biometría; no atribuir a ambas.
+
+Pendiente acordar cancelar físicamente, probar la otra modalidad, persistencia tras
+reinicio de proceso y revisión manual. No operar A13: acuerdo obligatorio ya en
+ambos AGENTS.md, incluso si está conectado/autorizado. Usar solo selector A56.
+Las secciones anteriores de evidencia se conservan como historial, no repetir
+aceptar por asumir que sigue pendiente.
+
 ## Actualización A56
 
 Lote no interactivo ejecutado con autorización explícita: SM-A566E, Android 16/

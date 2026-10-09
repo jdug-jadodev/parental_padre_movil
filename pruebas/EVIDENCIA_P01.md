@@ -1,5 +1,29 @@
 # Evidencia P01 — identidad y autenticación
 
+## Actualización física: autenticación, firma y caducidad
+
+Prueba interactiva aceptar autorizada por el propietario y ejecutada exclusivamente
+en A56 mediante runner ADB con selector explícito, filtro AutenticacionRealTest y
+argumento autenticacionReal=aceptar. Resultado: **un test aprobado, cero fallos**,
+status 0/OK (1 test), 76.324 segundos.
+
+El adulto respondió al prompt oficial: la callback de éxito abrió la sesión y
+la clave temporal P-256 protegida firmó un AUTH ficticio verificado por CP/1.
+Después de esperar 61 segundos, la llamada directa al proveedor rechazó firmar
+con UserNotAuthenticatedException y AutoridadPadre rechazó por sesión caducada.
+No se inyectó éxito biométrico, no hubo red ni clave alternativa. El alias temporal
+se eliminó en finally; no se creó cp.parent.sign.v1 por este test.
+
+La modalidad concreta usada (credencial o biometría fuerte) queda pendiente de
+confirmación del adulto. No afirmar que ambas aprobaron. También siguen pendientes
+cancelación física, reinicio del proceso, revisión manual y pérdida/invalidación
+de clave en entorno seguro. El resultado demuestra el flujo aceptar en este A56,
+no compatibilidad universal ni puertas G0–G4.
+
+Se persiste en AGENTS.md y padre/AGENTS.md la prohibición de operar el A13,
+aunque esté conectado/autorizado. Solo A56 seleccionado explícitamente; cambiar
+esta exclusión requiere nueva autorización expresa del propietario.
+
 ## Actualización física: lote no interactivo del A56
 
 El propietario habilitó ADB e identificó el A56 como padre, prohibiendo operar
