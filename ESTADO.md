@@ -7,6 +7,18 @@ Estado: VALIDADA_PARCIAL_LOCAL_Y_A56 — 99 pruebas locales y cuatro físicas de
 
 ## Entorno observado
 
+### Cambio de alcance acordado
+
+El propietario indicó que Render no debe mezclarse con la app del padre:
+servidor en `C:\Users\Usuario\Documents\parental_render`, desarrollo aparte
+posterior. Carpeta consultada: sin entradas visibles. No se modificó esa carpeta.
+Se actualizan AGENTS.md, padre/AGENTS.md, 00_EMPIEZA_AQUI.md y README.md para
+impedir nuevo desarrollo de servidor aquí. El relay existente no se ha movido ni
+borrado; extracción de código y adaptación de tests/scripts pendiente. No se
+ejecutaron pruebas ni ADB para este ajuste exclusivamente documental. CP/1 intacto.
+Próximo paso de organización: acordar traslado del relay existente conservando
+sus pruebas y separando verificadores locales del padre, sin perder trabajo.
+
 Android Studio AI-253.32098.37.2534.15232325 / JDK 21.0.6 / Gradle 8.13 / AGP 8.11.1 / Kotlin 2.2.0. Detalles en BUILD_ENV.md.
 Node 24.21.0 / npm 11.19.0 / Windows 11 amd64
 SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION

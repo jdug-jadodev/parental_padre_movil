@@ -1,6 +1,6 @@
 # Instrucciones de OpenCode — proyecto PADRE
 
-**Proyecto autónomo.** Solo implementar aplicación del padre y relay Render. No crear ni modificar el repositorio del otro rol.
+**Proyecto autónomo del padre.** Solo implementar aplicación del padre. El servidor Render pertenece al proyecto separado `C:\Users\Usuario\Documents\parental_render` y se desarrollará allí en otro turno. No crear ni modificar el repositorio del otro rol.
 
 1. Leer `00_EMPIEZA_AQUI.md`, `ESTADO.md` y `padre/AGENTS.md`.
 2. Elegir una sola tarea de `padre/PLAN_PADRE.md` o C00-C02 en `compartido/03_INICIO_TECNICO.md`.
@@ -17,6 +17,7 @@
 ## Acuerdos con el propietario — obligatorios para futuras sesiones
 
 - Comunicación, documentación, comentarios, textos de la app y mensajes de commit en español claro. Conservar los nombres exigidos por CP/1, APIs y herramientas; no traducir campos del protocolo.
+- Separación acordada: no desarrollar ni añadir servidor Render en este repositorio. Las referencias históricas a «Padre + Render» no autorizan mezclar proyectos. El `relay/` existente y sus dependencias de pruebas/scripts están pendientes de extracción conservadora; no borrar código, evidencias ni modificar CP/1 para separarlos. Desarrollar servidor posteriormente solo en parental_render.
 - Trabajar una tarea por turno. Empezar por C00 y respetar las dependencias del plan.
 - Hacer un commit al llegar a cada bloque de 500 líneas de código escritas o modificadas manualmente; cerrar también cada tarea con un commit aunque el bloque sea menor. Contar código y pruebas, no documentación, dependencias, archivos generados ni fixtures congelados. No añadir relleno para alcanzar 500 líneas. Revisar lo preparado antes de cada commit y no incluir secretos.
 - Antes de instalar, ejecutar pruebas o cambiar algo en un dispositivo por ADB, avisar y esperar a que el propietario lo habilite. Las compilaciones y pruebas locales no necesitan ese dispositivo.

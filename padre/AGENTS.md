@@ -1,11 +1,11 @@
 # Instrucciones para una IA de contexto reducido — padre
 
-Tu responsabilidad es **app del padre y relay Render**. El repositorio es por crear; este paquete es documentación. No afirmes que el producto funciona hasta ejecutar pruebas apropiadas.
+Tu responsabilidad aquí es **solo la app del padre**. El servidor Render se desarrollará aparte en `C:\Users\Usuario\Documents\parental_render`, por acuerdo del propietario. No afirmar que el producto funciona sin pruebas apropiadas.
 
 ## Lectura mínima por tarea
 
 1. Lee este archivo y `ESTADO.md` del repositorio.
-2. Abre únicamente la tarea elegida en `PLAN_PADRE.md` y las secciones citadas de `SPEC_PADRE.md / SPEC_RELAY_RENDER.md`.
+2. Abre únicamente la tarea Android elegida en `PLAN_PADRE.md` y las secciones citadas de `SPEC_PADRE.md`. Las tareas R del plan y SPEC_RELAY_RENDER son documentación histórica para el proyecto separado, no trabajo autorizado aquí.
 3. Para protocolos, lee las secciones correspondientes de `compartido/00_CONTRATO_V1.md` y el esquema JSON. Para Android específico, consulta las fuentes primarias de compatibilidad antes de inventar una API.
 4. Si cambias arquitectura, consulta el ADR afectado; no cambies decisiones globales para resolver un error local.
 

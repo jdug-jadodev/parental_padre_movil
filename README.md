@@ -4,6 +4,15 @@ Proyecto Android nativo en Kotlin y servicio Node/TypeScript. Este repositorio
 solo implementa el rol del padre y el relay. El APK del hijo pertenece a otro
 proyecto. La copia del protocolo CP/1 en `compartido/` permanece congelada.
 
+## Separación del servidor
+
+Por acuerdo del propietario, este proyecto es solo de la **app del padre**.
+El servidor Render se desarrollará aparte en
+`C:\Users\Usuario\Documents\parental_render`. Su código `relay/` existente
+aquí todavía está pendiente de extracción junto con las dependencias de pruebas
+y scripts; no se ha movido ni borrado. No continuar tareas de servidor aquí.
+El cliente Android WSS y CP/1 siguen formando parte de la app.
+
 ## Qué hay implementado (C00–C02, P00, P01, P03 y P02 local parcial)
 
 - `app-parent/`: navegación en español e identidad/autenticación Keystore implementadas, pendientes de validación física; sin vinculación real ni envío de órdenes.

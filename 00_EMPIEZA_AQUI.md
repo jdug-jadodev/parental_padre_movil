@@ -1,11 +1,18 @@
-# Control parental — proyecto Padre + Render
+# Control parental — proyecto Padre
+
+**Separación acordada con el propietario:** aquí se desarrolla solo la app del
+padre. El servidor pertenece a `C:\Users\Usuario\Documents\parental_render` y
+se desarrollará aparte más adelante. El `relay/` ya existente y sus dependencias
+de tests/scripts están pendientes de extracción conservadora; todavía no se han
+trasladado ni borrado. Las referencias históricas a ambos componentes no cambian
+este alcance. El cliente WSS de Android y el contrato común sí pertenecen al padre.
 
 **Especificaciones v1.0 y desarrollo inicial independiente. Hay bases compiladas y APK de desarrollo; la aplicación completa y la integración siguen pendientes. Consultar `ESTADO.md` para la evidencia vigente.**
 
 ## Qué se construye aquí
 
 - App Android para el adulto: autoriza órdenes y muestra estados.
-- Relay Node/TypeScript en Render: autentica y retransmite por WSS, sin DB ni cola persistente.
+- Cliente de la app para comunicarse con el relay externo mediante WSS; servidor separado.
 - Integración inicial con un *simulador* de teléfono hijo, sin necesitar el repo real del hijo.
 
 Este repositorio **no contiene el código del otro dispositivo**. El protocolo compartido CP/1 tiene la misma copia en los dos paquetes. Mantenerlo sin editar hasta la integración.
