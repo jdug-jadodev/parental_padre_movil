@@ -1,5 +1,13 @@
 # Relevo — P01
 
+## Revisión visual básica A56
+
+El propietario confirmó «todo bien» tras recorrido de inicio/configurar →
+Ver controles → Recuperación sin internet y pregunta sobre llegada/legibilidad.
+Revisión básica manual confirmada; no confundir con rotación, texto grande,
+Atrás o bloqueo tras segundo plano, aún sin confirmación manual. No pedir que
+repita este recorrido básico por referencias históricas a revisión pendiente.
+
 ## Actualización persistencia A56
 
 Cerrar/reabrir app autorizado y comprobado sin borrar datos ni reiniciar teléfono.

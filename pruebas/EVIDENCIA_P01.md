@@ -1,5 +1,14 @@
 # Evidencia P01 — identidad y autenticación
 
+## Revisión visual básica informada por el propietario
+
+En el A56 se le indicó abrir Control parental · Padre y pulsar Configurar este
+teléfono como padre → Ver controles → Recuperación sin internet. Al preguntarle
+si pudo llegar a Recuperación y leer bien la pantalla respondió «todo bien».
+Se registra recorrido y legibilidad básica como confirmación manual del adulto.
+No se extrapola a rotación, texto grande, Atrás ni bloqueo al regresar de segundo
+plano, que no confirmó. Invalidación permanente en banco separado sigue pendiente.
+
 ## Persistencia entre procesos en A56
 
 El propietario autorizó cerrar/reabrir solo la app padre en A56 sin borrar datos
