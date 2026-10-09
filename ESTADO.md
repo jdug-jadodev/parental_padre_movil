@@ -2,8 +2,8 @@
 
 Última actualización: 2026-10-09
 Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. P00: 37c74a3, 943082c. Primer bloque P01: 0f143c4; cierre local en el commit posterior, consultar git log.
-Tarea actual: P02 — escaneo directo con CameraX local
-Estado: CAMARA_VALIDADA_PARCIAL_A56 — 81 pruebas locales y lectura óptica del QR público confirmada por propietario; pruebas ampliadas e integración pendientes
+Tarea actual: P04 — cliente WSS del padre
+Estado: EN_CURSO_LOCAL — máquina de conexión/autenticación y ocho pruebas nuevas correctas; transporte TLS/Android e integración pendientes
 
 ## Entorno observado
 
@@ -47,6 +47,8 @@ Node 24.21.0 / npm 11.19.0 / Windows 11 amd64
 SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Terminado y demostrado
+
+- P04 primer bloque: RelayConnection separa conexión/reto/AUTH_OK/latidos/presencia indicativa; origen HTTPS/subprotocolo cp.v1, firma AUTH sobre reto exacto y pública configurada. Autoridad vigente antes de abrir y después de firmar; timeout monotónico, PONG correlacionado, backoff acotado/jitter, cierre al fondo y descarte de callbacks antiguos. No envía órdenes ni acepta STATE/ACK como evidencia (P05 pendiente). Ocho tests JVM nuevos aprobados, 53 app total. Transporte real y UI pendientes; servidor R02 es dependencia externa para integración, no impide tests aislados según plan.
 
 - P02 cámara, resultado manual: tras actualizar APK y mostrar QR público en PC, el propietario respondió «sip, apareció un json con muchos datos» a la comprobación de escaneo. Lectura óptica y publicación de oferta en campo confirmadas por observación del propietario. No acredita prueba ampliada de denegación de permiso, cierre/reapertura/fondo/giros, enfoque en condiciones diversas ni integración con APK hijo. No se preparó vínculo de prueba; no usar ese QR para vinculación operativa.
 
