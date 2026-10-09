@@ -30,6 +30,8 @@ import kotlinx.coroutines.CancellationException
 import dev.controlparental.parent.policy.ControlPoliticas
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import dev.controlparental.parent.presentation.AccionesControlReal
+import dev.controlparental.parent.ui.ControlScreen
 
 class MainActivity : ComponentActivity() {
     private val sesion = SesionAutoridad(SystemClock::elapsedRealtime)
@@ -55,6 +57,7 @@ class MainActivity : ComponentActivity() {
         val store = AlmacenPadreAndroid.obtener(applicationContext)
         politicas = ControlPoliticas(store, CanalPoliticasRelay(conexion) { red.validada.value },
             SystemClock::elapsedRealtime, sesion::exigirVigencia, { autoridad.firmar(it, Proposito.MESSAGE) })
+        val accionesControl = AccionesControlReal(store, politicas)
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
@@ -107,7 +110,9 @@ class MainActivity : ComponentActivity() {
                 AplicacionPadre(presentacion, modelo::navegar, modelo::volver,
                     identidad = { IdentidadPadre(aviso, publica, ::crearIdentidad, ::autenticar) },
                     vinculacion = { PairingScreen(vinculacion, store, ::autenticar) },
-                    conexion = { ConexionRelayScreen(conexion, store, redValidada, ::autenticar, politicas) })
+                    conexion = { ConexionRelayScreen(conexion, store, redValidada, ::autenticar, politicas) },
+                    controles = { ControlScreen(accionesControl, ::autenticar,
+                        redValidada && canal.fase == FaseRelay.AUTENTICADO && canal.canalSano) })
             }
         }
     }

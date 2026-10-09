@@ -15,7 +15,7 @@ internal fun ConexionRelayScreen(conexion: RelayConnection, store: ParentStore, 
     val estado by conexion.estado.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
     val resultado by politicas.resultado.collectAsStateWithLifecycle()
-    var aviso by remember { mutableStateOf("Conexión explícita con vínculo guardado. El servidor externo aún requiere implementación; no hay órdenes operativas.") }
+    var aviso by remember { mutableStateOf("Conexión explícita con vínculo guardado. La integración con servidor e hijo reales aún no está demostrada.") }
     DisposableEffect(conexion) { onDispose { conexion.desconectar() } }
     Text("Canal del padre", style = MaterialTheme.typography.titleMedium)
     Text(if (redValidada) "Red validada por Android; no demuestra acceso al relay"
@@ -53,5 +53,15 @@ internal fun ConexionRelayScreen(conexion: RelayConnection, store: ParentStore, 
             catch (_: Exception) { aviso = "No se pudo sincronizar. Revisa autoridad, vínculo, red validada y latido del canal; no se crean órdenes." }
         }
     }) { Text("Solicitar estado firmado del hijo") }
-    Text("Diagnóstico de sincronización: ${resultado.fase}. No habilita órdenes ni acredita recuperación local.")
+    Text("Sincronización: ${when (resultado.fase) {
+        FasePolitica.SIN_ESTADO -> "sin estado fresco"
+        FasePolitica.ESPERANDO_ESTADO -> "esperando respuesta firmada del hijo"
+        FasePolitica.ESTADO_VERIFICADO -> "estado verificado"
+        FasePolitica.ENVIADA_SIN_CONFIRMAR -> "orden sin confirmar"
+        FasePolitica.PENDIENTE_APLICACION -> "aceptada, aplicación pendiente"
+        FasePolitica.APLICADA -> "aplicada según evidencia del hijo"
+        FasePolitica.FALLO_APLICACION -> "fallo de aplicación"
+        FasePolitica.RECHAZADA -> "orden rechazada"
+        FasePolitica.REQUIERE_CONFIRMACION -> "revisa la intención pendiente y confirma de nuevo"
+    }}. No acredita recuperación local ni habilita órdenes automáticamente.")
 }

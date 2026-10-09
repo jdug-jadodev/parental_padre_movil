@@ -3,7 +3,7 @@
 Última actualización: 2026-10-09
 Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. P00: 37c74a3, 943082c. Primer bloque P01: 0f143c4; cierre local en el commit posterior, consultar git log.
 Tarea actual: P06 — interfaz de control final
-Estado: EN_CURSO_LOCAL — intención offline privada v3 y presentación pura probadas; pantalla/formularios y validación integrada pendientes
+Estado: P06_IMPLEMENTADO_LOCAL_PARCIAL — controles con confirmación y selección offline compilados; 132 pruebas locales correctas; UI física e integración pendientes
 
 ## Entorno observado
 
@@ -47,6 +47,10 @@ Node 24.21.0 / npm 11.19.0 / Windows 11 amd64
 SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Terminado y demostrado
+
+- P06 cierre local parcial: ControlScreen sustituye controles de recorrido en MainActivity con acciones reales inyectadas desde AccionesControlReal. Formularios de 60–604800 s, advertencias de las cuatro acciones, guardado local sin envío, reemplazo explícito y confirmación separada (también ALLOW/ALLOW_FOR). Guardia síncrona de operación; salida/fondo descartan diálogos y cancelan operación UI, conservando intención duradera. Vínculo PREPARADO no habilita acciones ni se promociona por STATE; recuperación siempre en barra inferior.
+- P06 evidencia: modo/causa y última respuesta firmada se presentan separados de intención, relay y presencia. APPLIED con NETWORK_LOST/LOCKED informa bloqueo por red, nunca pinta permitido por pulsar ALLOW. Caída del canal/red degrada presentación inmediatamente; sincronizar no rejuvenece evidencia previa. Antigüedad conocida solo en instancia que recibió evidencia, desconocida tras reabrir; remainingSec no se descuenta como confirmación remota. Descartar un comando exige sincronización fresca y advierte que no revoca órdenes recibidas; no se afirma cancelación remota.
+- P06 privado: v3 añade una única intención offline sin seq/frame y excluyente de pendiente reservado. Reemplazo por id; reserva consume selección local atómicamente y rechaza confirmación de id anterior. Migración v1/v2 conserva bytes de comandos/aceptación/evidencia y contador, sin inventar selección local. Solo formato privado Android, CP/1/fixtures intactos. Trece tests JVM nuevos correctos (96 app total); cinco PantallaControlTest nuevos compilados/no ejecutados, incluida escala de texto 2x. No ADB, instalaciones, pruebas físicas ni servidor externo. Primer bloque 2c262b3; cierre en commit posterior.
 
 - P06 primer bloque: intención local offline sin firma/seq, única y excluyente de orden pendiente; reemplazo/descarte por id explícito. Formato privado v3 migra v1/v2 conservando contador, comando, evidencia y aceptación (sin cambios CP/1). Confirmación vincula id de intención local y rechaza reemplazos posteriores incluso con misma acción. Vista revalida frescura/canal; textos distinguen modo real, causa, ACK aplicado/pendiente/fallo/rechazo, antigüedad desconocida y tiempo reportado sin descontarlo. Once tests JVM nuevos correctos; 94 app total. UI final pendiente, sin ADB ni servidor externo.
 
@@ -120,6 +124,13 @@ SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Archivos modificados en la última tarea
 
+P06 (prioritario): app-parent/src/main/java/dev/controlparental/parent/ui/{ControlScreen,AplicacionPadre,ConexionRelayScreen}.kt;
+app-parent/src/main/java/dev/controlparental/parent/presentation/{AccionesControl,PresentacionControl}.kt;
+app-parent/src/main/java/dev/controlparental/parent/{MainActivity,policy/ControlPoliticas,data/MetadatosPadre,data/ParentStore}.kt;
+app-parent/src/test/java/dev/controlparental/parent/{PresentacionControlTest,ParentStoreTest,ControlPoliticasTest,PairChildTest}.kt;
+app-parent/src/androidTest/java/dev/controlparental/parent/{PantallaControlTest,VinculoPersistidoAndroidTest}.kt;
+README.md, ESTADO.md y pruebas/EVIDENCIA_P06.md. Sin permisos/dependencias nuevos ni cambios externos.
+
 P05 (prioritario): app-parent/src/main/java/dev/controlparental/parent/policy/ControlPoliticas.kt;
 app-parent/src/main/java/dev/controlparental/parent/data/ParentStore.kt;
 app-parent/src/main/java/dev/controlparental/parent/network/{RelayConnection,CanalPoliticasRelay}.kt;
@@ -142,6 +153,8 @@ app-parent/src/androidTest/java/dev/controlparental/parent/AlmacenAndroidTest.kt
 pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P03.md y pruebas/HANDOFF_P03.md.
 
 ## Pruebas ejecutadas y resultado
+
+- P06: scripts/verificar.ps1 correcto y Gradle completo con --rerun-tasks (tests app/núcleo/interoperabilidad, debug/instrumentado/release sin firma de distribución y lint): 130 tareas ejecutadas correctamente. XML: 96 app + 30 núcleo + 1 interop, cero fallos/errores/omisiones; oráculo Node cinco aprobados, total 132 locales. Diez vectores/78 comprobaciones documentales; lint cero errores/23 avisos. Primer intento de recompilación instrumentada falló por lambda en posición del nuevo parámetro Boolean de ControlScreen; se corrigió la llamada de test con autenticar nombrado, sin relajar controles. Cinco tests UI compilados, no ejecutados; modificación del test Android de migración compilada/no repetida en dispositivo. No instalaciones/ADB ni integración real.
 
 - P05: scripts/verificar.ps1 correcto. Repetición Gradle --rerun-tasks de tests app/núcleo/interoperabilidad, debug/instrumentado/release sin firma de distribución y lint: 130 tareas ejecutadas correctamente. Tras ajustes finales de conexión automática/guardas y un test de concurrencia, script y release repetidos correctos. XML final: 83 app + 30 núcleo + 1 interop, cero fallos/errores/omisiones; cinco oráculo Node, total 119 locales. Diez vectores/78 comprobaciones documentales; lint cero errores/23 avisos. Un test de reapertura falló inicialmente porque el simulador retrocedía lastAcceptedSeq; se corrigió el simulador, conservando la guarda de producción. No ADB, APK instalados, pruebas físicas, servidor externo ni despliegue.
 
@@ -218,6 +231,9 @@ P01 aceptar con huella y PIN/contraseña pasó físicamente en A56, incluida cad
 La referencia plantillas/HANDOFF.md de padre/AGENTS.md no existe; usar pruebas/HANDOFF_PLANTILLA.md.
 
 ## Próxima tarea y lectura mínima
+
+P06 implementado localmente; P-UI-01/02 y texto grande/rotación/fondo físicos pendientes, además de integración con hijo/servidor reales. Próxima tarea: P07 de padre/PLAN_PADRE.md, SPEC-P P3/P4 y CP/1 §9, autorización local sin internet/retirada presencial. No declarar recuperación acreditada ni promocionar PREPARADO solo porque la interfaz esté compilada. Padre aún no terminado/preparado para integración completa; mantener aviso al propietario cuando cierre esa parte y comunicación local antes de despliegue, sin agentes ni desarrollo del servidor aquí. Antes de nuevas pruebas físicas/actualización APK en A56, avisar y esperar autorización; no operar A13.
+La indicación histórica siguiente de próxima tarea P06 ya fue atendida en este turno.
 
 P05 implementado localmente; integración externa H09/H10/R02 pendiente. Próxima tarea local: P06 de padre/PLAN_PADRE.md, SPEC-P P3/P6, interfaz final de acciones/duración/confirmación, última evidencia, causas y pendiente. No habilitar órdenes con PREPARADO ni fingir prueba de recuperación local. El descarte local debe avisar que no revoca una orden recibida; después exige sincronizar y confirmar de nuevo. Selección offline aún sin formulario/cola de nuevas órdenes; no firmar sin contexto válido. Padre todavía no preparado para integración completa: P06/P07 y aceptación física/integrada pendientes. El propietario orquestará el servidor; comunicación local antes de despliegue, sin agentes ni cambios externos desde aquí.
 P04 queda implementado localmente; pruebas físicas y autenticación conjunta siguen pendientes. La indicación histórica siguiente de próxima tarea P05 ya fue atendida en este turno.

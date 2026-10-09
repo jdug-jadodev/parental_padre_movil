@@ -14,7 +14,19 @@ No hay servidor ni dependencias npm en este proyecto. Las especificaciones/evide
 antiguas se conservan como historia, no como tareas de desarrollo del servidor aquí.
 El cliente Android WSS y CP/1 siguen formando parte de la app.
 
-## Qué hay implementado (C00–C02, P00–P05 local parcial)
+## Qué hay implementado (C00–C02, P00–P06 local parcial)
+
+P06 incorpora pantalla de controles con duración 60–604800 s, advertencias y
+confirmación explícita separada del guardado. Una selección offline se conserva
+cifrada sin firmar/reservar seq; reemplazar exige confirmación y nunca sustituye
+silenciosamente una orden pendiente. Formato privado v3 migra v1/v2 conservando
+contador/comando/evidencia/aceptación, sin cambiar CP/1. Vínculo PREPARADO no
+habilita acciones; recuperación presencial P07 sigue pendiente.
+La UI muestra modo/causa reales de evidencia firmada: APPLIED no significa
+permitido si el hijo sigue bloqueado por red/Android. Desconectar degrada a última
+evidencia; el tiempo reportado no se descuenta como confirmación remota.
+132 pruebas locales correctas; cinco tests de pantalla compilados/no ejecutados.
+No se ha demostrado control real de otro teléfono. Ver pruebas/EVIDENCIA_P06.md.
 
 P05 añade sincronización STATE firmada, confirmación de intención no reutilizable,
 reserva/firma/persistencia antes de enviar y correlación de ACK por id/seq/hash
@@ -23,8 +35,8 @@ después estado fresco; reconexión/reapertura nunca reproduce una orden antigua
 Pendiente de aplicación, fallo y rechazo no se confunden con APPLIED. Evidencia
 y resolución se guardan atómicamente. Red validada y PONG vigente son puertas
 independientes de envío; la nueva conexión sana solicita sincronización.
-119 pruebas locales correctas; no aplicación real demostrada. Órdenes finales
-todavía deshabilitadas hasta P06 y guardas de vínculo/recuperación; PREPARADO no
+119 pruebas locales correctas en ese bloque; no aplicación real demostrada. Allí
+los controles finales quedaban para P06 y guardas de vínculo/recuperación; PREPARADO no
 se promociona aquí. Ver pruebas/EVIDENCIA_P05.md.
 
 P04 incorpora cliente WSS del padre con OkHttp, TLS/hostname del sistema y cp.v1,

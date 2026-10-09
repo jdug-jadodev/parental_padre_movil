@@ -266,6 +266,13 @@ class ParentStoreTest {
         val reserva = store.reservarIntencion(Accion.LOCK, null, "8")
         val frame = e.firmar(e.orden(reserva), Rol.PARENT)
         store.guardarComandoFirmado(reserva.commandId, frame); store.marcarEnviada(reserva.commandId)
+        val ordenDoc = CriptografiaProtocolo.verificarSobre(frame,
+            ClaveVerificacion.desdeSpki(Rol.PARENT, e.publica), Proposito.MESSAGE)
+        val ack = Confirmacion(e.datos().pairId!!, "00000000-0000-4000-8000-000000000003",
+            "00000000-0000-4000-8000-000000000004", reserva.commandId, reserva.seq,
+            ordenDoc.payloadSha256B64, ResultadoAck.ACCEPTED_PENDING_ENFORCEMENT, Modo.LOCKED, Motivo.PARENT_LOCK, null)
+        store.retenerEvidencia(CriptografiaProtocolo.verificarSobre(e.firmar(ack, Rol.CHILD),
+            ClaveVerificacion.desdeSpki(Rol.CHILD, e.publicaHijo), Proposito.MESSAGE))
         val antes = store.leer(); store.cerrar()
         val v2 = e.cifrador.descifrar(e.archivo.bytes!!).toString(Charsets.UTF_8)
             .replace("\"schemaVersion\":3", "\"schemaVersion\":2").replace(",\"intencionLocal\":null", "")

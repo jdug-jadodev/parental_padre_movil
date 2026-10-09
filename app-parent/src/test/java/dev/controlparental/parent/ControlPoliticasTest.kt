@@ -407,6 +407,29 @@ class ControlPoliticasTest {
         e.store.cerrar()
     }
 
+    @Test fun nuevaSincronizacionNoRejuveneceEvidenciaAnterior() = runTest {
+        val e = Entorno(backgroundScope); e.preparar()
+        e.tiempo = 4_000; e.control.sincronizar()
+        val anterior = e.control.vista()
+        assertFalse(anterior.fresca); assertEquals(4L, anterior.antiguedadSeg)
+        e.recibir(e.estado("2"))
+        assertTrue(e.control.vista().fresca); assertEquals(0L, e.control.vista().antiguedadSeg)
+        e.store.cerrar()
+    }
+
+    @Test fun accionesDePantallaNoFirmanHastaConfirmacionExplicita() = runTest {
+        val e = Entorno(backgroundScope); e.preparar()
+        val acciones = dev.controlparental.parent.presentation.AccionesControlReal(e.store, e.control)
+        val local = acciones.guardar(Accion.ALLOW_FOR, 60, null)
+        val confirmacion = acciones.preparar(local)
+        assertEquals(1, e.firmas); assertEquals(1, e.enviados.size)
+        acciones.enviar(confirmacion)
+        assertEquals(2, e.firmas); assertEquals(2, e.enviados.size)
+        assertNull(acciones.vista().datos.intencionLocal)
+        assertNotNull(acciones.vista().datos.pendiente)
+        e.store.cerrar()
+    }
+
     companion object {
         const val ID = "00000000-0000-4000-8000-000000000002"
         const val BOOT = "00000000-0000-4000-8000-000000000003"

@@ -50,6 +50,8 @@ internal class ControlPoliticas(
     private var vuelo: EnVuelo? = null
     private var ultimoEstado: EstadoDispositivo? = null
     private var recibidaEn: Long? = null
+    private var ultimaEvidencia: Mensaje? = null
+    private var contextoEvidencia: Contexto? = null
     private val mutable = MutableStateFlow(ResultadoPolitica())
     val resultado = mutable.asStateFlow()
 
@@ -119,6 +121,7 @@ internal class ControlPoliticas(
                 c.estado = mensaje
                 ultimoEstado = mensaje
                 recibidaEn = ahora()
+                ultimaEvidencia = mensaje; contextoEvidencia = c
                 // Una actualización no renueva la ventana ni rearma un desafío consumido.
                 mutable.value = ResultadoPolitica(if (coincide) fase(mensaje.lastResult)
                     else if (pendiente != null) FasePolitica.REQUIERE_CONFIRMACION else FasePolitica.ESTADO_VERIFICADO, mensaje)
@@ -132,6 +135,7 @@ internal class ControlPoliticas(
                 mismaConexion(c)
                 v.aceptada = true
                 recibidaEn = ahora()
+                ultimaEvidencia = mensaje; contextoEvidencia = c
                 if (mensaje.result != ResultadoAck.ACCEPTED_PENDING_ENFORCEMENT) vuelo = null
                 mutable.value = ResultadoPolitica(when (mensaje.result) {
                     ResultadoAck.APPLIED -> FasePolitica.APLICADA
@@ -234,8 +238,8 @@ internal class ControlPoliticas(
                 ClaveVerificacion.desdeSpki(Rol.CHILD, datos.childPublicKeyB64!!), Proposito.MESSAGE).mensaje
         }
         val c = contexto
-        val misma = evidencia != null && evidencia == mutable.value.mensajeHijo && recibidaEn != null
-        val fresca = misma && c != null && runCatching { vigente(c) }.isSuccess
+        val misma = evidencia != null && evidencia == ultimaEvidencia && recibidaEn != null
+        val fresca = misma && c != null && contextoEvidencia === c && runCatching { vigente(c) }.isSuccess
         val puede = c != null && datos.vinculo == VinculoPersistido.VINCULADO && datos.pendiente == null &&
             runCatching { comprobarOrden(c) }.isSuccess
         VistaPoliticas(datos, evidencia, fresca, if (misma) maxOf(0, ahora() - recibidaEn!!) / 1000 else null, puede)
