@@ -4,6 +4,7 @@
         android:allowBackup="false"
         android:dataExtractionRules="@xml/reglas_transferencia"
         android:fullBackupContent="false"
+        android:icon="@drawable/ic_padre"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@android:style/Theme.Material.Light.NoActionBar"

@@ -1,9 +1,9 @@
 # Estado de implementación
 
 Última actualización: 2026-10-08
-Commit de acuerdos: 4cc7a39; cambios de C00 todavía en validación
+Commit de acuerdos: 4cc7a39; commit de base C00: e25bff5. Correcciones y cierre registrados en el commit posterior; consultar git log.
 Tarea actual: C00
-Estado: EN_VALIDACION
+Estado: COMPLETADA_LOCAL — alcance C00; prueba de pantalla en teléfono pendiente
 
 ## Entorno observado
 
@@ -14,15 +14,16 @@ SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 ## Terminado y demostrado
 
 - Acuerdos del propietario persistidos en AGENTS.md y protegidos por un commit.
-- Base Android creada, pendiente del resultado de compilación local.
+- Base Android compilada: APK debug de la app y APK instrumentado de pruebas generados.
 - Base del relay compilada; responde 503 en health y rechaza upgrades/producción. No implementa todavía R01–R03.
-- Doble de hijo exclusivamente en tests, basado en un fixture firmado congelado.
+- Cliente hijo simulado exclusivamente en tests, limitado a loopback; lectura de fixture firmado congelado.
+- Verificación local completa mediante scripts/verificar.ps1 aprobada. No se ha instalado la app ni demostrado control real de un dispositivo.
 
 ## Archivos modificados en la última tarea
 
 AGENTS.md, .gitignore, .gitattributes, README.md, BUILD_ENV.md, ESTADO.md.
 settings.gradle.kts, build.gradle.kts, gradle.properties, gradle/, gradlew, gradlew.bat.
-app-parent/, core-protocol/, relay/, scripts/verificar.ps1.
+app-parent/, core-protocol/, relay/, scripts/verificar.ps1, pruebas/HANDOFF_C00.md.
 local.properties creado solo para este equipo y excluido de Git.
 
 ## Pruebas ejecutadas y resultado
@@ -33,7 +34,10 @@ local.properties creado solo para este equipo y excluido de Git.
 - Ejecutable compilado del relay: arranque local y GET /healthz observado con 503; inicio en producción rechazado con código 1.
 - SHA-256 de contrato y esquema: coinciden con INTEGRACION_FUTURA.md.
 - `:core-protocol:test`: 1 prueba JVM aprobada (reporte XML, sin fallos ni errores).
-- Primer comando Android interrumpido por límite de 120 segundos durante la compilación. Se reinició con `scripts/verificar.ps1 -Modulo app` y límite de 10 minutos; pendiente de resultado final.
+- `:app-parent:testDebugUnitTest`: 1 prueba aprobada (reporte XML, sin fallos ni errores).
+- `:app-parent:assembleDebug` y `:app-parent:assembleDebugAndroidTest`: compilaciones correctas. La segunda solo compila las pruebas; no las ejecuta en Android.
+- `:app-parent:lintDebug`: 0 errores y 9 avisos de versiones más recientes. Se mantienen versiones fijadas y compatibles; no se deshabilitaron comprobaciones.
+- Primer comando Android interrumpido a los 120 segundos. Segundo intento completó APK/tests, pero lint detectó un escape incorrecto en local.properties y ausencia de icono. Ambos corregidos. La ejecución final completa de `scripts/verificar.ps1` terminó correctamente: núcleo, app, lint, relay y vectores.
 - Ninguna prueba por ADB, en teléfono, en Render o con el APK real del hijo.
 
 ## Decisiones locales sin cambiar ADR
@@ -52,7 +56,8 @@ La referencia plantillas/HANDOFF.md de padre/AGENTS.md no existe; usar pruebas/H
 
 ## Próxima tarea y lectura mínima
 
-Cerrar validación local de C00. Después, C01 — compartido/03_INICIO_TECNICO.md, contrato y esquema CP/1 para modelos, parser y serialización determinista.
+C01 — compartido/03_INICIO_TECNICO.md, contrato y esquema CP/1 para modelos, parser y serialización determinista.
+Prueba física disponible: cuando el propietario habilite el teléfono del padre por ADB, ejecutar :app-parent:connectedDebugAndroidTest y registrar resultado. No requiere Device Owner ni restablecimiento. La app requiere Android 11/API 30 o superior.
 
 ## Seguridad
 
