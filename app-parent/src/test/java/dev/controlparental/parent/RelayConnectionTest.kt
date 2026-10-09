@@ -100,7 +100,9 @@ class RelayConnectionTest {
     @Test fun pongDebeCorresponderAlDesafioVigenteYNoSeAceptaDuplicado() {
         val e = Entorno(); val socket = e.autenticar()
         val ping = socket.enviados.last() as Latido
+        assertFalse(e.conexion.estado.value.canalSano)
         socket.mensaje(RespuestaLatido(ping.nonce))
+        assertTrue(e.conexion.estado.value.canalSano)
         e.tiempo = 9999; e.conexion.avanzarReloj(); assertEquals(2, socket.enviados.size)
         socket.mensaje(RespuestaLatido(ping.nonce))
         assertEquals(FaseRelay.ERROR_SEGURO, e.conexion.estado.value.fase)
@@ -110,6 +112,7 @@ class RelayConnectionTest {
         val e = Entorno(); val antiguo = e.autenticar()
         e.tiempo = 15_000; e.conexion.avanzarReloj()
         assertTrue(antiguo.cancelado); assertEquals(FaseRelay.REINTENTO, e.conexion.estado.value.fase)
+        assertFalse(e.conexion.estado.value.canalSano)
         e.tiempo += 999; e.conexion.avanzarReloj(); assertEquals(1, e.sockets.size)
         e.tiempo += 300; e.conexion.avanzarReloj(); assertEquals(2, e.sockets.size)
         antiguo.mensaje(AutenticacionAceptada(e.reto.connectionId))
@@ -135,5 +138,30 @@ class RelayConnectionTest {
         for (origen in listOf("http://prueba.invalid", "https://prueba.invalid/", "https://adulto@prueba.invalid", "https://prueba.invalid?a=1")) {
             assertThrows(IllegalArgumentException::class.java) { ConfiguracionRelay(e.config.pairId, origen, e.publica) }
         }
+    }
+
+    @Test fun falloSincronoAlAbrirCancelaSocketDevueltoSinDejarHuerfanos() {
+        val e = Entorno()
+        var cancelado = false
+        val conexion = RelayConnection(TransporteRelay { _, eventos ->
+            eventos.fallo(true)
+            object : SocketRelay {
+                override fun enviar(texto: String) = error("No enviar tras fallo")
+                override fun cancelar() { cancelado = true }
+            }
+        }, { 0L }, {}, { error("No firmar sin reto") })
+        conexion.primerPlano(); conexion.conectar(e.config)
+        assertTrue(cancelado)
+        assertEquals(FaseRelay.ERROR_SEGURO, conexion.estado.value.fase)
+    }
+
+    @Test fun fondoDuranteFirmaNuncaEnviaYDescartaRetoSinReconexionOculta() {
+        val e = Entorno(); val socket = e.abrir()
+        e.duranteFirma = { e.conexion.segundoPlano() }
+        socket.mensaje(e.reto)
+        assertTrue(socket.cancelado); assertTrue(socket.enviados.isEmpty())
+        assertEquals(FaseRelay.DESCONECTADO, e.conexion.estado.value.fase)
+        e.tiempo = 120_000; e.conexion.avanzarReloj()
+        assertEquals(1, e.sockets.size)
     }
 }

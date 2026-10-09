@@ -1,4 +1,14 @@
-# Entorno de compilación — C00–C02, P00, P01, P03 y P02 parcial
+# Entorno de compilación — C00–C02 y P00–P04 parcial
+
+P04 fija OkHttp 4.12.0; MockWebServer/okhttp-tls solo en testImplementation.
+Certificados efímeros JVM de tests no se configuran en Android/producción.
+Permisos normales INTERNET/ACCESS_NETWORK_STATE; no servicio ni foreground
+service. NetworkCallback de red predeterminada existe solo con actividad STARTED;
+su indicador es independiente de AUTH_OK/PONG. Fuentes primarias consultadas:
+https://raw.githubusercontent.com/square/okhttp/parent-4.12.0/okhttp/src/main/kotlin/okhttp3/WebSocketListener.kt
+https://developer.android.com/training/monitoring-device-state/connectivity-status-type
+TLS moderno con confianza/hostname del sistema, sin aceptar certificados de
+prueba en release. Ver pruebas/EVIDENCIA_P04.md para límites de evidencia.
 
 P02 cámara: CameraX 1.4.2 fijado (core/camera2/lifecycle/view) con ZXing local.
 CAMERA runtime explícito, hardware/autofocus opcionales. CameraX vinculado a

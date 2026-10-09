@@ -22,6 +22,7 @@ fun AplicacionPadre(
     volver: () -> Unit,
     identidad: @Composable () -> Unit = {},
     vinculacion: @Composable () -> Unit = {},
+    conexion: @Composable () -> Unit = {},
 ) {
     BackHandler(enabled = estado.puedeVolver, onBack = volver)
     Scaffold(bottomBar = {
@@ -53,7 +54,7 @@ fun AplicacionPadre(
                         identidad()
                         vinculacion()
                     }
-                    PantallaPadre.CONTROL -> Control(estado.datos)
+                    PantallaPadre.CONTROL -> { Control(estado.datos); conexion() }
                     PantallaPadre.RECUPERACION -> Recuperacion()
                 }
             }

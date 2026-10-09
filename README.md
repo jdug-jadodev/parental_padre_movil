@@ -14,7 +14,17 @@ No hay servidor ni dependencias npm en este proyecto. Las especificaciones/evide
 antiguas se conservan como historia, no como tareas de desarrollo del servidor aquí.
 El cliente Android WSS y CP/1 siguen formando parte de la app.
 
-## Qué hay implementado (C00–C02, P00, P01, P03 y P02 local parcial)
+## Qué hay implementado (C00–C02, P00–P04 local parcial)
+
+P04 incorpora cliente WSS del padre con OkHttp, TLS/hostname del sistema y cp.v1,
+reto AUTH firmado con autoridad Keystore y latidos correlacionados. En Controles,
+autenticar y conectar son acciones explícitas con vínculo guardado; no crea una
+pareja para probar red. Fondo/salida de Controles cierran el canal, sin servicio
+oculto. Red validada, canal autenticado/latido y presencia son señales separadas;
+ninguna acredita restricciones del hijo. Las órdenes siguen deshabilitadas.
+97 pruebas locales correctas; pruebas físicas de este cliente y autenticación
+con servidor externo pendientes. Ver pruebas/EVIDENCIA_P04.md. El padre todavía
+no está terminado ni conectado al hijo real.
 
 - `app-parent/`: navegación en español e identidad/autenticación Keystore implementadas, pendientes de validación física; sin vinculación real ni envío de órdenes.
 - `core-protocol/`: modelos, parser estricto, esquema congelado y serialización determinista CP/1, sin dependencias de Android.

@@ -3,7 +3,7 @@
 Última actualización: 2026-10-09
 Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. P00: 37c74a3, 943082c. Primer bloque P01: 0f143c4; cierre local en el commit posterior, consultar git log.
 Tarea actual: P04 — cliente WSS del padre
-Estado: EN_CURSO_LOCAL — máquina de conexión/autenticación y ocho pruebas nuevas correctas; transporte TLS/Android e integración pendientes
+Estado: P04_IMPLEMENTADO_LOCAL_PARCIAL — cliente WSS/TLS y lifecycle compilados; 97 pruebas locales correctas; validación física y R02 externos pendientes
 
 ## Entorno observado
 
@@ -47,6 +47,10 @@ Node 24.21.0 / npm 11.19.0 / Windows 11 amd64
 SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Terminado y demostrado
+
+- P04 cierre local parcial: transporte OkHttp 4.12.0 con WSS exclusivo, /ws, cp.v1, confianza/hostname del sistema, sin redirecciones ni bypass TLS. AUTH usa AutoridadPadre/Keystore; el cliente verifica pública y reto exactos antes de encolar. Canal sano solo tras PONG vigente, separado de presencia indicativa y red validada por Android. Backoff se reinicia al recibir PONG, no solo por AUTH_OK. Se descartan callbacks antiguos y sockets devueltos después de un fallo síncrono.
+- P04 Android: apertura explícita desde Controles con vínculo PREPARADO/VINCULADO guardado; nunca crea identidad/pareja para conectar. Al salir de Controles se desconecta; al pasar a fondo cierra socket, bloquea autoridad y retira NetworkCallback. Al volver requiere autoridad vigente para reconectar, sin servicio oculto. RedAndroid solo observa la red predeterminada; su indicador no prueba acceso al relay ni autoriza órdenes. No se cambió CP/1 ni el proyecto servidor.
+- P04 pruebas: diez casos RelayConnectionTest y seis TransporteOkHttpTest (16 nuevos respecto de P02). WSS/TLS real exclusivamente loopback JVM con certificados efímeros de test; certificado no confiable/hostname ajeno rechazados, redirección real no seguida y frame binario rechazado. Firma de tests JCA efímera, no evidencia de AUTH con Keystore físico ni R-AUTH-01 contra servidor externo. Ver pruebas/EVIDENCIA_P04.md.
 
 - P04 primer bloque: RelayConnection separa conexión/reto/AUTH_OK/latidos/presencia indicativa; origen HTTPS/subprotocolo cp.v1, firma AUTH sobre reto exacto y pública configurada. Autoridad vigente antes de abrir y después de firmar; timeout monotónico, PONG correlacionado, backoff acotado/jitter, cierre al fondo y descarte de callbacks antiguos. No envía órdenes ni acepta STATE/ACK como evidencia (P05 pendiente). Ocho tests JVM nuevos aprobados, 53 app total. Transporte real y UI pendientes; servidor R02 es dependencia externa para integración, no impide tests aislados según plan.
 
@@ -107,6 +111,13 @@ SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Archivos modificados en la última tarea
 
+P04 (prioritario): app-parent/src/main/java/dev/controlparental/parent/network/{RelayConnection,TransporteOkHttp,RedAndroid}.kt;
+app-parent/src/main/java/dev/controlparental/parent/ui/{ConexionRelayScreen,AplicacionPadre}.kt y MainActivity.kt;
+app-parent/src/test/java/dev/controlparental/parent/{RelayConnectionTest,TransporteOkHttpTest}.kt;
+app-parent/src/main/AndroidManifest.xml, app-parent/build.gradle.kts, gradle/libs.versions.toml;
+README.md, BUILD_ENV.md, ESTADO.md y pruebas/EVIDENCIA_P04.md.
+Las rutas siguientes son del cierre histórico P03.
+
 README.md, BUILD_ENV.md, ESTADO.md, app-parent/build.gradle.kts.
 app-parent/src/main/java/dev/controlparental/parent/data/MetadatosPadre.kt, ParentStore.kt, ArchivoAtomicoMetadatos.kt, AlmacenPadreAndroid.kt.
 app-parent/src/main/java/dev/controlparental/parent/security/CifradoMetadatos.kt y MetadataKeyStore.kt.
@@ -115,6 +126,8 @@ app-parent/src/androidTest/java/dev/controlparental/parent/AlmacenAndroidTest.kt
 pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P03.md y pruebas/HANDOFF_P03.md.
 
 ## Pruebas ejecutadas y resultado
+
+- P04: scripts/verificar.ps1 correcto. Repetición Gradle --rerun-tasks de tests app/núcleo/interoperabilidad, APK debug/instrumentado/release sin firma de distribución y lint: 130 tareas ejecutadas correctamente. Reportes XML: 61 app + 30 núcleo + 1 interop, cero fallos/errores/omisiones; oráculo Node cinco aprobados, total 97 locales. Diez vectores/78 comprobaciones documentales; lint cero errores/23 avisos. No ADB, instalación, pruebas físicas, comunicación con APK hijo, servidor externo ni despliegue.
 
 - P02 cámara: scripts/verificar.ps1 correcto tras corregir ruta de fixture inexistente en test nuevo (ahora pública JCA efímera en test). 45 app + 30 núcleo + 1 interop + 5 oráculo Node = 81 pruebas locales correctas; 78 comprobaciones documentales. Cinco tests LuminanciaQr nuevos: strides/padding/posición, límites/truncado, submuestreo, oferta en cuatro giros y rechazo de QR no oferta. Debug/instrumentado/release sin firma de distribución compilados; lint cero errores/20 avisos de versiones. No se instalaron APK nuevos ni se ejecutaron tests físicos; los diez A56 anteriores son evidencia del APK anterior.
 
@@ -187,6 +200,9 @@ P01 aceptar con huella y PIN/contraseña pasó físicamente en A56, incluida cad
 La referencia plantillas/HANDOFF.md de padre/AGENTS.md no existe; usar pruebas/HANDOFF_PLANTILLA.md.
 
 ## Próxima tarea y lectura mínima
+
+P04 local implementado, aceptación física/integrada pendiente. Próximo desarrollo: P05 de padre/PLAN_PADRE.md (CP/1 §7, SPEC-P P5), sincronización de STATE y envío idempotente; no se implementó en este turno. R02 del servidor es puerta externa para probar autenticación conjunta, no está acreditada por MockWebServer. Padre aún no preparado para integración completa: faltan P05 y controles/recuperación finales. Avisar al propietario al completar esa parte; él orquestará servidor e integración local antes de despliegue. No acceder por ADB sin aviso/autorización nueva, nunca operar A13.
+P02: la lectura óptica básica ya está confirmada por el propietario en A56; solo quedan las pruebas ampliadas descritas en HANDOFF_P02.md. Las referencias históricas siguientes a lectura básica pendiente no exigen repetirla.
 
 Próximo paso físico P03 completado: tres pruebas autorizadas/aprobadas en A56. No repetir por referencias históricas a pendientes. Antes de nuevas instalaciones/pruebas, avisar y esperar permiso; no tocar A13 ni ejecutar connected contra todos los dispositivos.
 Próximo paso P02: pedir autorización para actualizar APK y probar cámara/permiso reales en A56 con QR público de pruebas mostrado en PC, sin crear identidad ni vínculo cotidiano. Comprobar aceptar/denegar permiso, cancelar, lectura, giros, salir/fondo y ausencia de cámara al regresar hasta apertura explícita; regresión de diez casos aislados si se autoriza. No cambiar permisos por ADB sin acuerdo ni operar A13. Cámara local implementada pero pendiente físicamente; revisión selector/texto grande/FLAG_SECURE real y PAIR autenticado/hijo real siguen pendientes. Ver HANDOFF_P02.md. Aún falta cliente WSS/órdenes para integrar; avisar al propietario cuando esté preparada parte padre, con integración local antes de despliegue.

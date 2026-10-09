@@ -19,11 +19,21 @@ import dev.controlparental.parent.pairing.PairChild
 import dev.controlparental.parent.data.AlmacenPadreAndroid
 import dev.controlparental.protocol.Proposito
 import dev.controlparental.parent.security.*
+import dev.controlparental.parent.network.*
+import dev.controlparental.parent.ui.ConexionRelayScreen
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.Lifecycle
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     private val sesion = SesionAutoridad(SystemClock::elapsedRealtime)
     private lateinit var autoridad: AutoridadPadre
     private lateinit var autenticacion: LocalAuthentication
+    private lateinit var transporte: TransporteOkHttp
+    private lateinit var conexion: RelayConnection
+    private lateinit var red: RedAndroid
     private var aviso by mutableStateOf("Identidad sin comprobar. Crear o cargar exige bloqueo seguro del sistema.")
     private var publica by mutableStateOf<String?>(null)
 
@@ -32,16 +42,41 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         autoridad = AutoridadPadre(ParentKeyStore(applicationContext), sesion)
         autenticacion = LocalAuthentication(this, sesion)
+        transporte = TransporteOkHttp()
+        red = RedAndroid(applicationContext)
+        conexion = RelayConnection(transporte, SystemClock::elapsedRealtime, sesion::exigirVigencia,
+            { autoridad.firmar(it, Proposito.AUTH) })
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                while (true) { conexion.avanzarReloj(); delay(250) }
+            }
+        }
         window.addFlags(android.view.WindowManager.LayoutParams.FLAG_SECURE)
         val store = AlmacenPadreAndroid.obtener(applicationContext)
         val vinculacion = PairChild(store, autoridad::exportarPublica, { autoridad.firmar(it, Proposito.PAIR) })
         val modelo = ViewModelProvider(this, AppContainer().fabrica)[ParentViewModel::class.java]
         setContent {
             val estado by modelo.estado.collectAsStateWithLifecycle()
+            val canal by conexion.estado.collectAsStateWithLifecycle()
+            val redValidada by red.validada.collectAsStateWithLifecycle()
+            val relayUi = when (canal.fase) {
+                FaseRelay.CONECTANDO -> dev.controlparental.parent.presentation.ConexionRelay.CONECTANDO
+                FaseRelay.ESPERANDO_RETO, FaseRelay.ESPERANDO_AUTH_OK -> dev.controlparental.parent.presentation.ConexionRelay.AUTENTICANDO
+                FaseRelay.AUTENTICADO -> dev.controlparental.parent.presentation.ConexionRelay.CONECTADO
+                FaseRelay.ERROR_SEGURO -> dev.controlparental.parent.presentation.ConexionRelay.ERROR
+                else -> dev.controlparental.parent.presentation.ConexionRelay.DESCONECTADO
+            }
+            val presenciaUi = when (canal.hijoIndicativo) {
+                true -> dev.controlparental.parent.presentation.PresenciaHijo.PRESENTE
+                false -> dev.controlparental.parent.presentation.PresenciaHijo.AUSENTE
+                null -> dev.controlparental.parent.presentation.PresenciaHijo.DESCONOCIDA
+            }
+            val presentacion = estado.copy(datos = estado.datos.copy(relay = relayUi, presencia = presenciaUi))
             MaterialTheme {
-                AplicacionPadre(estado, modelo::navegar, modelo::volver,
+                AplicacionPadre(presentacion, modelo::navegar, modelo::volver,
                     identidad = { IdentidadPadre(aviso, publica, ::crearIdentidad, ::autenticar) },
-                    vinculacion = { PairingScreen(vinculacion, store, ::autenticar) })
+                    vinculacion = { PairingScreen(vinculacion, store, ::autenticar) },
+                    conexion = { ConexionRelayScreen(conexion, store, redValidada, ::autenticar) })
             }
         }
     }
@@ -68,12 +103,21 @@ class MainActivity : ComponentActivity() {
     override fun onStart() {
         super.onStart()
         sesion.primerPlano()
+        red.iniciar()
+        conexion.primerPlano()
     }
 
     override fun onStop() {
         sesion.bloquear()
+        conexion.segundoPlano()
+        red.detener()
         autenticacion.cancelar()
         aviso = "Autoridad bloqueada al pasar a segundo plano. Autentica nuevamente antes de firmar."
         super.onStop()
+    }
+    override fun onDestroy() {
+        conexion.desconectar()
+        transporte.liberar()
+        super.onDestroy()
     }
 }

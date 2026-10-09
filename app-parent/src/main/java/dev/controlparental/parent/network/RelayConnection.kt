@@ -9,7 +9,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 internal enum class FaseRelay { DESCONECTADO, CONECTANDO, ESPERANDO_RETO, ESPERANDO_AUTH_OK, AUTENTICADO, REINTENTO, AUTENTICACION_REQUERIDA, ERROR_SEGURO }
-internal data class EstadoRelay(val fase: FaseRelay = FaseRelay.DESCONECTADO, val hijoIndicativo: Boolean? = null)
+internal data class EstadoRelay(
+    val fase: FaseRelay = FaseRelay.DESCONECTADO,
+    val hijoIndicativo: Boolean? = null,
+    val canalSano: Boolean = false,
+)
 internal data class ConfiguracionRelay(val pairId: String, val relayOrigin: String, val publicaPadre: String) {
     init {
         ClaveVerificacion.desdeSpki(Rol.PARENT, publicaPadre)
@@ -74,7 +78,7 @@ internal class RelayConnection(
         mutable.value = EstadoRelay(FaseRelay.CONECTANDO)
         limite = ahora() + 10_000
         try {
-            socket = transporte.abrir(config.endpoint, object : EventosRelay {
+            val abierto = transporte.abrir(config.endpoint, object : EventosRelay {
                 override fun abierto(subprotocolo: String?) = synchronized(this@RelayConnection) {
                     if (actual(ticket)) {
                         if (subprotocolo != "cp.v1" || mutable.value.fase != FaseRelay.CONECTANDO) terminar(true)
@@ -88,6 +92,8 @@ internal class RelayConnection(
                     if (actual(ticket)) terminar(permanente)
                 }
             })
+            // Un transporte puede fallar dentro de abrir; no conservar un socket huérfano.
+            if (actual(ticket)) socket = abierto else abierto.cancelar()
         } catch (_: Exception) { terminar(true) }
     }
     private fun actual(ticket: Long) = visible.get() && solicitado && ticket == generacion
@@ -122,11 +128,12 @@ internal class RelayConnection(
                 is AutenticacionAceptada -> {
                     require(mutable.value.fase == FaseRelay.ESPERANDO_AUTH_OK && ahora() < limite && mensaje.connectionId == connectionId)
                     mutable.value = EstadoRelay(FaseRelay.AUTENTICADO)
-                    fallos = 0; proximoPing = ahora(); avanzarReloj()
+                    proximoPing = ahora(); avanzarReloj()
                 }
                 is RespuestaLatido -> {
                     require(mutable.value.fase == FaseRelay.AUTENTICADO && mensaje.nonce == ping && ahora() < limite)
-                    ping = null; proximoPing = ahora() + 10_000
+                    ping = null; fallos = 0; proximoPing = ahora() + 10_000
+                    mutable.value = mutable.value.copy(canalSano = true)
                 }
                 is Presencia -> {
                     require(mutable.value.fase == FaseRelay.AUTENTICADO && mensaje.peerRole == Rol.CHILD)
