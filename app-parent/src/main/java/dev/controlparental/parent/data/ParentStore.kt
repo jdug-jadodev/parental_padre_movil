@@ -92,6 +92,7 @@ class ParentStore(
     }
 
     suspend fun guardarComandoFirmado(commandId: String, frame: ByteArray) {
+        require(frame.size <= CodecProtocolo.MAX_FRAME)
         val copia = frame.copyOf()
         transaccion {
             val datos = cargar()

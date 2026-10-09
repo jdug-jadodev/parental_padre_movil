@@ -1,4 +1,4 @@
-# Entorno de compilación — C00–C02, P00 y P01
+# Entorno de compilación — C00–C02, P00, P01 y P03
 
 ## Herramientas observadas
 
@@ -56,6 +56,16 @@ https://developer.android.com/reference/android/hardware/biometrics/BiometricPro
 No requiere StrongBox ni afirma respaldo de hardware específico. El contrato de
 KeyInfo se comprueba al usar la clave; propiedades reales y funcionamiento del
 prompt con credencial/biometría quedan pendientes del teléfono.
+
+P03 usa plugin serialization ya fijado en el catálogo y dependencia JSON
+explícita en app-parent. No añade versiones ni librerías criptográficas nuevas.
+Fuentes primarias consultadas para AtomicFile y AES-GCM de Android Keystore:
+https://developer.android.com/reference/android/util/AtomicFile
+https://developer.android.com/reference/android/security/keystore/KeyGenParameterSpec
+
+AtomicFile no aporta bloqueo de concurrencia: AlmacenPadreAndroid conserva una
+instancia por proceso y ParentStore serializa operaciones en una coroutine.
+No se admite un segundo proceso escritor ni edición externa del archivo privado.
 
 ## Límites de la verificación
 

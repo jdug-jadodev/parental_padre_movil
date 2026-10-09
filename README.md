@@ -4,7 +4,7 @@ Proyecto Android nativo en Kotlin y servicio Node/TypeScript. Este repositorio
 solo implementa el rol del padre y el relay. El APK del hijo pertenece a otro
 proyecto. La copia del protocolo CP/1 en `compartido/` permanece congelada.
 
-## Qué hay implementado (C00–C02, P00 y P01 local)
+## Qué hay implementado (C00–C02, P00, P01 y P03 local)
 
 - `app-parent/`: navegación en español e identidad/autenticación Keystore implementadas, pendientes de validación física; sin vinculación real ni envío de órdenes.
 - `core-protocol/`: modelos, parser estricto, esquema congelado y serialización determinista CP/1, sin dependencias de Android.
@@ -41,10 +41,19 @@ P01 añade creación/carga explícita de EC P-256 no exportable, autenticación 
 sistema (credencial o biometría fuerte), ventana de 60 segundos y bloqueo de
 interfaz al ir a segundo plano. Un error no sustituye claves ni habilita firma
 alternativa. Se muestra exclusivamente pública SPKI, sin copiarla al portapapeles.
-El alias de cifrado de metadatos está reservado por separado; su almacenamiento
-cifrado/transaccional todavía no se implementó. El botón del recorrido no crea
+El alias de cifrado de metadatos es distinto del de firma. El botón del recorrido no crea
 identidad: hay un botón explícito separado. Las órdenes siguen deshabilitadas.
-La persistencia tras reiniciar proceso y la autenticación real están pendientes.
+P01 se comprobó parcialmente en A56: huella, PIN/contraseña, cancelación,
+caducidad y persistencia de identidad temporal entre procesos. Ver EVIDENCIA_P01.md
+para límites; el A13 permanece excluido.
+
+P03 añade ParentStore: archivo privado atómico AES-256-GCM, nonce nuevo por
+escritura y una coroutine escritora. Contador y única intención se persisten
+juntos; cancelar conserva contador consumido y evidencia. Recuperar no envía
+ni reenvía órdenes. Datos corruptos/clave ausente fallan sin generar alternativas.
+El almacenamiento todavía no está conectado a la UI: P02/P05 deben integrarlo
+con vínculo real y contexto autenticado. Obtener el almacén no inicializa datos.
+El formato es local/versionado; no cambia CP/1 ni guarda privadas/códigos.
 
 El relay devuelve **503** en `/healthz` porque todavía no está listo para CP/1.
 Rechaza upgrades y ejecución en `NODE_ENV=production`. No es desplegable en
@@ -120,3 +129,5 @@ Acuerdos del propietario, idioma y frecuencia de commits: `AGENTS.md`.
 Evidencia criptográfica local: `pruebas/EVIDENCIA_C02.md`.
 Evidencia de navegación y estados: `pruebas/EVIDENCIA_P00.md`.
 Evidencia de identidad/autenticación: `pruebas/EVIDENCIA_P01.md`.
+Evidencia de almacenamiento: `pruebas/EVIDENCIA_P03.md`. Tres pruebas Android
+nuevas de almacenamiento compiladas y pendientes de autorización/ejecución en A56.
