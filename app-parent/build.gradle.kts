@@ -39,5 +39,29 @@ dependencies {
     androidTestImplementation(libs.compose.ui.test)
     androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.serialization.json)
     debugImplementation(libs.compose.ui.test.manifest)
+}
+
+// Solo en el APK instrumentado, nunca en la app debug/release.
+abstract class PrepararVectoresAndroid : DefaultTask() {
+    @get:InputFile
+    abstract val archivo: RegularFileProperty
+    @get:OutputDirectory
+    abstract val directorio: DirectoryProperty
+
+    @TaskAction
+    fun preparar() {
+        val destino = directorio.get().asFile
+        destino.mkdirs()
+        archivo.get().asFile.copyTo(destino.resolve("vectores_crypto.json"), overwrite = true)
+    }
+}
+val copiarVectoresAndroid by tasks.registering(PrepararVectoresAndroid::class) {
+    archivo.set(rootProject.layout.projectDirectory.file("pruebas/vectores_crypto.json"))
+    directorio.set(layout.buildDirectory.dir("generated/assets/pruebas"))
+}
+// La API oficial comunica esta dependencia tanto a empaquetado como a lint.
+androidComponents.onVariants { variante ->
+    variante.androidTest?.sources?.assets?.addGeneratedSourceDirectory(copiarVectoresAndroid) { it.directorio }
 }

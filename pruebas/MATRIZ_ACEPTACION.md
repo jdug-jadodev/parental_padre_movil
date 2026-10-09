@@ -10,7 +10,7 @@ G0 = administración/quiosco y emergencia en A13. G1 = identidad, protocolo y re
 
 | ID | Caso y preparación | Resultado esperado | Entorno | Estado |
 |---|---|---|---|---|
-| C-CRYPTO-01 | **Firma válida y verificación cruzada.** Firmar/verificar fixtures P-256 DER en JVM, Android y Node. | Se aceptan bytes originales y se rechazan cambios/clave/propósito incorrectos. | Automática | PENDIENTE |
+| C-CRYPTO-01 | **Firma válida y verificación cruzada.** Firmar/verificar fixtures P-256 DER en JVM, Android y Node. | Se aceptan bytes originales y se rechazan cambios/clave/propósito incorrectos. | JVM/Node automáticos; Android/Keystore pendientes | VALIDADA_LOCAL; evidencia en EVIDENCIA_C02.md; no acredita autorización contextual |
 | C-SCHEMA-01 | **Parser estricto.** Probar campos extra, UTF-8/base64 inválidos, duplicados, números y tamaños fuera de límites. | Todos se rechazan antes de aplicar políticas. | JVM/Node automáticos; Android pendiente | VALIDADA_LOCAL; evidencia en EVIDENCIA_C01.md; no se aplicaron políticas |
 | C-PAIR-01 | **Vinculación física.** QR vencido, clave del hijo diferente, otra pareja, cancelación y segunda vinculación sin permiso. | No cambian claves; solo oferta física vigente y confirmada crea vínculo. | Automática + A13 | PENDIENTE |
 | C-SEQ-01 | **Repetición exacta.** Reenviar último comando en la misma sesión tras perder ACK. | Devuelve resultado, conserva inicio y duración; no vuelve a liberar. | Automática | PENDIENTE |

@@ -4,7 +4,7 @@ Proyecto Android nativo en Kotlin y servicio Node/TypeScript. Este repositorio
 solo implementa el rol del padre y el relay. El APK del hijo pertenece a otro
 proyecto. La copia del protocolo CP/1 en `compartido/` permanece congelada.
 
-## Qué hay implementado (C00 y C01)
+## Qué hay implementado (C00–C02, alcance local)
 
 - `app-parent/`: pantalla inicial en español, sin identidad, vinculación ni órdenes.
 - `core-protocol/`: modelos, parser estricto, esquema congelado y serialización determinista CP/1, sin dependencias de Android.
@@ -17,11 +17,17 @@ Ajv 2020-12. Ambos lados conservan los bytes de los diez vectores comunes.
 Se controlan UTF-8, ASCII, duplicados, límites, secuencias, base64url, formatos
 SPKI/DER, propósito y coherencia de los campos del estado.
 
-**Todavía no hay autenticación criptográfica implementada.**
-`leerPayloadSinVerificar` solo devuelve datos estructuralmente válidos; no
-acredita firmas, identidad, frescura ni autorización. C02 añadirá la verificación
-sobre los bytes recibidos, antes de validar el payload. Ninguno de estos datos
-se usa todavía para confirmar ni aplicar órdenes.
+C02 añade firma SHA-256/ECDSA DER en Kotlin mediante un firmante inyectado y
+verificación estándar en JVM/Node sobre los bytes originales. La privada del
+padre y su autenticación se implementarán en P01 con Android Keystore. El relay
+no firma ni recibe privadas.
+
+`leerPayloadSinVerificar` sigue siendo solo estructural. Para verificar firmas
+se usa `CriptografiaProtocolo.verificarSobre` con propósito esperado y pública
+de configuración/vínculo confiable, nunca una pública elegida por el comando.
+`DocumentoVerificado` no acredita frescura, autorización contextual ni `APPLIED`:
+esas comprobaciones corresponden a los casos de uso futuros. Ninguno de estos
+datos se usa todavía para confirmar ni aplicar órdenes.
 
 El relay devuelve **503** en `/healthz` porque todavía no está listo para CP/1.
 Rechaza upgrades y ejecución en `NODE_ENV=production`. No es desplegable en
@@ -38,6 +44,10 @@ Studio o ejecutar desde PowerShell:
 
 Para un módulo: `-Modulo nucleo`, `-Modulo app` o `-Modulo relay`.
 El script detiene la verificación si falla cualquier comando.
+La verificación completa también ejecuta `:core-protocol:testInterop`: firmas
+nuevas cruzadas en ambos sentidos JVM/Node para los diez vectores. Requiere Node
+y las dependencias instaladas en relay; el script las prepara antes. El test
+JVM puro no exige Node y no incluye ese caso de interoperabilidad.
 
 Comandos Android individuales:
 
@@ -72,8 +82,12 @@ del padre**, se podrá instalar el APK debug y ejecutar
 `:app-parent:connectedDebugAndroidTest`. No ejecutar ese comando todavía.
 Además de la pantalla, el APK instrumentado verifica el parser y el acceso al
 esquema dentro de Android. Está compilado, pero esas pruebas no se han ejecutado.
+También comprueba vectores criptográficos y una clave temporal no exportable en
+Keystore. Esa clave existe solo en el test instrumentado y se elimina en su
+`finally`; no es identidad de producción ni prueba autenticación del adulto.
 Esta app no administra ni restablece teléfonos. Las pruebas del hijo real y
 la integración se planifican por separado.
 
 Estado real y próxima tarea: `ESTADO.md`. Herramientas: `BUILD_ENV.md`.
 Acuerdos del propietario, idioma y frecuencia de commits: `AGENTS.md`.
+Evidencia criptográfica local: `pruebas/EVIDENCIA_C02.md`.

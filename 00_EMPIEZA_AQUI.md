@@ -1,6 +1,6 @@
 # Control parental — proyecto Padre + Render
 
-**Paquete de especificaciones v1.0. Se desarrolla por separado. Aún NO hay código funcional ni APK.**
+**Especificaciones v1.0 y desarrollo inicial independiente. Hay bases compiladas y APK de desarrollo; la aplicación completa y la integración siguen pendientes. Consultar `ESTADO.md` para la evidencia vigente.**
 
 ## Qué se construye aquí
 
@@ -38,7 +38,7 @@ Este repositorio **no contiene el código del otro dispositivo**. El protocolo c
 - Un WebSocket puede desconectarse y no garantiza entrega instantánea ni permanente. El hijo aplica política local, no confía en recibir siempre una orden.
 - El acceso de emergencia del sistema debe funcionar independientemente del servicio. No iniciar restricciones irreversibles sin recuperación comprobada.
 - Device Owner requiere aprovisionamiento real; A13 es candidato, no compatibilidad universal certificada.
-- Los ejemplos y scripts **solo validan el contrato documental**. Ninguna app ni relay se han implementado aún.
+- Los ejemplos y verificadores originales **solo validan el contrato documental**. Las pruebas de implementación y sus resultados se registran por tarea en `ESTADO.md` y `pruebas/`; no equivalen a validar el producto en teléfonos reales.
 
 ## Comprobación de documentación
 

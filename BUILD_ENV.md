@@ -1,4 +1,4 @@
-# Entorno de compilación — C00 y C01
+# Entorno de compilación — C00–C02
 
 ## Herramientas observadas
 
@@ -29,6 +29,14 @@ Android Studio puede crear ese archivo al abrir el proyecto.
 
 Compatibilidad AGP 8.11, Gradle 8.13 y API 36 consultada en la fuente oficial:
 https://developer.android.com/build/releases/past-releases/agp-8-11-0-release-notes
+
+APIs primarias consultadas para las pruebas Keystore y assets generados:
+https://developer.android.com/privacy-and-security/keystore
+https://developer.android.com/reference/tools/gradle-api/8.11/com/android/build/api/variant/SourceDirectories
+
+C02 usa SHA256withECDSA del JDK y SHA-256/ECDSA DER de node:crypto. No añade
+bibliotecas criptográficas ni implementa curvas. La prueba cruzada usa Node 24
+y tsx en procesos locales, con claves efímeras solo en memoria.
 
 ## Límites de la verificación
 
