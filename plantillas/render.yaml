@@ -1,0 +1,25 @@
+# Plantilla: necesita el relay implementado, scripts y env pública real.
+# Crear una sola instancia; elegir en Render un plan que no suspenda por inactividad.
+services:
+  - type: web
+    name: control-parental-relay
+    runtime: node
+    rootDir: relay
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npm start
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_VERSION
+        value: "24"
+      - key: NODE_ENV
+        value: production
+      - key: LOG_LEVEL
+        value: error
+      - key: PUBLIC_ORIGIN
+        sync: false
+      - key: ACTIVE_PAIR_ID
+        sync: false
+      - key: PARENT_PUBLIC_KEY_B64
+        sync: false
+      - key: CHILD_PUBLIC_KEY_B64
+        sync: false
