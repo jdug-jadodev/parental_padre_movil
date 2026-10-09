@@ -1,5 +1,27 @@
 # Evidencia P02 — vinculación QR parcial local
 
+## Actualización física autorizada — A56
+
+El propietario autorizó actualizar ambos APK y ejecutar pruebas automáticas.
+App padre/APK instrumentado instalados con -r correctamente, solo en A56.
+Runner filtrado a ImagenQrAndroidTest y AlmacenAndroidTest: **cuatro aprobados,
+cero fallos/omisiones**, status 0 cada caso, OK (4 tests), 1.226 s.
+Los otros 14 instrumentados no se ejecutaron. A13 conectado, sin operaciones.
+
+Lector Android: PNG QR generado/leído localmente, texto que no es CHILD_OFFER
+rechazado por codec, imagen ilegible rechazada. Regresión almacenamiento del
+APK actual: nonce nuevo, AES no exportable, reserva recuperada al reabrir,
+.new interrumpido conserva datos anteriores y corrupción no sobrescribe.
+Cleanup de archivos/alias temporales completado; identidad/vínculo operativos,
+datos de app y credenciales sin cambios de prueba. Ambos APK quedan actualizados.
+
+No se desactivó la red ni se abrió selector en modo avión. El test usa archivo
+local y lector sin solicitudes remotas; no valida disponibilidad offline de un
+proveedor cloud. Tampoco prueba migración v1 real, flujo completo de aceptación,
+pantalla/FLAG_SECURE/prompt ni comunicación con otro teléfono/Render.
+Esos pendientes siguen vigentes. Los apartados siguientes son el cierre local
+anterior; las referencias a imagen/regresión pendientes se resuelven aquí.
+
 Primer bloque `65b9184`; cierre en commit posterior. CP/1 intacto; no ADB,
 push/despliegue Render ni cambios del otro repositorio. A13 excluido.
 

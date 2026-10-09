@@ -63,8 +63,9 @@ al salir/segundo plano; FLAG_SECURE protege la ventana. QR firmado/env pública
 copiable recuperables al reabrir, sin recrear códigos. Formato privado v2 migra v1
 sin reiniciar contador/intención/evidencia. Permanece PREPARADO, sin órdenes ni
 revinculación; faltan estado firmado del hijo y recuperación local comprobada.
-99 pruebas locales aprobadas; imagen Android/pantalla/migración v2 no probadas
-físicamente. Ver `pruebas/EVIDENCIA_P02.md`. No hubo ADB en este turno.
+99 pruebas locales aprobadas. Después, con autorización, aprobaron en A56 cuatro
+pruebas de imagen Android y regresión de almacenamiento. Pantalla/aceptación y
+migración v1 física pendientes. Ver `pruebas/EVIDENCIA_P02.md`.
 
 El relay devuelve **503** en `/healthz` porque todavía no está listo para CP/1.
 Rechaza upgrades y ejecución en `NODE_ENV=production`. No es desplegable en

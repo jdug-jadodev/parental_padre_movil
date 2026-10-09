@@ -1,5 +1,18 @@
 # Relevo — P02 parcial local
 
+## Actualización A56
+
+App padre y APK instrumentado actualizados con -r con permiso expreso. Solo
+ImagenQrAndroidTest y AlmacenAndroidTest: cuatro aprobados, cero fallos/omisiones,
+1.226 s. PNG/lector Android y regresión AES/Keystore/AtomicFile actuales correctos.
+Cleanup temporal completado. No operaciones A13, cambio de credenciales ni
+vínculo operativo. No repetir por pendientes históricos siguientes.
+
+Pendientes: revisión manual selector/pantalla/prompt/FLAG_SECURE/ciclo de vida,
+migración v1 física y aceptación aislada con aliases de test. No se desactivó red
+ni se probó selector offline. No se ejecutaron otros 14 tests ni comunicación
+real con hijo/Render. Nuevo acceso dispositivo requiere aviso/permiso.
+
 Leer ESTADO.md/EVIDENCIA_P02.md. Primer bloque `65b9184`; cierre en commit
 posterior. Sin ADB/push/despliegue ni cambios CP/1; A13 excluido. Solo P02.
 

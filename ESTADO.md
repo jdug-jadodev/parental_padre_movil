@@ -3,7 +3,7 @@
 Última actualización: 2026-10-09
 Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. P00: 37c74a3, 943082c. Primer bloque P01: 0f143c4; cierre local en el commit posterior, consultar git log.
 Tarea actual: P02 — vinculación QR
-Estado: IMPLEMENTADA_LOCAL_PARCIAL — QR desde imagen/pantalla/aceptación firmada listos; 99 pruebas locales aprobadas; revisión física e integración pendientes
+Estado: VALIDADA_PARCIAL_LOCAL_Y_A56 — 99 pruebas locales y cuatro físicas de imagen/almacenamiento aprobadas; revisión manual, migración física e integración pendientes
 
 ## Entorno observado
 
@@ -12,6 +12,8 @@ Node 24.21.0 / npm 11.19.0 / Windows 11 amd64
 SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Terminado y demostrado
+
+- P02 físico autorizado: app padre y APK instrumentado actualizados con install -r solo en A56. ImagenQrAndroidTest y AlmacenAndroidTest: cuatro aprobados, cero fallos/omisiones, 1.226 s. PNG QR leído localmente, texto no oferta e imagen ilegible rechazados; regresión AES/Keystore/AtomicFile del formato actual correcta. Cleanup de archivos/alias temporales completado, sin cambiar identidad/vínculo operativo ni credenciales. A13 conectado pero sin operaciones dirigidas a él.
 
 - P02 cierre local: pantalla en Vincular con selector oficial de imagen QR (no cámara directa), códigos solo en memoria y descartados al salir/pasar a segundo plano, huellas completas, casillas y autenticación antes de firmar. FLAG_SECURE en actividad. No se garantiza borrado físico de String JVM. QR/env pública recuperables tras cerrar la app; vínculo permanece PREPARADO, sin órdenes ni revinculación.
 - Metadatos privados v2: aceptación firmada persistida y validada; migración explícita v1 mantiene contador/intención/evidencia sin inventar aceptación. CP/1/esquema/fixtures intactos. Cinco tests P02 correctos (38 app total), incluida migración y casos negativos en simulador de hijo. No prueban APK real del hijo ni vencimiento: CHILD_OFFER no tiene timestamp y su vigencia la verifica el hijo localmente. Primer bloque 65b9184; cierre en commit posterior.
@@ -61,6 +63,8 @@ app-parent/src/androidTest/java/dev/controlparental/parent/AlmacenAndroidTest.kt
 pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P03.md y pruebas/HANDOFF_P03.md.
 
 ## Pruebas ejecutadas y resultado
+
+- P02 A56: runner AndroidJUnitRunner filtrado a ImagenQrAndroidTest y AlmacenAndroidTest, selector explícito de A56. Cuatro status 0, OK (4 tests), 1.226 s; ambos install -r correctos. No se ejecutaron los otros 14 tests. No se apagó la red: lectura/decodificación local no hace solicitudes remotas, pero no se probó selector en modo avión. No se ejecutó migración v1 física ni flujo completo de aceptación/UI.
 
 - P02: scripts/verificar.ps1 correcto; repetición Gradle --rerun-tasks de tests app/núcleo/interoperabilidad, APK debug/instrumentado/release sin firma de distribución y lint: 130 tareas correctas. 38 app, 30 núcleo, 1 interoperabilidad y 30 Node, total 99 locales; 78 comprobaciones documentales. Lint cero errores/16 avisos de versiones. Un test Android nuevo de imagen QR compilado/no ejecutado (18 instrumentados disponibles). No se instalaron APK nuevos, no hubo ADB ni despliegue público.
 
@@ -127,7 +131,7 @@ La referencia plantillas/HANDOFF.md de padre/AGENTS.md no existe; usar pruebas/H
 ## Próxima tarea y lectura mínima
 
 Próximo paso físico P03 completado: tres pruebas autorizadas/aprobadas en A56. No repetir por referencias históricas a pendientes. Antes de nuevas instalaciones/pruebas, avisar y esperar permiso; no tocar A13 ni ejecutar connected contra todos los dispositivos.
-Próximo paso P02: revisión física en A56 después de aviso/permiso nuevo. Empezar por ImagenQrAndroidTest y regresión AlmacenAndroidTest dirigidos explícitamente al A56; revisar pantalla/ciclo de vida/FLAG_SECURE sin crear vínculo cotidiano ficticio. No tocar A13. Evidencia física P03 anterior no valida migración v2/este APK. Ver pruebas/HANDOFF_P02.md. La integración conjunta sigue pendiente: no declarar vínculo completado sin estado firmado y recuperación local probada; no autoenrolar/borrar datos ante fallo ni avanzar otra tarea en este turno.
+Próximo paso P02: revisión manual de pantalla/ciclo de vida/selector/FLAG_SECURE en A56, sin crear vínculo cotidiano ficticio; preparar pruebas aisladas de aceptación/migración con aliases de test. ImagenQrAndroidTest y regresión AlmacenAndroidTest ya aprobaron en este APK, no repetir por pendientes históricos. Nuevo acceso al dispositivo exige aviso/permiso. No tocar A13. Ver pruebas/HANDOFF_P02.md. Integración conjunta pendiente: no declarar vínculo completado sin estado firmado y recuperación local probada; no autoenrolar/borrar datos ante fallo.
 
 ## Seguridad
 
