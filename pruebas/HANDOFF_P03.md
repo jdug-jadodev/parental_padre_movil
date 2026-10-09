@@ -1,5 +1,18 @@
 # Relevo — P03
 
+## Actualización A56
+
+Con autorización expresa se actualizaron app/APK instrumentado (install -r) y se
+ejecutó únicamente AlmacenAndroidTest: tres aprobados, cero omitidos/fallos,
+1.286 s. Keystore AES/AtomicFile, nonce, reserva, .new interrumpido y corrupción
+comprobados. Archivos/alias temporales retirados; sin borrado de datos operativos,
+credenciales ni operaciones en A13. Ambos APK permanecen actualizados en A56.
+
+P03 ya tiene validación local y de estos tres casos físicos. No repetir por los
+pendientes históricos siguientes. No afirmar corte de energía real ni ejecución
+del lote completo de 17 tests. Siguiente tarea P02; nuevo acceso ADB necesita
+aviso/permiso y selector explícito de A56.
+
 P03 completada localmente, Android pendiente. Primer bloque `a20f025`; cierre en
 commit posterior. Se ejecutó antes de P02 por PLAN_PADRE: P02 depende de P03.
 No se inició QR ni cambió CP/1. No hubo ADB en este turno; no tocar A13.

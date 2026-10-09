@@ -129,5 +129,5 @@ Acuerdos del propietario, idioma y frecuencia de commits: `AGENTS.md`.
 Evidencia criptográfica local: `pruebas/EVIDENCIA_C02.md`.
 Evidencia de navegación y estados: `pruebas/EVIDENCIA_P00.md`.
 Evidencia de identidad/autenticación: `pruebas/EVIDENCIA_P01.md`.
-Evidencia de almacenamiento: `pruebas/EVIDENCIA_P03.md`. Tres pruebas Android
-nuevas de almacenamiento compiladas y pendientes de autorización/ejecución en A56.
+Evidencia de almacenamiento: `pruebas/EVIDENCIA_P03.md`. Las tres pruebas Android
+nuevas de almacenamiento aprobaron en A56; no equivalen a validar QR/órdenes reales.

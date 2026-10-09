@@ -1,5 +1,26 @@
 # Evidencia P03 — archivo cifrado e intención única
 
+## Actualización física: A56
+
+El propietario autorizó actualizar app del padre y APK instrumentado y ejecutar
+las tres pruebas de almacenamiento. Ambas instalaciones con `install -r`
+dirigidas explícitamente al A56 terminaron correctamente, sin borrado de datos.
+Runner AndroidJUnitRunner filtrado a AlmacenAndroidTest, también dirigido al A56:
+**tres aprobados, cero omitidos/fallos**, status 0 cada caso, OK (3 tests), 1.286 s.
+
+Comprobado en Android/Keystore/AtomicFile reales: nonce distinto por escritura,
+cifrado sin origen en claro, clave AES no exportable, reserva recuperada al
+reabrir almacén y contador conservado al cancelar; .new sin finishWrite no
+sustituye documento anterior; corrupción cifrada falla sin sobrescribir datos.
+El cierre de cada test retiró únicamente su directorio/archivos y alias temporales.
+No se modificaron credenciales ni claves/vínculo operativos. A13 sin operaciones.
+
+La escritura interrumpida se simula dejando .new, no cortando alimentación del
+teléfono. No se demuestra aún persistencia del vínculo completo entre procesos
+ni QR, órdenes o red reales. Solo se ejecutaron estos tres tests, no los otros
+14 disponibles en el APK. Las secciones siguientes conservan el cierre local
+anterior y sus pendientes, actualizados por este resultado físico.
+
 Primer bloque `a20f025`; cierre en el commit posterior. **Completada localmente**,
 pendiente de pruebas AtomicFile/Keystore Android. Se eligió P03 antes de P02 por
 su dependencia explícita en PLAN_PADRE. CP/1/esquema/fixtures intactos.

@@ -3,7 +3,7 @@
 Última actualización: 2026-10-09
 Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. P00: 37c74a3, 943082c. Primer bloque P01: 0f143c4; cierre local en el commit posterior, consultar git log.
 Tarea actual: P03 (dependencia necesaria antes de P02)
-Estado: COMPLETADA_LOCAL — almacenamiento cifrado y transacciones comprobados en JVM; tres pruebas Android compiladas pendientes de autorización/ejecución
+Estado: VALIDADA_LOCAL_Y_A56 — 94 pruebas locales y tres pruebas Android de almacenamiento aprobadas; integración UI/QR pendiente
 
 ## Entorno observado
 
@@ -15,6 +15,7 @@ SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 - P03: ParentStore con una coroutine escritora, metadatos locales versionados, contador/intención en una transacción, comandos originales firmados y evidencia separada. AtomicFile y AES-256-GCM con alias Keystore distinto de firma y nonce generado por proveedor. No se conecta todavía a la UI ni crea archivos automáticamente al abrir la app. Primer bloque a20f025; cierre en el commit posterior.
 - P03: 15 tests nuevos aprobados (4 AES-GCM y 11 ParentStore), 33 tests app en total. Cierre antes de envío conserva reserva; cancelación no reutiliza contador ni borra evidencia; fallos antes/después de commit, concurrencia, corrupción y pérdida simulada de clave comprobados. Se implementó antes de P02 por su dependencia explícita; no se inició vinculación QR.
+- P03 físico: actualización de app/APK instrumentado autorizada y ejecutada solo en A56. AlmacenAndroidTest: tres aprobados, cero omisiones/fallos, 1.286 s. AES-GCM/Keystore/AtomicFile comprobados, nonce nuevo, reserva conservada al reabrir, .new interrumpido conserva documento anterior y corrupción rechazada sin sobrescribir. Cleanup de archivos/alias temporales completado; no se modificaron identidad operativa ni credenciales. A13 sin operaciones.
 
 - A56, P01: huella y PIN/contraseña confirmados por el propietario y aprobados, firma protegida y caducidad Keystore/sesión tras 61 segundos comprobadas, cancelación física aprobada. Persistencia entre procesos aprobada con identidad temporal. Detalles y límites en EVIDENCIA_P01.md; invalidación permanente segura y revisión visual ampliada siguen pendientes.
 - Exclusión del A13 persistida como acuerdo obligatorio en AGENTS.md y padre/AGENTS.md. Ningún comando de dispositivo ni instalación dirigido a A13. Las futuras sesiones deben usar selector explícito de A56.
@@ -22,25 +23,25 @@ SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 - Primer lote físico autorizado por el propietario en el padre A56 (SM-A566E, Android 16/API 36): APK debug y de pruebas instalados con éxito, 12 tests aprobados y 1 interactivo omitido expresamente. Se verificaron navegación/estados, parser/esquema, vectores, firma con clave temporal no exportable y parámetros de identidad protegida/reapertura del almacén. No acredita autenticación física ni persistencia tras reiniciar proceso.
 - El A13 estaba conectado pero quedó excluido: ningún comando shell, instalación ni prueba dirigido a él. Se usó ADB con selector explícito del A56; no Gradle connected contra todos los teléfonos. Identificadores de dispositivo no se guardan en documentación.
 
-- P01: ParentKeyStore con alias EC P-256 protegido, ventana de 60 segundos y ambos autenticadores fuertes/sistema. No reemplaza identidad incompatible ni crea clave durante firma. Alias de metadatos separado reservado, almacenamiento cifrado todavía pendiente.
+- P01: ParentKeyStore con alias EC P-256 protegido, ventana de 60 segundos y ambos autenticadores fuertes/sistema. No reemplaza identidad incompatible ni crea clave durante firma. El alias de metadatos separado se implementó después en P03.
 - P01 sesión de interfaz con reloj monotónico, invalidación en segundo plano/cancelación y rechazo de callbacks viejos/duplicados. LocalAuthentication usa BiometricPrompt oficial API 30. Pantalla inicial permite crear/cargar explícitamente y autenticar; no habilita órdenes ni crea vínculo.
-- P01: nueve tests JVM nuevos correctos (18 tests de app en total). Debug, instrumentado y release sin firma de distribución compilados; lint correcto. Dos pruebas nuevas de identidad y una interactiva real compiladas, no ejecutadas. No se accedió al teléfono ni se acredita persistencia tras muerte de proceso.
+- P01 cierre local: nueve tests JVM nuevos correctos (18 tests app en ese momento), APK compilados y lint correcto. Posteriormente identidad, autenticación y persistencia se comprobaron en A56; resultados físicos en EVIDENCIA_P01.md.
 
 - P00: MainActivity, AppContainer, ParentViewModel/StateFlow, cuatro pantallas y estados separados. Producción usa fuente no operativa, no un simulador; repositorio falso exclusivo de tests. Botones de órdenes deshabilitados, recuperación informativa siempre accesible. No se crea autoridad ni vinculación al explorar controles.
-- P00: 9 tests JVM de la app correctos (8 nuevos). Compilación debug/instrumentada/release sin firma de distribución y lint correctos. Cinco nuevos tests UI instrumentados preparados y compilados, no ejecutados. Se corrigió la limpieza de ViewModelStore antes de resetMain en las pruebas JVM, sin simular APIs Android.
+- P00 cierre local: 9 tests JVM app correctos (8 nuevos), APK/lint correctos y cinco tests UI preparados. Posteriormente aprobaron en el lote físico A56. Se corrigió limpieza de ViewModelStore antes de resetMain en tests JVM, sin simular APIs Android.
 - Estado de presentación confirmado únicamente con vínculo, relay conectado, hijo presente y resumen marcado fresco; al desconectar/ausentarse pasa a última evidencia conocida. P05 deberá producir resumen desde evidencia autenticada/correlacionada y calcular antigüedad/frescura; P00 no valida ni aplica órdenes.
 
 - Acuerdos del propietario persistidos en AGENTS.md y protegidos por un commit.
 - Base Android compilada: APK debug de la app y APK instrumentado de pruebas generados.
 - Base del relay compilada; responde 503 en health y rechaza upgrades/producción. No implementa todavía R01–R03.
 - Cliente hijo simulado exclusivamente en tests, limitado a loopback; lectura de fixture firmado congelado.
-- Verificación local completa mediante scripts/verificar.ps1 aprobada. No se ha instalado la app ni demostrado control real de un dispositivo.
+- Verificación local completa mediante scripts/verificar.ps1 aprobada. App de desarrollo instalada en A56 para pruebas; todavía no se ha demostrado control real de otro dispositivo.
 - C01: modelos de todos los tipos CP/1 en Kotlin/Node, parser estricto, serialización determinista y validación adicional de secuencias, base64, SPKI P-256, DER y origen HTTPS. Los diez vectores preservan sus bytes exactos en ambos runtimes.
 - Kotlin incorpora el esquema directamente desde compartido/; Node recibe sus bytes desde inicialización confiable. Ambos verifican su SHA-256 congelado. No se cambia ni duplica manualmente el contrato.
 - Ajv 8.20.0 fijado para JSON Schema 2020-12. Se descartó 8.17.1 al detectar un aviso moderado en npm audit; la versión finalmente fijada no presenta avisos en la auditoría ejecutada.
 - C02: verificación estándar SHA256withECDSA/DER sobre bytes originales en JVM y crypto.verify en Node; comparación de propósito y rol. El firmante Kotlin se inyecta desde la futura capa Keystore P01, sin almacenar privadas ni crear alternativas.
 - Firmas nuevas verificadas en ambas direcciones para los diez vectores: 20 intercambios JVM↔Node, ambos roles y todos los propósitos. Claves de prueba efímeras en memoria, sin guardarlas ni imprimirlas.
-- Tests instrumentados de criptografía y clave temporal no exportable preparados y compilados; pendientes del teléfono. No se acredita Keystore real ni autenticación del adulto por inspección o tests JVM.
+- Tests instrumentados de criptografía y clave temporal no exportable aprobaron en el lote físico A56. Keystore y autenticación reales se acreditan solo por las pruebas efectivamente ejecutadas, no por inspección/JVM; ver límites en EVIDENCIA_P01.md.
 - No hay autorización contextual: leerPayloadSinVerificar no acredita firmas; DocumentoVerificado acredita firma/estructura, no pareja autorizada, sesión vigente ni aplicación de una orden.
 
 ## Archivos modificados en la última tarea
@@ -55,7 +56,7 @@ pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P03.md y pruebas/HANDOFF_P03.md.
 ## Pruebas ejecutadas y resultado
 
 - P03 cierre: scripts/verificar.ps1 correcto. Gradle tests app/núcleo/interoperabilidad, APK debug/instrumentado/release y lint repetidos con --rerun-tasks: 130 tareas ejecutadas correctamente. Reportes: 33 app, 30 núcleo y 1 interoperabilidad, sin fallos/errores; 30 Node correctos, total 94 pruebas locales aprobadas. Vectores documentales: 78 comprobaciones correctas. Lint: cero errores y 15 avisos de versiones nuevas.
-- Tres nuevos tests Android de almacenamiento compilados (17 instrumentados disponibles en total), no ejecutados: AES/Keystore/AtomicFile reales, escritura .new sin finishWrite y corrupción cifrada en archivos/alias temporales. No se usó ADB ni se instaló nada en teléfonos durante P03. Inspección ZIP/DEX de app debug/release no encuentra fixtures ni fake/clases/alias de tests examinados.
+- P03 cierre local: tres nuevos tests Android compilados (17 instrumentados disponibles). En ese turno no se usó ADB; posteriormente se ejecutaron con autorización expresa: tres aprobados/ninguno omitido en A56, status 0 cada uno, OK (3 tests), 1.286 s. Ambas instalaciones con -r correctas. Runner dirigido solo a AlmacenAndroidTest y solo al A56; no se ejecutaron los otros 14 tests en este lote. Inspección local ZIP/DEX previa sin fixtures/dobles/clases/alias de tests examinados en app debug/release.
 
 ### Historial de comprobaciones anteriores (ver evidencias de cada tarea)
 
@@ -116,8 +117,8 @@ La referencia plantillas/HANDOFF.md de padre/AGENTS.md no existe; usar pruebas/H
 
 ## Próxima tarea y lectura mínima
 
-Próximo paso físico: avisar y esperar permiso para instalar los APK actualizados y ejecutar solo AlmacenAndroidTest en A56 con selector explícito. Son tres pruebas automáticas con archivos/alias temporales; no requieren huella/PIN ni modifican identidad operativa, vínculo o credenciales. No tocar A13 ni ejecutar connected contra todos los dispositivos.
-Próxima tarea de desarrollo: P02 — PLAN_PADRE P02, CP/1 §5/§9 y SPEC-P P3.2/P4. P03 era dependencia necesaria y ya está completada localmente; no se inició QR en este turno. Integrar explícitamente almacenamiento con casos de uso, sin autoenrolar al faltar/corromperse un archivo.
+Próximo paso físico P03 completado: tres pruebas autorizadas/aprobadas en A56. No repetir por referencias históricas a pendientes. Antes de nuevas instalaciones/pruebas, avisar y esperar permiso; no tocar A13 ni ejecutar connected contra todos los dispositivos.
+Próxima tarea de desarrollo: P02 — PLAN_PADRE P02, CP/1 §5/§9 y SPEC-P P3.2/P4. P03, su dependencia, ya tiene validación local y de almacenamiento Android en A56; no se inició QR en este turno. Integrar explícitamente almacenamiento con casos de uso, sin autoenrolar al faltar/corromperse un archivo.
 
 ## Seguridad
 
