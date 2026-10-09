@@ -5,7 +5,9 @@ fallos. **Interactivo aceptar también aprobado:** firma y caducidad tras 61 s,
 un test sin fallos, 76.324 s. El propietario confirmó huella. **Cancelar también
 aprobado:** firma rechazada, un test sin fallos, 21.311 s. Segunda ejecución aceptar
 con PIN/contraseña aprobada (72.282 s), modalidad confirmada por el propietario.
-Reinicio del proceso y revisión manual pendientes. A13 excluido por ambos AGENTS.md.
+Persistencia del almacén de identidad protegido entre procesos también aprobada
+con dos fases y force-stop autorizado: 0.103 s/0.036 s. Revisión manual pendiente.
+A13 excluido por ambos AGENTS.md.
 Avisar y esperar habilitación expresa de ADB antes de listar
 dispositivos, instalar o probar. Usar solo el teléfono del padre, Android 11+.
 Si hay varios dispositivos, confirmar el objetivo antes de instalar.
@@ -55,6 +57,15 @@ el flujo, detener esa vía y corregir conservando autenticación/bloqueo. No dar
 por aprobado el flujo del fabricante porque compile.
 
 ## 3. Persistencia y ciclo de vida reales (manual)
+
+Persistencia ya comprobada con alias temporal: PersistenciaProcesoTest usa
+argumento persistenciaProceso=preparar, se cierra únicamente el paquete padre,
+y después persistenciaProceso=verificar. Afirma PID distinto, misma pública sin
+recrear y sesión nueva bloqueada. No repetir sin autorización para cerrar proceso.
+El test se omite sin argumentos; guarda solo marcador público temporal y lo retira
+junto con su alias al verificar. No confundirlo con metadatos de producción.
+Las comprobaciones manuales de la identidad operativa siguientes siguen siendo
+opcionales pendientes; no se creó una identidad de familia durante esta prueba.
 
 - En Primer inicio, pulsar Crear o cargar identidad protegida. Comparar la
   pública en el propio teléfono, sin guardar claves/capturas en el repositorio.

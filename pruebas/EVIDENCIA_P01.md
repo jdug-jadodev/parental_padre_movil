@@ -1,5 +1,32 @@
 # Evidencia P01 — identidad y autenticación
 
+## Persistencia entre procesos en A56
+
+El propietario autorizó cerrar/reabrir solo la app padre en A56 sin borrar datos
+ni reiniciar teléfono. Se añadió PersistenciaProcesoTest, exclusivo del APK de
+pruebas, con fases opt-in preparar/verificar. Compilación instrumentada y lint
+correctos; actualizado únicamente APK instrumentado con install -r dirigido al A56.
+
+Fase preparar: un test aprobado, 0.103 s; crea identidad protegida con alias único
+cp.test.persist.*. Después se ejecutó force-stop solo de dev.controlparental.parent
+en A56. Fase verificar: un test aprobado, 0.036 s; afirma PID diferente, alias
+existente y hash SHA-256 de pública idéntico, cargando sin crearSiFalta. La sesión
+nueva bloqueó firma sin autenticar. No se recreó clave para aparentar persistencia.
+Registro temporal y alias eliminados en finally; MainActivity reabierta al terminar.
+
+El registro en noBackupFilesDir contiene alias de prueba, hash público y PID,
+nunca privada/credencial/códigos. No equivale a metadatos de producción cifrados.
+No se tocó cp.parent.sign.v1 ni A13, no hubo borrado de datos ni cambios de bloqueo.
+Se demuestra persistencia del almacén de identidad protegido entre procesos,
+no autenticación/firma posterior al reinicio ni persistencia de vínculo.
+
+Hay ahora 14 tests instrumentados compilados: el nuevo test se omite sin argumento
+de fase. Las dos fases aprobadas son un procedimiento de persistencia, no dos
+casos independientes adicionales del lote completo. El lote completo anterior
+de 12 aprobados/1 omitido se conserva como ejecución previa de 13 tests.
+Pendientes: revisión visual y pérdida/invalidación permanente en banco separado.
+Las referencias posteriores a reinicio pendiente pertenecen al historial anterior.
+
 ## Segunda aceptación: credencial solicitada
 
 El propietario autorizó probar PIN/contraseña, sin huella. Se ejecutó únicamente

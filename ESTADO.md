@@ -3,7 +3,7 @@
 Última actualización: 2026-10-08
 Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. P00: 37c74a3, 943082c. Primer bloque P01: 0f143c4; cierre local en el commit posterior, consultar git log.
 Tarea actual: P01
-Estado: VALIDADA_PARCIAL_A56 — lote de 12 pruebas, huella, PIN/contraseña, firma/caducidad y cancelación reales aprobados; reinicio de proceso pendiente
+Estado: VALIDADA_PARCIAL_A56 — identidad persistente entre procesos, huella, PIN/contraseña, firma/caducidad y cancelación aprobadas; revisión manual e invalidación segura pendientes
 
 ## Entorno observado
 
@@ -48,9 +48,13 @@ app-parent/src/main/java/dev/controlparental/parent/security/SesionAutoridad.kt,
 app-parent/src/main/java/dev/controlparental/parent/ui/AplicacionPadre.kt e IdentidadPadre.kt.
 app-parent/src/test/java/dev/controlparental/parent/SesionAutoridadTest.kt y AutoridadPadreTest.kt.
 app-parent/src/androidTest/java/dev/controlparental/parent/IdentidadKeystoreTest.kt y AutenticacionRealTest.kt.
+app-parent/src/androidTest/java/dev/controlparental/parent/PersistenciaProcesoTest.kt (comprobación física adicional en dos fases).
 pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P01.md, pruebas/HANDOFF_P01.md, pruebas/PRUEBA_FISICA_P01.md.
 
 ## Pruebas ejecutadas y resultado
+
+- A56 persistencia entre procesos autorizada: nuevo PersistenciaProcesoTest opt-in, compilación APK instrumentado/lint correctos e instalación de actualización del APK de pruebas con -r. Fase preparar aprobada (0.103 s); force-stop únicamente dev.controlparental.parent en A56; fase verificar aprobada (0.036 s). La segunda fase comprobó PID distinto, alias aún existente, misma huella SHA-256 de pública y carga sin crearSiFalta. Nueva SesionAutoridad rechazó firma sin autenticar. Alias temporal y registro de prueba eliminados en finally; no se borraron datos de la app ni se reinició teléfono. MainActivity reabierta al terminar. Ninguna operación sobre A13.
+- El registro temporal contiene solo alias cp.test.persist.*, hash de pública y PID, en noBackupFilesDir. No contiene privadas, credenciales ni datos de vínculo. Se elimina al verificar; no implementa ni reemplaza el almacenamiento cifrado de producción. No se usó cp.parent.sign.v1. La prueba demuestra persistencia del almacén de identidad protegido entre procesos; no firma autenticada después del reinicio ni persistencia de metadatos de vinculación.
 
 - A56: segunda ejecución aceptar con PIN/contraseña, confirmado expresamente por el propietario (sin huella). Un test aprobado, status 0/OK (1 test), cero fallos, 72.282 s. Firma protegida y caducidad Keystore/sesión tras 61 segundos comprobadas de nuevo. A13 excluido, sin operaciones.
 
@@ -104,7 +108,7 @@ La referencia plantillas/HANDOFF.md de padre/AGENTS.md no existe; usar pruebas/H
 
 ## Próxima tarea y lectura mínima
 
-Próximo paso inmediato: acordar reinicio de proceso y revisión visual. Huella, PIN/contraseña, firma/caducidad y cancelación ya aprobaron y las modalidades fueron confirmadas por el propietario. Usar siempre selección explícita del A56; no tocar A13. No requiere Device Owner, vinculación ni restablecimiento. Alias temporales se eliminan; no reemplazan identidad.
+Próximo paso inmediato: revisión visual/ciclo de vida (texto grande, rotación y recuperación accesible). Reinicio de proceso ya comprobado con identidad temporal sin borrar datos. Huella, PIN/contraseña, firma/caducidad y cancelación aprobadas y confirmadas por el propietario. Invalidación permanente/pérdida de clave requiere banco de pruebas separado y autorización específica: no modificar credenciales del A56 cotidiano. Usar solo selección explícita del A56; no tocar A13.
 Tras validar P01, siguiente tarea de desarrollo P02 — vinculación QR. No se inició P02 ni almacenamiento de metadatos en este turno. P00 y C02 conservan aceptación física pendiente.
 
 ## Seguridad

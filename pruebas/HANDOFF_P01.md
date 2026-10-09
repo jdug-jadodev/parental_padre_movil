@@ -1,5 +1,22 @@
 # Relevo — P01
 
+## Actualización persistencia A56
+
+Cerrar/reabrir app autorizado y comprobado sin borrar datos ni reiniciar teléfono.
+PersistenciaProcesoTest nuevo, solo androidTest: preparar pasó (0.103 s), force-stop
+de paquete padre solo en A56, verificar pasó (0.036 s) con PID distinto, alias
+existente y misma huella pública. Carga sin recrear; nueva sesión bloqueada.
+Alias cp.test.persist.* y registro público temporal eliminados; MainActivity
+reabierta. A13 sin operaciones. No se usa identidad de producción.
+
+Ahora 14 tests compilados; persistencia opt-in se omite sin argumento. El lote de
+12 aprobados/1 omitido anterior no se convierte retroactivamente en lote de 14.
+No afirmar firma autenticada tras reinicio ni persistencia de metadatos/vínculo:
+solo persistencia del almacén de identidad protegido y bloqueo de sesión nueva.
+Revisión manual e invalidación segura siguen pendientes; no retirar credencial
+del teléfono cotidiano para completar esa prueba. Ignorar pendientes históricos
+de reinicio que se conservan en secciones siguientes.
+
 ## Segunda aceptación A56
 
 Prueba aceptar solicitando PIN/contraseña aprobada: un test sin fallos, 72.282 s,
