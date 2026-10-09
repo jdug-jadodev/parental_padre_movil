@@ -1,0 +1,28 @@
+# Datos locales, secretos y credenciales
+.env
+.env.*
+!.env.example
+*.jks
+*.keystore
+*.pem
+*.key
+local.properties
+
+# Resultados y dependencias regenerables
+.gradle/
+.kotlin/
+**/build/
+node_modules/
+dist/
+coverage/
+*.apk
+*.aab
+*.apks
+__pycache__/
+.venv/
+
+# Configuración particular del editor
+.idea/
+.vscode/
+*.iml
+*.log
