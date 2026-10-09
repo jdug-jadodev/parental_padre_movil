@@ -7,6 +7,9 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.assertIsEnabled
+import android.view.WindowManager
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 
@@ -26,7 +29,7 @@ class PantallaInicialTest {
     fun recorreLasCuatroPantallasSinConfigurarAutoridadNiEnviarOrdenes() {
         pantalla.onNodeWithText("Configurar este teléfono como padre").performScrollTo().performClick()
         pantalla.onNodeWithText("Vincular dispositivo").assertIsDisplayed()
-        pantalla.onNodeWithText("Escanear QR del hijo").performScrollTo().assertIsNotEnabled()
+        pantalla.onNodeWithText("Leer imagen QR de la oferta").performScrollTo().assertIsEnabled()
         pantalla.onNodeWithText("Ver controles").performScrollTo().performClick()
         pantalla.onNodeWithText("Vinculación: pendiente").assertIsDisplayed()
         pantalla.onNodeWithText("Estado del hijo: sin evidencia verificada").assertIsDisplayed()
@@ -46,5 +49,11 @@ class PantallaInicialTest {
         pantalla.onNodeWithText("Recuperación").assertIsDisplayed()
         pantalla.onNodeWithText("Volver").performClick()
         pantalla.onNodeWithText("Este teléfono será el administrador").assertIsDisplayed()
+    }
+
+    @Test fun ventanaProtegidaSinConfigurarIdentidad() {
+        pantalla.runOnIdle {
+            assertTrue(pantalla.activity.window.attributes.flags and WindowManager.LayoutParams.FLAG_SECURE != 0)
+        }
     }
 }

@@ -25,6 +25,16 @@ congeladas con hashes iguales, sin sincronizar cambios unilateralmente.
 
 ## Plan posterior de integración
 
+Acuerdo del propietario: completar primero la parte del padre preparada para
+integración y avisarle para que orqueste una IA en parental_render. Esa IA
+trabajará en el servidor separado; comunicación y reconexión entre componentes
+deben demostrarse primero en entorno local, antes de cualquier despliegue.
+Los simuladores sirven para desarrollar casos unitarios, no para declarar
+aprobadas las conexiones entre dos APK reales. No usar A13 sin autorización
+expresa nueva, ni interpretar esta intención como permiso para dispositivos o
+despliegues. Conservar TLS/WSS y autenticación también en las pruebas locales:
+no deshabilitar verificación de certificados en release para facilitar integración.
+
 1. Congelar cambios de protocolo en los dos repositorios; comparar SHA-256 de contrato y esquema contra los valores indicados arriba.
 2. Ejecutar ambos verificadores de ejemplos. Si no coinciden, **no conectar releases** hasta resolver la diferencia por revisión conjunta de ADR y nueva versión explícita del contrato.
 3. Sustituir simuladores por el servicio real Render y el otro APK. Probar emparejamiento, firmas cruzadas, órdenes/ACK y reconexión.

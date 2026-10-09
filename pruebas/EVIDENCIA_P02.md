@@ -1,5 +1,41 @@
 # Evidencia P02 — vinculación QR parcial local
 
+## Seguimiento — pruebas aisladas y preparación descartada
+
+Se corrigió conservación de preparación anterior al cambiar una oferta mediante
+selector de imagen. Todo cambio de entrada, salida o segundo plano invalida
+preparación/códigos/casillas y su generación. Guardia contra doble operación antes
+del lanzamiento coroutine. PairChild comprueba hashes de códigos aún presentes
+contra aceptación/pareja antes de firmar, rechazando preparaciones descartadas.
+Dos nuevos tests JVM correctos para descarte/cambio de pareja/hash sin firma.
+
+scripts/verificar.ps1 correcto: 40 app, 30 núcleo, 1 interop y 5 oráculo Node,
+**76 locales**. Diez vectores/78 comprobaciones. Debug/instrumentado/release sin firma compilados,
+lint correcto. No hubo ADB ni pruebas físicas en este seguimiento; resultados
+físicos siguientes corresponden a APK anterior, no a estas modificaciones.
+
+Siete nuevos tests Android y un caso antiguo actualizado: PantallaInicialTest
+(cuatro casos ahora, incluye FLAG_SECURE y recorrido con lector de imagen habilitado),
+PantallaVinculoTest (cuatro casos) y VinculoPersistidoAndroidTest (dos). Estos
+diez casos están compilados/no ejecutados; hay 25 instrumentados disponibles.
+EntornoVinculoAndroid prepara solo archivos/alias AES cp.test.pair.* y privada
+JCA efímera en memoria del APK de pruebas. AES/AtomicFile serán reales al ejecutar;
+firma JCA de prueba no demuestra Keystore de autoridad ni autenticación del adulto.
+No llama a crear identidad/vínculo cotidiano ni modifica credenciales.
+
+Persistencia: QR firmado reabierto/env sin códigos/bloqueo de segunda pareja;
+migración v1 cifrada real conserva reserva y contador, nonce nuevo, posterior
+reapertura consistente. UI: dos casillas obligatorias, fallo de firma no prepara
+vínculo, descarte al ir a fondo/cambiar entradas/salir y ausencia de restauración
+de códigos. FLAG_SECURE se verifica como flag de ventana, no como captura real
+denegada por el sistema. Pendiente ejecutar tras permiso nuevo y revisar selector,
+rotación/texto grande/aceptación física. Cámara directa CameraX de SPEC-P P4 aún
+pendiente, no se considera completada por lectura de imagen.
+
+Se registró aviso al propietario cuando padre esté preparado para integración;
+él coordinará IA del servidor y primero pruebas locales, sin despliegue implícito.
+Cliente WSS/órdenes aún faltan. No se tocó parental_render ni el A13.
+
 ## Actualización física autorizada — A56
 
 El propietario autorizó actualizar ambos APK y ejecutar pruebas automáticas.

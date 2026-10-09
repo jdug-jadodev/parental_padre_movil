@@ -46,6 +46,9 @@ internal class PairChild(
     suspend fun aceptar(preparacion: PreparacionVinculo, huellasComparadas: Boolean, codigosGuardados: Boolean): ByteArray {
         check(huellasComparadas && codigosGuardados) { "Compara huellas y guarda los tres códigos fuera del teléfono" }
         val aceptacion = preparacion.aceptacion
+        check(preparacion.codigos.hashes(aceptacion.pairId) == aceptacion.recoveryHashes) {
+            "Preparación descartada o códigos distintos de los confirmados"
+        }
         check(publicaPadre() == aceptacion.parentPublicKeyB64)
         val sobre = firmar(aceptacion) // Keystore y sesión exigen autenticación vigente.
         val frame = CodecProtocolo.codificarFrame(sobre)

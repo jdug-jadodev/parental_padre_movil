@@ -1,5 +1,35 @@
 # Relevo — P02 parcial local
 
+## Seguimiento más reciente (prioritario)
+
+Se retoma P02 después de separar servidor. 76 tests locales correctos, APK
+debug/instrumentado compilados y lint correcto. No ADB en este turno. UI descarta
+preparación/códigos/casillas al cambiar oferta/origen y entrar/salir de selector
+según ciclo; guardia síncrona contra operaciones dobles. PairChild no firma si
+preparación fue descartada o códigos no corresponden a hashes/pareja.
+
+Próximo físico: avisar/esperar permiso, instalar APK nuevos y ejecutar únicamente
+PantallaInicialTest, PantallaVinculoTest y VinculoPersistidoAndroidTest (diez
+casos). 25 tests instrumentados disponibles; no probar todos ni AutenticacionRealTest
+sin acuerdo adicional. A56 explícito, A13 excluido. No requiere huella/PIN.
+EntornoVinculoAndroid usa almacén AES/archivo temporal real y firmante JCA efímero
+solo en tests; no acredita firma autenticada/Keystore de autoridad. No crea
+identidad/vínculo cotidiano ni cambia credenciales. Cleanup exacto del alias y
+directorio temporal; no usar borrado general ni modificar cp.parent.*.
+
+Probar diez casos compilados no significa que hayan pasado: UI casillas/firma
+fallida/fondo/cambio de entrada/salida, QR persistido, migración v1 con reserva
+y nonce nuevo, recorrido actualizado y FLAG_SECURE como flag de ventana.
+Cámara directa CameraX sigue pendiente (SPEC-P P4); imagen no la reemplaza en
+aceptación final. Revisión manual selector/rotación/texto grande/ciclo y aceptación
+APK real hijo pendientes. Resultados físicos antiguos siguientes no aprueban
+este APK nuevo ni migración.
+
+Acuerdo: avisar al propietario al completar padre preparado para integración,
+para que orqueste IA en parental_render; comunicación local antes de desplegar.
+No iniciar agentes ni modificar servidor en sesiones padre. Cliente WSS/órdenes
+siguen pendientes, no avisar como si app estuviese terminada.
+
 ## Actualización A56
 
 App padre y APK instrumentado actualizados con -r con permiso expreso. Solo

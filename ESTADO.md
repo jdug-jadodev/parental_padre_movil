@@ -2,8 +2,8 @@
 
 Última actualización: 2026-10-09
 Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. P00: 37c74a3, 943082c. Primer bloque P01: 0f143c4; cierre local en el commit posterior, consultar git log.
-Tarea actual: separación del servidor por petición del propietario
-Estado: SEPARADO_Y_VERIFICADO_LOCAL — padre independiente; servidor en parental_render; P02 conserva validación parcial anterior
+Tarea actual: P02 — pruebas aisladas y descarte seguro de preparación
+Estado: VERIFICADA_LOCAL — 76 pruebas locales correctas; diez casos Android nuevos/actualizados compilados, pendientes de autorización/ejecución
 
 ## Entorno observado
 
@@ -47,6 +47,11 @@ Node 24.21.0 / npm 11.19.0 / Windows 11 amd64
 SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Terminado y demostrado
+
+- P02 nueva revisión: cambiar oferta (incluido selector de imagen)/origen o salir de pantalla invalida códigos, casillas y generación en curso. Guardia síncrona contra dobles operaciones. PairChild rechaza preparación descartada o cuyos códigos no corresponden a los hashes/pareja antes de firmar. Dos nuevos tests JVM aprobados, 40 app en total.
+- Pruebas aisladas Android compiladas: EntornoVinculoAndroid usa archivo/alias AES temporal propio y firma JCA efímera exclusivamente instrumentada (no autentica al adulto ni reemplaza Keystore de firma real). VinculoPersistidoAndroidTest prepara/persiste/reabre QR, comprueba env sin códigos/no revinculación y migra v1 real conservando reserva/contador. PantallaVinculoTest comprueba ambas casillas/fallo de firma, segundo plano, cambio de entrada y salida de pantalla. PantallaInicialTest actualizado al lector actual y nuevo test de FLAG_SECURE sin configurar identidad. Ninguno ejecutado físicamente en este turno.
+- Acuerdo nuevo registrado en AGENTS.md e INTEGRACION_FUTURA.md: avisar al propietario al completar parte padre preparada para integración; él orquestará IA en proyecto servidor y se probará comunicación local antes de desplegar. No se lanzó agente, modificó servidor ni usó ADB. El padre aún no está listo para integración completa: cliente WSS y casos de órdenes siguen pendientes.
+- Rutas de este turno: AGENTS.md, INTEGRACION_FUTURA.md, ESTADO.md, pruebas/EVIDENCIA_P02.md, pruebas/HANDOFF_P02.md; app-parent/src/main/java/dev/controlparental/parent/ui/PairingScreen.kt y pairing/PairChild.kt; app-parent/src/test/java/dev/controlparental/parent/PairChildTest.kt; app-parent/src/androidTest/java/dev/controlparental/parent/{PantallaInicialTest,EntornoVinculoAndroid,VinculoPersistidoAndroidTest,PantallaVinculoTest}.kt.
 
 - P02 físico autorizado: app padre y APK instrumentado actualizados con install -r solo en A56. ImagenQrAndroidTest y AlmacenAndroidTest: cuatro aprobados, cero fallos/omisiones, 1.226 s. PNG QR leído localmente, texto no oferta e imagen ilegible rechazados; regresión AES/Keystore/AtomicFile del formato actual correcta. Cleanup de archivos/alias temporales completado, sin cambiar identidad/vínculo operativo ni credenciales. A13 conectado pero sin operaciones dirigidas a él.
 
@@ -98,6 +103,8 @@ app-parent/src/androidTest/java/dev/controlparental/parent/AlmacenAndroidTest.kt
 pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P03.md y pruebas/HANDOFF_P03.md.
 
 ## Pruebas ejecutadas y resultado
+
+- P02 seguimiento: scripts/verificar.ps1 correcto, 40 app + 30 núcleo + 1 interoperabilidad + 5 oráculo Node = 76 locales; diez vectores/78 comprobaciones documentales. APK debug/instrumentado/release sin firma de distribución compilados y lint sin errores. Hay 25 tests Android disponibles, no se ejecutaron en este turno. Los diez de PantallaInicialTest/PantallaVinculoTest/VinculoPersistidoAndroidTest requieren aviso/permiso nuevo antes de instalar APK/ejecutarlos en A56. Firma protegida/autenticación no simuladas como resultado real.
 
 - P02 A56: runner AndroidJUnitRunner filtrado a ImagenQrAndroidTest y AlmacenAndroidTest, selector explícito de A56. Cuatro status 0, OK (4 tests), 1.226 s; ambos install -r correctos. No se ejecutaron los otros 14 tests. No se apagó la red: lectura/decodificación local no hace solicitudes remotas, pero no se probó selector en modo avión. No se ejecutó migración v1 física ni flujo completo de aceptación/UI.
 
@@ -166,7 +173,7 @@ La referencia plantillas/HANDOFF.md de padre/AGENTS.md no existe; usar pruebas/H
 ## Próxima tarea y lectura mínima
 
 Próximo paso físico P03 completado: tres pruebas autorizadas/aprobadas en A56. No repetir por referencias históricas a pendientes. Antes de nuevas instalaciones/pruebas, avisar y esperar permiso; no tocar A13 ni ejecutar connected contra todos los dispositivos.
-Próximo paso P02: revisión manual de pantalla/ciclo de vida/selector/FLAG_SECURE en A56, sin crear vínculo cotidiano ficticio; preparar pruebas aisladas de aceptación/migración con aliases de test. ImagenQrAndroidTest y regresión AlmacenAndroidTest ya aprobaron en este APK, no repetir por pendientes históricos. Nuevo acceso al dispositivo exige aviso/permiso. No tocar A13. Ver pruebas/HANDOFF_P02.md. Integración conjunta pendiente: no declarar vínculo completado sin estado firmado y recuperación local probada; no autoenrolar/borrar datos ante fallo.
+Próximo paso P02: tras permiso nuevo, actualizar APK padre/instrumentado y ejecutar solo PantallaInicialTest/PantallaVinculoTest/VinculoPersistidoAndroidTest en A56 explícito (diez casos, sin interacción biométrica ni vínculo cotidiano ficticio). Los tests de imagen/almacén anteriores son evidencia del APK anterior; no declarar regresión nueva por resultados históricos. Cámara directa CameraX todavía pendiente conforme SPEC-P P4, también revisión manual selector/ciclo de vida/texto grande/rotación y aceptación real por hijo. No tocar A13. Ver HANDOFF_P02.md. No declarar vínculo completo ni app lista para integración hasta cumplir pasos pendientes; avisar al propietario cuando proceda orquestar servidor, con integración local antes de desplegar.
 
 ## Seguridad
 

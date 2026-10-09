@@ -11,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
@@ -38,10 +39,11 @@ internal fun PairingScreen(flujo: PairChild, store: ParentStore, autenticar: () 
     var bloqueado by remember { mutableStateOf(false) }
     var generacion by remember { mutableIntStateOf(0) }
 
-    fun descartar() { preparacion?.codigos?.descartar(); preparacion = null; comparadas = false; guardados = false }
+    fun descartar() { generacion++; preparacion?.codigos?.descartar(); preparacion = null; comparadas = false; guardados = false }
     fun ejecutar(operacion: suspend () -> Unit) {
+        if (ocupado) return
+        ocupado = true
         scope.launch {
-            ocupado = true
             try { operacion() }
             catch (cancelacion: CancellationException) { throw cancelacion }
             catch (_: Exception) { aviso = "Operación rechazada. Comprueba oferta/origen e identidad y autentica de nuevo. Un almacén dañado o vínculo existente requiere recuperación; no se reemplaza." }
@@ -50,7 +52,7 @@ internal fun PairingScreen(flujo: PairChild, store: ParentStore, autenticar: () 
     }
     DisposableEffect(ciclo) {
         val observador = LifecycleEventObserver { _, evento ->
-            if (evento == Lifecycle.Event.ON_STOP) { generacion++; descartar() }
+            if (evento == Lifecycle.Event.ON_STOP) descartar()
         }
         ciclo.addObserver(observador)
         onDispose { ciclo.removeObserver(observador); descartar() }
@@ -71,6 +73,7 @@ internal fun PairingScreen(flujo: PairChild, store: ParentStore, autenticar: () 
     val selector = rememberLauncherForActivityResult(PickVisualMedia()) { uri ->
         if (uri != null) ejecutar {
             val texto = withContext(Dispatchers.IO) { ImagenQrAndroid.leer(contexto.contentResolver, uri) }
+            descartar()
             oferta = texto
             aviso = "QR leído localmente. Comprueba que el hijo sigue mostrando esta oferta."
         }
@@ -83,9 +86,9 @@ internal fun PairingScreen(flujo: PairChild, store: ParentStore, autenticar: () 
             Text(stringResource(dev.controlparental.parent.R.string.escanear_qr))
         }
         OutlinedTextField(oferta, { if (it.length <= 16384) { descartar(); oferta = it } },
-            enabled = !ocupado, label = { Text("CHILD_OFFER (alternativa de prueba)") }, modifier = Modifier.fillMaxWidth())
+            enabled = !ocupado, label = { Text("CHILD_OFFER (alternativa de prueba)") }, modifier = Modifier.fillMaxWidth().testTag("oferta_vinculo"))
         OutlinedTextField(origen, { descartar(); origen = it.take(512) }, enabled = !ocupado,
-            label = { Text("Origen HTTPS del relay") }, modifier = Modifier.fillMaxWidth())
+            label = { Text("Origen HTTPS del relay") }, modifier = Modifier.fillMaxWidth().testTag("origen_vinculo"))
         Button(enabled = !ocupado && oferta.isNotEmpty(), onClick = {
             ejecutar {
                 descartar()
@@ -98,11 +101,13 @@ internal fun PairingScreen(flujo: PairChild, store: ParentStore, autenticar: () 
         preparacion?.let { preparada ->
             Text("Huella SHA-256 del padre: ${preparada.huellaPadre}")
             Text("Huella SHA-256 del hijo: ${preparada.huellaHijo}")
-            Text("Mantenimiento: ${preparada.codigos.mostrar()[PropositoRecuperacion.MAINTENANCE]}")
-            Text("Recuperar padre: ${preparada.codigos.mostrar()[PropositoRecuperacion.RECOVER_PARENT]}")
-            Text("Retirar: ${preparada.codigos.mostrar()[PropositoRecuperacion.RETIRE]}")
-            Row { Checkbox(comparadas, { comparadas = it }, enabled = !ocupado); Text("Comparé ambas huellas presencialmente; las compararé también en el hijo antes de aceptar.") }
-            Row { Checkbox(guardados, { guardados = it }, enabled = !ocupado); Text("Guardé los tres códigos fuera del teléfono.") }
+            Column(Modifier.testTag("codigos_vinculo")) {
+                Text("Mantenimiento: ${preparada.codigos.mostrar()[PropositoRecuperacion.MAINTENANCE]}")
+                Text("Recuperar padre: ${preparada.codigos.mostrar()[PropositoRecuperacion.RECOVER_PARENT]}")
+                Text("Retirar: ${preparada.codigos.mostrar()[PropositoRecuperacion.RETIRE]}")
+            }
+            Row { Checkbox(comparadas, { comparadas = it }, enabled = !ocupado, modifier = Modifier.testTag("huellas_comparadas")); Text("Comparé ambas huellas presencialmente; las compararé también en el hijo antes de aceptar.") }
+            Row { Checkbox(guardados, { guardados = it }, enabled = !ocupado, modifier = Modifier.testTag("codigos_guardados")); Text("Guardé los tres códigos fuera del teléfono.") }
             Button(enabled = !ocupado, onClick = autenticar) { Text("Autenticar al adulto") }
             Button(enabled = !ocupado && comparadas && guardados, onClick = {
                 ejecutar {

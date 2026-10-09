@@ -170,4 +170,33 @@ class PairChildTest {
         preparacion.codigos.descartar()
         store.cerrar()
     }
+
+    @Test fun preparacionDescartadaNoFirmaAunqueLleguenConfirmacionesAntiguas() = runTest {
+        val e = Entorno()
+        val store = ParentStore(e.archivo, e.cifrador, backgroundScope)
+        val flujo = PairChild(store, { e.publica }, e::firma)
+        val preparacion = flujo.preparar(e.oferta, "https://prueba.invalid")
+        preparacion.codigos.descartar()
+        assertTrue(runCatching { flujo.aceptar(preparacion, true, true) }.isFailure)
+        assertEquals(0, e.firmas)
+        assertEquals(VinculoPersistido.SIN_VINCULAR, store.leer().vinculo)
+        assertNull(store.leer().pairAcceptanceFrameB64)
+        store.cerrar()
+    }
+
+    @Test fun cambiarParejaOHashesDePreparacionNoFirmaCodigosNoConfirmados() = runTest {
+        val e = Entorno()
+        val store = ParentStore(e.archivo, e.cifrador, backgroundScope)
+        val flujo = PairChild(store, { e.publica }, e::firma)
+        val preparacion = flujo.preparar(e.oferta, "https://prueba.invalid")
+        val otraPareja = PreparacionVinculo(preparacion.aceptacion.copy(pairId = java.util.UUID.randomUUID().toString()), preparacion.codigos)
+        assertTrue(runCatching { flujo.aceptar(otraPareja, true, true) }.isFailure)
+        val otrosHashes = PreparacionVinculo(preparacion.aceptacion.copy(recoveryHashes =
+            preparacion.aceptacion.recoveryHashes.copy(MAINTENANCE = "A".repeat(43))), preparacion.codigos)
+        assertTrue(runCatching { flujo.aceptar(otrosHashes, true, true) }.isFailure)
+        assertEquals(0, e.firmas)
+        assertEquals(VinculoPersistido.SIN_VINCULAR, store.leer().vinculo)
+        preparacion.codigos.descartar()
+        store.cerrar()
+    }
 }
