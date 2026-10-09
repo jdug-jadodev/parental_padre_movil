@@ -2,8 +2,8 @@
 
 Última actualización: 2026-10-08
 Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. P00: 37c74a3, 943082c. Primer bloque P01: 0f143c4; cierre local en el commit posterior, consultar git log.
-Tarea actual: P01
-Estado: VALIDADA_PARCIAL_A56 — identidad persistente entre procesos, huella, PIN/contraseña, firma/caducidad y cancelación aprobadas; revisión manual e invalidación segura pendientes
+Tarea actual: P03 (dependencia necesaria antes de P02)
+Estado: EN_CURSO — almacenamiento cifrado y escritor único implementados; pruebas de fallos/recuperación pendientes de cierre
 
 ## Entorno observado
 
@@ -12,6 +12,9 @@ Node 24.21.0 / npm 11.19.0 / Windows 11 amd64
 SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Terminado y demostrado
+
+- P03 primer bloque: ParentStore con una coroutine escritora, metadatos locales versionados, contador/intención en una transacción, comandos originales firmados y evidencia separada. AtomicFile y AES-256-GCM con alias Keystore distinto de firma y nonce generado por proveedor. No se conecta todavía a la UI ni crea archivos automáticamente al abrir la app.
+- P03: cuatro pruebas JVM AES-GCM y una transaccional aprobadas (23 tests app en total); debug y lint correctos. Se implementa P03 antes de P02 porque PLAN_PADRE P02 depende explícitamente de P03; no se inició vinculación QR.
 
 - A56, prueba interactiva aceptar autorizada y ejecutada: autenticación oficial confirmada, firma CP/1 con clave protegida temporal y verificación correctas. Tras 61 segundos Keystore lanzó UserNotAuthenticatedException y la sesión rechazó otra firma. Un test aprobado, cero fallos, 76.324 segundos. El propietario confirmó que usó huella; credencial PIN/contraseña todavía no probada.
 - Exclusión del A13 persistida como acuerdo obligatorio en AGENTS.md y padre/AGENTS.md. Ningún comando de dispositivo ni instalación dirigido a A13. Las futuras sesiones deben usar selector explícito de A56.
