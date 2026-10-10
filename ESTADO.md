@@ -2,8 +2,8 @@
 
 Última actualización: 2026-10-09
 Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. P00: 37c74a3, 943082c. Primer bloque P01: 0f143c4; cierre local en el commit posterior, consultar git log.
-Tarea actual: PADRE-C01 — diseño de acreditación presencial (subunidad documental P08)
-Estado: PADRE_C01_DOCUMENTADO — sin promoción ni código productivo; P08-B conserva evidencia local; validación física y entrega pendientes
+Tarea actual: PADRE-C01-R1 — revisión documental del resumen público del hijo
+Estado: PADRE_C01_R1_COMPATIBLE_PROPUESTO — sin aprobar puertas/orden ni implementar C02; vínculo y aceptación física pendientes
 
 ## Entorno observado
 
@@ -47,6 +47,8 @@ Node 24.21.0 / npm 11.19.0 / Windows 11 amd64
 SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Terminado y demostrado
+
+- PADRE-C01-R1: HIJO-C02 cb62a73 revisado solo en lectura, compatible como propuesta de resumen post-commit (pairId completo, huellas SHA-256 SPKI DER P-256 en 64 hex mayúsculos/16 grupos de cuatro y origen HTTPS exacto). Acordados snapshot íntegro/readback, estatus de commit local con acreditación pendiente y errores sin confirmación/reemplazo. Hash privado PAIR no se exige al hijo; resumen/STATE no son recibos exactos ni prueba de consumo OFFLINE. Declaraciones del adulto separadas de firmas. Matriz A/B/C1/C2 no activa H06 ni promoción padre; decisión propietario pendiente. PADRE-C02 acotado en §7 del diseño, solo diagnóstico puro futuro, no implementado. Hijo reporta 17 tests nuevos/346 JVM H05-L01 c7fb842: no reejecutados ni evidencia física nueva. Sin tests/builds/código/ADB/CP1/plan cambiado o repos externos editados.
 
 - PADRE-C01: diseño acotado en padre/DISENO_ACREDITACION_VINCULO.md; aceptación propia, commit del hijo observado, STATE correlacionado, recuperación MAINTENANCE presencial y confirmación del adulto separados. Propone revisión no reutilizable y persistencia privada atómica de etiqueta/evidencia, sin política ni promoción automática. CP/1 no contiene recibo de aceptación exacta ni de recuperación por nonce: comprobación física no se sustituye por firmas; prueba remota automática requeriría CP/2 acordado y detener esa vía. Negativos/aceptación propuestos, no ejecutados. Coordinación del relay 8385410/e26aebb y 104 tests/seis variantes leída, no reejecutada. Sin ADB, código productivo, CP/1 cambiado, repos ajenos, APIs de sesiones o pruebas nuevas.
 
@@ -133,6 +135,9 @@ SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 - No hay autorización contextual: leerPayloadSinVerificar no acredita firmas; DocumentoVerificado acredita firma/estructura, no pareja autorizada, sesión vigente ni aplicación de una orden.
 
 ## Archivos modificados en la última tarea
+
+PADRE-C01-R1 (documentación únicamente): padre/DISENO_ACREDITACION_VINCULO.md
+(precisión de estatus + §7), COORDINACION_PROYECTOS.md y ESTADO.md.
 
 PADRE-C01 (solo documentación): padre/DISENO_ACREDITACION_VINCULO.md,
 COORDINACION_PROYECTOS.md y ESTADO.md. Commit de cierre por mensaje PADRE-C01.
@@ -266,6 +271,15 @@ P01 aceptar con huella y PIN/contraseña pasó físicamente en A56, incluida cad
 La referencia plantillas/HANDOFF.md de padre/AGENTS.md no existe; usar pruebas/HANDOFF_PLANTILLA.md.
 
 ## Próxima tarea y lectura mínima
+
+PADRE-C01-R1 cerrada documentalmente, acuerdo público compatible como propuesta.
+Coordinador debe revisar §7 de padre/DISENO_ACREDITACION_VINCULO.md y solicitar
+decisión de puertas/orden al propietario. PADRE-C02 sigue sin activar: validador
+puro con inputs/supuestos/negativos definidos, sin promoción/IO/UI/órdenes; esperar
+asignación explícita. H08/H10/H11 y evidencia física no acreditados por este acuerdo.
+No nuevas pruebas/builds ni permisos; A56 disponible no habilita ADB, A13 excluido.
+Resultados en documentos/respuesta, sin mensajes de vuelta ni bucles de agentes.
+Las indicaciones siguientes son historial, no nuevas asignaciones.
 
 PADRE-C01 cerrada documentalmente. Próxima unidad propuesta PADRE-C02, no activada:
 validador puro de revisión y pruebas negativas JVM, sin promoción productiva ni

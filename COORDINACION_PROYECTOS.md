@@ -7,9 +7,45 @@ repositorios, acceso a dispositivos, aprovisionamiento ni despliegue.
 
 ## Resultado de PADRE-C01 — diseño, no promoción
 
+### PADRE-C01-R1 — acuerdo público revisado
+
+Revisión documental cerrada sobre HIJO-C02 **cb62a73** / H05-L01 **c7fb842**.
+Resultado: formato/estatus/errores y declaraciones **compatibles como propuesta**;
+detalle en §7 de padre/DISENO_ACREDITACION_VINCULO.md. Commit de cierre consultable
+por mensaje «PADRE-C01-R1: acordar resumen público y acotar validador puro».
+
+Acuerdo explícito: pairId completo, SHA-256 SPKI DER P-256 de ambas públicas
+(64 hex mayúsculos, 16 grupos de cuatro) y relayOrigin HTTPS exacto sin truncar.
+Un snapshot íntegro/readback post-commit origina el resumen; texto de datos guardados
+con acreditación pendiente. Reapertura no revincula; error/corrupción/legado sin
+procedencia/identidad perdida no producen confirmación ni reemplazo de clave.
+Precisión mínima incorporada al diseño del padre: «commit local confirmado», no
+«vínculo operativo confirmado». Sin corrección necesaria en el formato del hijo.
+
+Hash privado PAIR del padre no pasa al resumen ni se exige al hijo. Resumen/STATE
+no certifican aceptación exacta/consumo OFFLINE. Commit y mantenimiento observados
+son declaraciones del adulto separadas de firmas, nunca prueba de Device Owner.
+
+Matriz A/B/C1/C2 compatible como propuesta: no H06 por JVM, C1 salida real previa
+a endurecimiento, C2 ceremonia posterior con STATE/WSS, no sustitución ni promoción.
+Decisión de puertas/orden sigue pendiente del propietario; plan/CP/1 sin cambios.
+
+PADRE-C02 futuro acotado: entradas inmutables de snapshot/aceptación, revisión/
+resumen, STATE/contexto verificados, OFFLINE/observaciones y señales locales de
+autoridad/lifecycle/canal; salida diagnóstico puro, no autorización. Llamador no
+puede delegar comprobación física o Keystore al validador. Negativos definidos,
+**no implementados/ejecutados**. Esperar revisión y asignación explícita; no activa
+UI, migración, escritura VINCULADO o órdenes.
+
+Solo lectura/revisión documental y diff --check. Resultados hijo 17 tests nuevos/
+346 JVM y relay históricos son reportados, no reejecutados ni evidencia física
+nueva. Sin código/tests/builds, dispositivos, certificados/LAN, repos ajenos,
+subagentes o prompts de vuelta. Siguiente paso: coordinador revisa acuerdo y
+presenta decisión pendiente al propietario antes de asignar implementación.
+
 Unidad documental completada: `padre/DISENO_ACREDITACION_VINCULO.md`.
-Base de implementación permanece 77c2b10; commit de esta unidad consultable en
-git log por mensaje «PADRE-C01: diseñar acreditación presencial de vínculo».
+Base de implementación permanece 77c2b10; diseño original en **0e7b5db**,
+mensaje «PADRE-C01: diseñar acreditación presencial de vínculo».
 
 CP/1 §5 permite una ceremonia presencial: validación de aceptación propia,
 observación explícita del commit/resumen del hijo, STATE firmado correlacionado,
