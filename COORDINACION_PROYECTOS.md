@@ -7,6 +7,40 @@ repositorios, acceso a dispositivos, aprovisionamiento ni despliegue.
 
 ## Resultado de PADRE-C01 — diseño, no promoción
 
+### PADRE-C02 — diagnóstico puro de laboratorio completado
+
+Asignación autorizada comunicada por coordinador, sobre revisión 95dfd02 y acuerdo
+hijo cb62a73. Sin decisiones de puertas/orden/CP/1. Resultado implementado aislado
+en src/revisionAislada/kotlin del padre, solo sourceSet test JVM, fuera de APK/
+androidTest. Evidencia: pruebas/EVIDENCIA_PADRE_C02.md. Commit de cierre por
+mensaje «PADRE-C02: validar revisión ficticia aislada con pruebas JVM».
+
+Entradas inmutables/defensivas; re-verificación PAIR/STATE/OFFLINE con claves
+vinculadas, contexto/tiempos y señales explícitos, cuatro datos de resumen y
+declaraciones separadas FICTICIAS_JVM. Salida únicamente diagnóstico: no permiso,
+token, vínculo operativo, escritura, migración, UI o órdenes. No valida físicamente
+Keystore, autenticación, readback del hijo o consumo OFFLINE; obligaciones del
+llamador documentadas. No existe un puerto productivo para esos datos ficticios.
+
+21 tests nuevos correctos; suite final 131 app + 30 núcleo + 1 interop + 5 Node,
+**167 independientes**, sin fallos/errores/omisiones. 78 comprobaciones documentales;
+29 tareas Gradle finales ejecutadas. Clases Revision: cero en main/debug, 16 en
+debugUnitTest. No assemble/lint/instalación/instrumentación/integración externa.
+Primer intento completo falló en QR sintético P07 anterior; pasó aislado y suite
+repetida. No modificado ni declarado corregido; causa no identificada.
+
+Archivos: app-parent/build.gradle.kts, src/revisionAislada/kotlin/.../pairing/RevisionVinculo.kt,
+src/test/java/.../RevisionVinculoTest.kt; padre/DISENO_ACREDITACION_VINCULO.md §8,
+pruebas/EVIDENCIA_PADRE_C02.md, COORDINACION_PROYECTOS.md y ESTADO.md.
+Sin ParentStore/Metadatos/fuentes productivas/CP1/plan modificados. Sin dispositivos,
+certificados/LAN, subagentes, repos externos editados o prompts de vuelta.
+
+Siguiente unidad propuesta, no activada: diagnóstico acotado del fallo QR sintético
+previo; coordinador debe revisar/asignar antes. Ceremonia/persistencia/migración,
+H08/H10/H11, decisiones del propietario y aceptación física siguen pendientes.
+Las secciones C01/R1 siguientes conservan su contexto histórico, no revocan esta
+asignación ni constituyen nuevas tareas.
+
 ### PADRE-C01-R1 — acuerdo público revisado
 
 Revisión documental cerrada sobre HIJO-C02 **cb62a73** / H05-L01 **c7fb842**.

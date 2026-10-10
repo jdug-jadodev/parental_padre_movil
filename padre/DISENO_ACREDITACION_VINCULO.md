@@ -1,6 +1,7 @@
 # PADRE-C01 — diseño de acreditación del vínculo
 
-Fecha: 2026-10-09. Unidad documental dentro de P08. **Propuesta, no implementación.**
+Fecha: 2026-10-09. Diseño dentro de P08, sin implementación productiva.
+§8 registra únicamente el validador aislado para pruebas JVM de PADRE-C02.
 Fuentes: CP/1 §5, §6, §7.1 y §9; SPEC-P P3/P4; esquema PairAccept/State/
 OfflineChallenge/OfflineResponse; PairChild, MetadatosPadre y ParentStore actuales.
 No modifica CP/1, no promociona PREPARADO ni habilita órdenes.
@@ -144,7 +145,7 @@ entorno TLS/red acordado y autorización física específica posterior. Relay re
 8385410/e26aebb, 104 tests/seis variantes JVM: leído, no reejecutado por el padre;
 no prueba ninguna de esas condiciones físicas. Health 503/producción bloqueada.
 
-Siguiente unidad **PADRE-C02 propuesta, no activada**: especificar/implementar un
+Propuesta original **PADRE-C02** (posteriormente asignada, resultado en §8): especificar/implementar un
 validador puro de revisión y sus pruebas negativas JVM, sin ruta productiva de
 promoción, sin UI que habilite órdenes y sin migración/escritura VINCULADO.
 Requiere revisión del coordinador y acuerdo del hijo sobre qué muestra tras su
@@ -219,9 +220,10 @@ STATE MAINTENANCE sustituye la declaración de consumo específico observado.
 La decisión sobre puertas y orden corresponde al propietario; esta revisión
 solo confirma correspondencia documental. No cambia PLAN_HIJO ni dependencias.
 
-### PADRE-C02 futuro — límites, entradas y aceptación
+### PADRE-C02 — límites, entradas y aceptación acordados
 
-**No activado ni implementado.** Propuesta de validador puro aislado, sin Android,
+Especificación de R1, posteriormente asignada e implementada solo en laboratorio
+JVM; resultado en §8. Validador puro aislado, sin Android,
 IO, red, reloj oculto, UI, escritura/migración, transición VINCULADO o envío.
 
 Entradas conceptuales inmutables, aportadas explícitamente por su llamador:
@@ -260,7 +262,26 @@ La ruta positiva requiere todas las evidencias **declaradas y etiquetadas**, per
 su resultado no habilita una transición. No añadir pruebas de migración/IO/commit
 en C02; pertenecen a otras unidades aún pendientes de asignación.
 
-Antes de asignar C02, coordinador revisa este acuerdo; decisiones de puertas,
+La revisión/asignación C02 no resuelve decisiones de puertas,
 implementación H08/H10/H11, entorno y permisos físicos permanecen pendientes.
 Si se exige recibo remoto exacto en lugar de declaración presencial, detener
 esa vía y acordar versionado según §1, sin ampliar CP/1 silenciosamente.
+
+## 8. PADRE-C02 — resultado aislado, no acreditación
+
+Asignación posterior del coordinador sobre 95dfd02; acuerdo público mantenido.
+Validador implementado únicamente en app-parent/src/revisionAislada/kotlin,
+incluido por Gradle solo en pruebas JVM (ni APK ni androidTest). Sin enlace
+productivo de UI/callbacks o ParentStore. Detalle en pruebas/EVIDENCIA_PADRE_C02.md.
+
+Modelos defensivos, sobres originales re-verificados con codec/crypto y claves
+vinculadas, instantes/contextos explícitos. Diagnóstico único, no recibo/token,
+transición o permiso. Las observaciones solo admiten FICTICIAS_JVM: coherencia
+de laboratorio no significa autenticación ni comprobación física. No se implementa
+consumo de revisión, migración, escritura o promoción; no cambia CP/1/PLAN_HIJO.
+
+21 tests nuevos; última suite independiente correcta (167 con núcleo/interop/Node).
+Primer intento tuvo un fallo QR de test anterior, no reproducido al repetirlo
+aislado y repetir suite; no corregido ni atribuido a causa probada. Sin builds APK,
+instrumentación, ADB, permisos nuevos, repos ajenos ni cobertura relay repetida.
+Coordinador revisará el resultado; próximas unidades no se activan automáticamente.

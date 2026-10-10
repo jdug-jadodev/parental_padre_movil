@@ -2,8 +2,8 @@
 
 Última actualización: 2026-10-09
 Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. P00: 37c74a3, 943082c. Primer bloque P01: 0f143c4; cierre local en el commit posterior, consultar git log.
-Tarea actual: PADRE-C01-R1 — revisión documental del resumen público del hijo
-Estado: PADRE_C01_R1_COMPATIBLE_PROPUESTO — sin aprobar puertas/orden ni implementar C02; vínculo y aceptación física pendientes
+Tarea actual: PADRE-C02 — validador puro aislado y pruebas JVM
+Estado: PADRE_C02_VALIDADO_JVM_AISLADO — 21 tests nuevos; suite final 167 independientes; sin promoción/producción; incidencia QR anterior no reproducida pendiente de diagnóstico
 
 ## Entorno observado
 
@@ -47,6 +47,8 @@ Node 24.21.0 / npm 11.19.0 / Windows 11 amd64
 SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Terminado y demostrado
+
+- PADRE-C02: ValidadorRevisionVinculo en sourceSet solo JVM test (revisionAislada), sin APK/androidTest, IO, Android, UI, callbacks, permisos, token, ParentStore/migración o escritura VINCULADO. Modelos inmutables y frames defensivos; verificación CP/1 PAIR/MESSAGE/OFFLINE con claves del snapshot, resumen exacto, generación/contexto/secuencia/tiempos y observaciones FICTICIAS_JVM. Diagnóstico coherente/incompleto/rechazado, no acreditación física. 21 tests nuevos correctos; evidencia pruebas/EVIDENCIA_PADRE_C02.md. No decisiones de puertas/orden hijo ni cambio CP/1; sin ADB/repos externos/subagentes.
 
 - PADRE-C01-R1: HIJO-C02 cb62a73 revisado solo en lectura, compatible como propuesta de resumen post-commit (pairId completo, huellas SHA-256 SPKI DER P-256 en 64 hex mayúsculos/16 grupos de cuatro y origen HTTPS exacto). Acordados snapshot íntegro/readback, estatus de commit local con acreditación pendiente y errores sin confirmación/reemplazo. Hash privado PAIR no se exige al hijo; resumen/STATE no son recibos exactos ni prueba de consumo OFFLINE. Declaraciones del adulto separadas de firmas. Matriz A/B/C1/C2 no activa H06 ni promoción padre; decisión propietario pendiente. PADRE-C02 acotado en §7 del diseño, solo diagnóstico puro futuro, no implementado. Hijo reporta 17 tests nuevos/346 JVM H05-L01 c7fb842: no reejecutados ni evidencia física nueva. Sin tests/builds/código/ADB/CP1/plan cambiado o repos externos editados.
 
@@ -136,6 +138,12 @@ SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Archivos modificados en la última tarea
 
+PADRE-C02: app-parent/build.gradle.kts;
+app-parent/src/revisionAislada/kotlin/dev/controlparental/parent/pairing/RevisionVinculo.kt;
+app-parent/src/test/java/dev/controlparental/parent/RevisionVinculoTest.kt;
+pruebas/EVIDENCIA_PADRE_C02.md; padre/DISENO_ACREDITACION_VINCULO.md,
+COORDINACION_PROYECTOS.md y ESTADO.md.
+
 PADRE-C01-R1 (documentación únicamente): padre/DISENO_ACREDITACION_VINCULO.md
 (precisión de estatus + §7), COORDINACION_PROYECTOS.md y ESTADO.md.
 
@@ -187,6 +195,8 @@ app-parent/src/androidTest/java/dev/controlparental/parent/AlmacenAndroidTest.kt
 pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P03.md y pruebas/HANDOFF_P03.md.
 
 ## Pruebas ejecutadas y resultado
+
+- PADRE-C02: test JVM focalizado inicial (17 nuevos) correcto; tras cuatro añadidos, suite completa app/núcleo/interop --rerun-tasks. Primer intento: 131 app con un fallo QR anterior (ZXing NotFoundException en OfflineChallengeSignerTest.ambosQrSeLeenLocalmenteYLaRespuestaConservaFirmaOffline), 21 revisión correctos. Test QR aislado repetido correcto; suite completa repetida correcta, 29 tareas ejecutadas, 131 app + 30 núcleo + 1 interop sin fallos/errores/omisiones. Cinco oráculo Node y 78 comprobaciones documentales correctos: 167 independientes finales. Fallo QR no reproducido, causa no diagnosticada, sin cambios a ese test/QR. Inspección de clases: cero Revision en main/debug, 16 en debugUnitTest. Sin assemble/lint/script completo verificar.ps1, instrumentación/ADB o integración externa en este turno.
 
 - P08-B: prueba opcional focalizada repetida y suite completa con -PrutaRelayIntegracion/--rerun-tasks correctas; 130 tareas ejecutadas, XML 111 app (una integración real) + 30 núcleo + 1 interop, sin fallos/errores/omisiones. Después scripts/verificar.ps1 sin ruta externo: 110 app + 30 núcleo + 1 interop y cinco oráculo Node, 146 independientes; integración excluida, no omitida ni dependencia obligatoria. Total demostrado: 147 incluyendo la opcional. APK debug/instrumentado/release sin firma de distribución compilados; lint cero errores/23 avisos. Diez vectores/78 comprobaciones documentales. Repositorio externo limpio antes/después; no build/instalación/npm allí. Sin instrumentados ejecutados.
 
@@ -271,6 +281,14 @@ P01 aceptar con huella y PIN/contraseña pasó físicamente en A56, incluida cad
 La referencia plantillas/HANDOFF.md de padre/AGENTS.md no existe; usar pruebas/HANDOFF_PLANTILLA.md.
 
 ## Próxima tarea y lectura mínima
+
+PADRE-C02 aislado cerrado; esperar revisión/asignación del coordinador, no tareas
+automáticas ni prompts de vuelta. Propuesta siguiente: diagnóstico de incidencia
+QR sintética P07 observada, sin ADB/cámara productiva/CP1/integración relay; no
+iniciada. Leer pruebas/EVIDENCIA_PADRE_C02.md y resultado §8 del diseño. H08/H10/H11,
+puertas/orden del hijo, persistencia/migración/ceremonia y evidencia física siguen
+bloqueadas por decisiones/asignaciones separadas. A56 disponible no autoriza uso;
+A13 excluido. Secciones siguientes conservan indicaciones históricas.
 
 PADRE-C01-R1 cerrada documentalmente, acuerdo público compatible como propuesta.
 Coordinador debe revisar §7 de padre/DISENO_ACREDITACION_VINCULO.md y solicitar
