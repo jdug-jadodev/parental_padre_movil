@@ -27,6 +27,9 @@ android {
     sourceSets.getByName("test").java.srcDir("src/revisionAislada/kotlin")
     sourceSets.getByName("androidTest").java.srcDir("src/soporteTest/kotlin")
     testOptions.unitTests.all {
+        val diagnosticoQr = providers.gradleProperty("diagnosticoQr").orNull
+        if (diagnosticoQr !in listOf("true", "fixture")) it.exclude("**/DiagnosticoQrTest*")
+        if (diagnosticoQr == "fixture") it.filter.excludeTestsMatching("*.presupuestoSesentaYCuatroParesYDieciseisVariantesMaximas")
         val rutaRelay = providers.gradleProperty("rutaRelayIntegracion").orNull
         if (rutaRelay == null) it.exclude("**/IntegracionPoliticasRelayTest*")
         else {

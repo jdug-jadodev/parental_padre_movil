@@ -2,8 +2,8 @@
 
 Última actualización: 2026-10-09
 Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. P00: 37c74a3, 943082c. Primer bloque P01: 0f143c4; cierre local en el commit posterior, consultar git log.
-Tarea actual: PADRE-C02 — validador puro aislado y pruebas JVM
-Estado: PADRE_C02_VALIDADO_JVM_AISLADO — 21 tests nuevos; suite final 167 independientes; sin promoción/producción; incidencia QR anterior no reproducida pendiente de diagnóstico
+Tarea actual: PADRE-QR01 — diagnóstico acotado QR sintético
+Estado: PADRE_QR01_REPRODUCIDO_NO_CORREGIDO — geometría errónea del detector ZXing confirmada con fixture público; cambios productivos requieren nueva revisión/asignación
 
 ## Entorno observado
 
@@ -47,6 +47,8 @@ Node 24.21.0 / npm 11.19.0 / Windows 11 amd64
 SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Terminado y demostrado
+
+- PADRE-QR01: muestra única de 64 pares/128 sobres CP/1 efímeros: retos 64 correctos, respuestas 61 correctas y tres NotFoundException (39/56/63). Caso 39 público conservado; versión15/máscara4, original siempre falla, variantes de margen/escala fallan, otras siete máscaras leen bytes/firma exactos. PURE como control aislado recupera contenido válido; detector escoge falsa esquina inferior izquierda, lector QR directo ChecksumException convertido en NotFound observable por QrLocal. Confirmado camino de detección productivo, no error de render test ni orden necesario para caso fijo; sin corrección autorizada de producción/dependencia. Evidencia pruebas/EVIDENCIA_PADRE_QR01.md. No cambiar test P07/C02 o CP/1 ni declarar estabilidad por suite verde.
 
 - PADRE-C02: ValidadorRevisionVinculo en sourceSet solo JVM test (revisionAislada), sin APK/androidTest, IO, Android, UI, callbacks, permisos, token, ParentStore/migración o escritura VINCULADO. Modelos inmutables y frames defensivos; verificación CP/1 PAIR/MESSAGE/OFFLINE con claves del snapshot, resumen exacto, generación/contexto/secuencia/tiempos y observaciones FICTICIAS_JVM. Diagnóstico coherente/incompleto/rechazado, no acreditación física. 21 tests nuevos correctos; evidencia pruebas/EVIDENCIA_PADRE_C02.md. No decisiones de puertas/orden hijo ni cambio CP/1; sin ADB/repos externos/subagentes.
 
@@ -138,6 +140,12 @@ SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Archivos modificados en la última tarea
 
+PADRE-QR01: app-parent/build.gradle.kts (diagnóstico JVM opt-in);
+app-parent/src/test/java/dev/controlparental/parent/DiagnosticoQrTest.kt;
+app-parent/src/test/resources/qr01_respuesta_publica.json;
+pruebas/EVIDENCIA_PADRE_QR01.md, COORDINACION_PROYECTOS.md y ESTADO.md.
+Solo test/configuración/documentación; fuentes productivas sin cambios.
+
 PADRE-C02: app-parent/build.gradle.kts;
 app-parent/src/revisionAislada/kotlin/dev/controlparental/parent/pairing/RevisionVinculo.kt;
 app-parent/src/test/java/dev/controlparental/parent/RevisionVinculoTest.kt;
@@ -195,6 +203,8 @@ app-parent/src/androidTest/java/dev/controlparental/parent/AlmacenAndroidTest.kt
 pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P03.md y pruebas/HANDOFF_P03.md.
 
 ## Pruebas ejecutadas y resultado
+
+- PADRE-QR01: cuatro ejecuciones Gradle JVM, 25 tareas cada una. Muestreo único FALLÓ (128 lecturas, 3 fallos); 16 variantes de caso39 con 9 NotFound y control PURE correcto. Caracterización fija inicial FALLÓ por expectativa de excepción del lector directo (Checksum real, no NotFound); precisada la aserción diagnóstica, caracterización PASÓ con tres NotFound productivos explícitos, Checksum directo y control bytes/firma válido. Suite pertinente única con -PdiagnosticoQr=fixture/--rerun-tasks PASÓ: 132 app, cero fallos/errores/omisiones; un test caracteriza limitación conocida, no corrección. Todas las lecturas fallidas registradas: 21 NotFound QrLocal y 3 Checksum directos entre los experimentos. No repetir núcleo/interop/Node/relay, ni APK/lint/script completo/instrumentación/ADB. Fallo productivo NO corregido.
 
 - PADRE-C02: test JVM focalizado inicial (17 nuevos) correcto; tras cuatro añadidos, suite completa app/núcleo/interop --rerun-tasks. Primer intento: 131 app con un fallo QR anterior (ZXing NotFoundException en OfflineChallengeSignerTest.ambosQrSeLeenLocalmenteYLaRespuestaConservaFirmaOffline), 21 revisión correctos. Test QR aislado repetido correcto; suite completa repetida correcta, 29 tareas ejecutadas, 131 app + 30 núcleo + 1 interop sin fallos/errores/omisiones. Cinco oráculo Node y 78 comprobaciones documentales correctos: 167 independientes finales. Fallo QR no reproducido, causa no diagnosticada, sin cambios a ese test/QR. Inspección de clases: cero Revision en main/debug, 16 en debugUnitTest. Sin assemble/lint/script completo verificar.ps1, instrumentación/ADB o integración externa en este turno.
 
@@ -281,6 +291,14 @@ P01 aceptar con huella y PIN/contraseña pasó físicamente en A56, incluida cad
 La referencia plantillas/HANDOFF.md de padre/AGENTS.md no existe; usar pruebas/HANDOFF_PLANTILLA.md.
 
 ## Próxima tarea y lectura mínima
+
+PADRE-QR01 cerrado como diagnóstico reproducible; detenida vía de corrección
+productiva por límite de asignación. Propuesta PADRE-QR02: revisión técnica del
+lector con fixture público y criterios de bytes/firmas, previo acuerdo de alcance
+para cambiar producción/dependencias. No iniciada ni prompts de vuelta. Leer
+pruebas/EVIDENCIA_PADRE_QR01.md; no confundir caracterización verde con solución.
+Puertas/orden hijo, vínculo operativo y físicos siguen pendientes. A56 disponible
+no autoriza operarlo; A13 excluido. Indicaciones siguientes son históricas.
 
 PADRE-C02 aislado cerrado; esperar revisión/asignación del coordinador, no tareas
 automáticas ni prompts de vuelta. Propuesta siguiente: diagnóstico de incidencia

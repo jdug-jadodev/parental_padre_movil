@@ -7,6 +7,39 @@ repositorios, acceso a dispositivos, aprovisionamiento ni despliegue.
 
 ## Resultado de PADRE-C01 — diseño, no promoción
 
+### PADRE-QR01 — fallo QR reproducido, lector no corregido
+
+Diagnóstico sobre 8a6ae91, evidencia pruebas/EVIDENCIA_PADRE_QR01.md.
+Presupuesto fijo ejecutado: 64 pares/128 frames, 16 variantes del primer fallo,
+control PURE y fixture público fijo; no reruns ilimitados. Tres respuestas
+fallidas (índices 39/56/63), ningún reto. Versión 15/ECC L, máscara 4; DER 71/72.
+Márgenes/escalas alternativos no corrigen el caso fijo; siete otras máscaras sí
+leen mismos bytes con firma válida. No equivale a receta/máscara segura universal.
+
+Confirmado caso: detector selecciona patrón interno (122.5,676.0) en vez de esquina
+real inferior izquierda (68.5,698.5). QRCodeReader directo da ChecksumException,
+QrLocal/MultiFormatReader da NotFoundException. PURE recupera bytes/firma exactos.
+No error demostrado del render RGB de test ni dependencia de orden de suite
+para ese caso. Heurística interna exacta sin instrumentar; producción intacta.
+
+Cambios: app-parent/build.gradle.kts (opt-in diagnóstico JVM), DiagnosticoQrTest.kt,
+test/resources/qr01_respuesta_publica.json y documentación propia/ESTADO. Recurso
+solo sobre/pública ficticios; no privadas/códigos/QR operativos. Caso fijo comprueba
+fallo conocido explícito, no concede permisos ni reemplaza lector del test P07.
+
+Resultados: muestreo FALLÓ con tres errores; caracterización inicial FALLÓ porque
+lector directo dio Checksum y no NotFound esperado; expectativa precisada PASÓ
+con fallos productivos explícitos; suite pertinente PASÓ (132 app, uno de
+caracterización, cero fallos/errores/omisiones). Núcleo/Node/relay no reejecutados.
+Test P07 aleatorio intacto pasó en suite, **incidencia no corregida**. Registro
+incluye todos los fallos, variantes/hipótesis y comandos. Commit de cierre por
+mensaje «PADRE-QR01: reproducir fallo de detección QR con fixture público».
+
+No cambio productivo permitido: requiere revisión/asignación aparte. Siguiente
+propuesta PADRE-QR02 de revisión técnica del lector, no activada. Sin cambiar C02,
+CP/1, puertas/orden, migración/promoción, cámara/UI/órdenes, dependencias o repos
+externos. Sin dispositivos/ADB/Keystore/certificados/LAN/subagentes/prompts de vuelta.
+
 ### PADRE-C02 — diagnóstico puro de laboratorio completado
 
 Asignación autorizada comunicada por coordinador, sobre revisión 95dfd02 y acuerdo
