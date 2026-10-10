@@ -5,6 +5,37 @@ El propietario ha designado a la IA del servidor para orquestar el trabajo resta
 Este archivo describe necesidades y evidencias; no autoriza cambios en otros
 repositorios, acceso a dispositivos, aprovisionamiento ni despliegue.
 
+## Resultado de PADRE-C01 — diseño, no promoción
+
+Unidad documental completada: `padre/DISENO_ACREDITACION_VINCULO.md`.
+Base de implementación permanece 77c2b10; commit de esta unidad consultable en
+git log por mensaje «PADRE-C01: diseñar acreditación presencial de vínculo».
+
+CP/1 §5 permite una ceremonia presencial: validación de aceptación propia,
+observación explícita del commit/resumen del hijo, STATE firmado correlacionado,
+recuperación MAINTENANCE real observada y confirmación final del adulto con
+autoridad. Se propone persistir etiqueta y evidencia mínima juntas en transacción
+privada versionada, sin alterar contador/claves ni reutilizar contexto para órdenes.
+
+Límite crítico: STATE no certifica PAIR_ACCEPT exacto; OFFLINE_RESPONSE no prueba
+consumo/aplicación y STATE no correlaciona nonce OFFLINE. No hay recibo automático
+inventado. Si se exige prueba remota criptográfica de esos hechos, se necesita
+propuesta CP/2 acordada y se detiene esa vía; no cambios CP/1 en esta unidad.
+
+Diseño incluye pruebas negativas y aceptación futura, **ninguna ejecutada ahora**.
+Dependencias: H08 commit/resumen del hijo, H10 estado/WSS, H11 recuperación;
+acuerdo de migración local, entorno y permiso físico posteriores. Disponibilidad
+del A56 no autoriza operarlo; A13 sigue excluido aquí.
+
+Coordinación relay 8385410/documentación e26aebb y sus 104 tests/seis variantes
+JVM leídos como evidencia externa, no reejecutados ni reinterpretados como APK/
+Device Owner/enforcement. No se repite cobertura local ya terminada del relay.
+
+Siguiente unidad propuesta **PADRE-C02**: validador puro y negativos JVM, sin
+promoción productiva ni habilitación de órdenes. Requiere revisión/asignación;
+no activada ni enviada por otra API. Resultado se devuelve aquí y en respuesta
+para evitar bucles. No código productivo, dispositivos o cambios externos.
+
 ## 1. Estado del padre
 
 Repositorio: `C:\Users\Usuario\Documents\parental_padre`.

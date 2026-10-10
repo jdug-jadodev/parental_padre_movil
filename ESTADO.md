@@ -2,8 +2,8 @@
 
 Última actualización: 2026-10-09
 Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. P00: 37c74a3, 943082c. Primer bloque P01: 0f143c4; cierre local en el commit posterior, consultar git log.
-Tarea actual: P08-B — integración JVM de políticas con relay real
-Estado: P08_B_VALIDADO_LOCAL_PARCIAL — 146 pruebas independientes y una integración opcional aprobadas; APK/hijo reales y entrega pendientes
+Tarea actual: PADRE-C01 — diseño de acreditación presencial (subunidad documental P08)
+Estado: PADRE_C01_DOCUMENTADO — sin promoción ni código productivo; P08-B conserva evidencia local; validación física y entrega pendientes
 
 ## Entorno observado
 
@@ -47,6 +47,8 @@ Node 24.21.0 / npm 11.19.0 / Windows 11 amd64
 SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Terminado y demostrado
+
+- PADRE-C01: diseño acotado en padre/DISENO_ACREDITACION_VINCULO.md; aceptación propia, commit del hijo observado, STATE correlacionado, recuperación MAINTENANCE presencial y confirmación del adulto separados. Propone revisión no reutilizable y persistencia privada atómica de etiqueta/evidencia, sin política ni promoción automática. CP/1 no contiene recibo de aceptación exacta ni de recuperación por nonce: comprobación física no se sustituye por firmas; prueba remota automática requeriría CP/2 acordado y detener esa vía. Negativos/aceptación propuestos, no ejecutados. Coordinación del relay 8385410/e26aebb y 104 tests/seis variantes leída, no reejecutada. Sin ADB, código productivo, CP/1 cambiado, repos ajenos, APIs de sesiones o pruebas nuevas.
 
 - P08-B: ControlPoliticas + ParentStore + CanalPoliticasRelay + RelayConnection + TransporteOkHttp contra relay externo compilado (ce59ef6), WSS loopback/puerto efímero y hijo Node ficticio. Hashes CP/1/esquema/vectores iguales antes de escuchar. Hijo no apto y vínculo PREPARADO bloquean órdenes; señales de red/autoridad ficticias negativas bloquean sync/envío. Se comprueba comando persistido antes de cada envío, reserva seq=1 y dos retransmisiones de bytes exactos; ACK firmado con hash ajeno rechazado, ACK pendiente no es APPLIED. Reapertura de ParentStore cifrado en RAM y reconexión no reproducen orden; STATE nuevo correlacionado id/seq/hash resuelve como ENFORCEMENT_FAILED simulado. No hay mutaciones de producción, bypass ni promoción de vínculo operativo. Harness opcional -PrutaRelayIntegracion; prueba independiente no necesita servidor/npm. Evidencia: pruebas/EVIDENCIA_P08_B.md. Sin ADB ni cambios/despliegue en parental_render.
 
@@ -131,6 +133,9 @@ SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 - No hay autorización contextual: leerPayloadSinVerificar no acredita firmas; DocumentoVerificado acredita firma/estructura, no pareja autorizada, sesión vigente ni aplicación de una orden.
 
 ## Archivos modificados en la última tarea
+
+PADRE-C01 (solo documentación): padre/DISENO_ACREDITACION_VINCULO.md,
+COORDINACION_PROYECTOS.md y ESTADO.md. Commit de cierre por mensaje PADRE-C01.
 
 P08-B: app-parent/build.gradle.kts;
 app-parent/src/test/java/dev/controlparental/parent/IntegracionPoliticasRelayTest.kt;
@@ -261,6 +266,15 @@ P01 aceptar con huella y PIN/contraseña pasó físicamente en A56, incluida cad
 La referencia plantillas/HANDOFF.md de padre/AGENTS.md no existe; usar pruebas/HANDOFF_PLANTILLA.md.
 
 ## Próxima tarea y lectura mínima
+
+PADRE-C01 cerrada documentalmente. Próxima unidad propuesta PADRE-C02, no activada:
+validador puro de revisión y pruebas negativas JVM, sin promoción productiva ni
+migración/escritura VINCULADO. Esperar revisión/asignación del coordinador y acuerdo
+del hijo sobre su evidencia de commit; leer padre/DISENO_ACREDITACION_VINCULO.md.
+Bloqueos H08/H10/H11, migración privada segura, entorno TLS/red y autorización
+física posteriores. A56 disponible no permite ADB por esta tarea; A13 excluido.
+No responder con otra tarea a la sesión coordinadora: resultados en documentos
+y respuesta de cierre, sin bucle de mensajes entre agentes.
 
 Handoff de coordinación añadido en COORDINACION_PROYECTOS.md por petición del propietario: IA de parental_render orquestará trabajo restante, sin transferir permisos de dispositivo/despliegue ni autorizar edición cruzada. Incluye estado, comandos, dependencias hijo/TLS, límites y puerta operativa PREPARADO→VINCULADO todavía pendiente. Cambios documentales: COORDINACION_PROYECTOS.md, AGENTS.md y ESTADO.md; no código, ADB ni pruebas nuevas en este turno. Próximo paso: recibir asignación concreta del coordinador tras identificar hijo y entorno autorizado.
 
