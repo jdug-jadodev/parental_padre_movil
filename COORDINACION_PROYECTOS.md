@@ -1,9 +1,55 @@
 # Coordinación Padre / Relay / Hijo
 
-Fecha: 2026-10-09. Handoff del proyecto padre para el coordinador en parental_render.
+Fecha: 2026-10-10. Handoff del proyecto padre para el coordinador en parental_render.
 El propietario ha designado a la IA del servidor para orquestar el trabajo restante.
 Este archivo describe necesidades y evidencias; no autoriza cambios en otros
 repositorios, acceso a dispositivos, aprovisionamiento ni despliegue.
+
+## PADRE-C03 — revisión del control local del adulto, solo documental
+
+Base padre a8e4ffc; HIJO-C03 9ae6c99 y documentos centrales consultados solo en
+lectura. Resultado: compatible como propuesta con precisiones, **sin aprobación
+de opciones, versión CP/2, puertas u orden**. Revisión completa y decisiones en
+padre/REVISION_CONTROL_LOCAL_ADULTO.md; propuesta registrada en INTEGRACION_FUTURA.md.
+
+Acuerdos propuestos: administración RAM distinta de permiso normal por boot;
+credencial reutilizable propia de instalación y esperas independientes de códigos
+CP/1; emergencia/Keyguard independientes. Última acción fresca serializada puede
+permitir LOCK remoto posterior y luego permitir local posterior, previa decisión
+del propietario. Revisión global distinta de seq remoto; desafíos/confirmaciones/
+timers viejos quedan invalidados, incluida apertura diferida de LOCK_FOR. Elegir
+regla para fuente REMOTA/red sin pisar LOCAL offline ni revivir permiso revocado.
+
+Padre debe separar modo efectivo/fuente/revisión/vigencia de STATE fresco de
+resultado de última orden remota id/seq/hash. ACK tardío no reemplaza estado nuevo;
+modo local/revisión mayor no inventan APPLIED. Preservar pendientes/reservas cuando
+resultado sea desconocido. ControlPoliticas/ParentStore/presentación CP/1 actuales
+no bastan para coexistencia nueva y no fueron modificados. Ningún código maestro,
+salt, verificador o QR reutilizable en padre/relay; ningún recibo exacto de pairing/
+consumo añadido automáticamente.
+
+Elecciones para propietario (con recomendaciones razonadas en revisión): duración
+normal/timers; RAM/ciclo de vida; precedencia/red remota; tipo de credencial/esperas
+y evaluación KDF; rotación/olvido/cambio de adulto; apps aprobadas frente a uso más
+amplio; versión/migración presencial. 30 min, 5 min, 26 caracteres, KDF/coste y
+recuperación dedicada **no aprobados**. Apps aprobadas es recomendación a confirmar,
+no restricción ya aceptada del requisito nuevo. No prometer coste/antirollback físico.
+
+Delta mínimo por rol y mapa pendiente: acuerdo → versión/ADR/puertas → modelos/
+persistencia/migración → ceremonia/identidad → C1 real antes de endurecer → quiosco
+autorizado y regresión → WSS/reconciliación/C2 según dependencias revisadas. No cambia
+planes ni cierra H05/enforcement/H08/H10/H11; H05-L01/PADRE-C02 no acreditan cambio.
+Migración conserva identidad/seq/consumos/esperas/incertidumbre, sin fabricar código
+o permiso ni downgrade CP/1 con semántica nueva. No promoción por STATE/presencia.
+
+Evidencia: lecturas y revisión documental; git diff --check y revisión de preparado,
+sin tests/builds/mediciones físicas nuevas. Rutas propias: revisión nueva, nota en
+diseño de acreditación, INTEGRACION_FUTURA.md, este relevo y ESTADO.md. Commit de
+cierre por mensaje «PADRE-C03: revisar control local y transición de versión»;
+hash entregado al cierre. Sin código/contrato/fixtures/plan/ADR aceptados o repos
+externos modificados; sin dispositivos/ADB/Keystore/LAN/push/despliegue/subagentes.
+PADRE-QR01 a8e4ffc reproducido NO corregido; QR02 pendiente de asignación aparte.
+Esperar decisiones/revisión/asignación; sin prompts de vuelta ni siguiente tarea.
 
 ## Resultado de PADRE-C01 — diseño, no promoción
 

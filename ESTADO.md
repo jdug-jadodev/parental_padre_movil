@@ -1,9 +1,9 @@
 # Estado de implementación
 
-Última actualización: 2026-10-09
+Última actualización: 2026-10-10
 Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. P00: 37c74a3, 943082c. Primer bloque P01: 0f143c4; cierre local en el commit posterior, consultar git log.
-Tarea actual: PADRE-QR01 — diagnóstico acotado QR sintético
-Estado: PADRE_QR01_REPRODUCIDO_NO_CORREGIDO — geometría errónea del detector ZXing confirmada con fixture público; cambios productivos requieren nueva revisión/asignación
+Tarea actual: PADRE-C03 — revisión documental de control local y versión
+Estado: PADRE_C03_REVISION_DOCUMENTAL_COMPLETA — propuesta compatible con precisiones; decisiones/versión/puertas pendientes; CP/1 intacto; QR01 reproducido NO corregido
 
 ## Entorno observado
 
@@ -47,6 +47,8 @@ Node 24.21.0 / npm 11.19.0 / Windows 11 amd64
 SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Terminado y demostrado
+
+- PADRE-C03: revisado HIJO-C03 9ae6c99 y propuesta/relevo centrales solo en lectura. Resultado documental en padre/REVISION_CONTROL_LOCAL_ADULTO.md: administración RAM distinta de permiso normal por boot y recuperación única, última acción fresca serializada propuesta, timers/desafíos viejos invalidados (incluido LOCK_FOR), STATE efectivo/fuente/revisión distinto del resultado remoto id/seq/hash. ACK tardío/modo local no prueban APPLIED actual. Lista de decisiones y mapa mínimo de subunidades/puertas; duraciones/credencial/KDF/precedencia/recuperación/apps/migración pendientes de propietario y versión de tres roles. Apps aprobadas es interpretación recomendada no impuesta; recibos exactos no requeridos automáticamente. Sin código/tests/builds/CP1/fixtures/planes/ADR aceptados/dispositivos/repos externos modificados. H05/enforcement/puertas siguen pendientes; H05-L01/PADRE-C02 no acreditan requisito nuevo.
 
 - PADRE-QR01: muestra única de 64 pares/128 sobres CP/1 efímeros: retos 64 correctos, respuestas 61 correctas y tres NotFoundException (39/56/63). Caso 39 público conservado; versión15/máscara4, original siempre falla, variantes de margen/escala fallan, otras siete máscaras leen bytes/firma exactos. PURE como control aislado recupera contenido válido; detector escoge falsa esquina inferior izquierda, lector QR directo ChecksumException convertido en NotFound observable por QrLocal. Confirmado camino de detección productivo, no error de render test ni orden necesario para caso fijo; sin corrección autorizada de producción/dependencia. Evidencia pruebas/EVIDENCIA_PADRE_QR01.md. No cambiar test P07/C02 o CP/1 ni declarar estabilidad por suite verde.
 
@@ -140,6 +142,11 @@ SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Archivos modificados en la última tarea
 
+PADRE-C03: padre/REVISION_CONTROL_LOCAL_ADULTO.md (nueva revisión);
+padre/DISENO_ACREDITACION_VINCULO.md (nota de alcance, sin reescribir diseño CP/1);
+INTEGRACION_FUTURA.md (propuesta pendiente), COORDINACION_PROYECTOS.md y ESTADO.md.
+Solo documentación; lista siguiente conserva cambios históricos de QR01.
+
 PADRE-QR01: app-parent/build.gradle.kts (diagnóstico JVM opt-in);
 app-parent/src/test/java/dev/controlparental/parent/DiagnosticoQrTest.kt;
 app-parent/src/test/resources/qr01_respuesta_publica.json;
@@ -203,6 +210,8 @@ app-parent/src/androidTest/java/dev/controlparental/parent/AlmacenAndroidTest.kt
 pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P03.md y pruebas/HANDOFF_P03.md.
 
 ## Pruebas ejecutadas y resultado
+
+- PADRE-C03: ninguna prueba/build nuevo ni medición KDF o evidencia física; revisión documental/lectura de fuentes y comprobaciones Git (git diff --check, revisión de preparado y estado). No reejecutar suite QR ni núcleo/interop/relay. Resultado solo de correspondencia propuesta; versión/semántica/compatibilidad/migración pendientes antes de código. Commit de cierre por mensaje «PADRE-C03: revisar control local y transición de versión»; hash devuelto en entrega.
 
 - PADRE-QR01: cuatro ejecuciones Gradle JVM, 25 tareas cada una. Muestreo único FALLÓ (128 lecturas, 3 fallos); 16 variantes de caso39 con 9 NotFound y control PURE correcto. Caracterización fija inicial FALLÓ por expectativa de excepción del lector directo (Checksum real, no NotFound); precisada la aserción diagnóstica, caracterización PASÓ con tres NotFound productivos explícitos, Checksum directo y control bytes/firma válido. Suite pertinente única con -PdiagnosticoQr=fixture/--rerun-tasks PASÓ: 132 app, cero fallos/errores/omisiones; un test caracteriza limitación conocida, no corrección. Todas las lecturas fallidas registradas: 21 NotFound QrLocal y 3 Checksum directos entre los experimentos. No repetir núcleo/interop/Node/relay, ni APK/lint/script completo/instrumentación/ADB. Fallo productivo NO corregido.
 
@@ -284,6 +293,11 @@ pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P03.md y pruebas/HANDOFF_P03.md.
 
 ## Bloqueos y riesgos abiertos
 
+Control normal local offline exige nueva versión acordada (CP/2 provisional), no
+modificar ALLOW CP/1 ni convertir MAINTENANCE. Pendientes elecciones §6 de revisión,
+contrato/firmas/subprotocolo de tres roles, migración presencial y puertas/orden.
+Defecto QR01 a8e4ffc NO corregido; QR02 no asignado ni activado en PADRE-C03.
+
 G0–G4 pendientes. A13 excluido, sin validación física ni permiso para operarlo. El padre A56 tiene validación parcial P00/C02/P01 registrada; no certifica el producto completo ni compatibilidad universal.
 Falta jsonschema para el verificador estructural Python.
 Antes de usar ADB, avisar y esperar habilitación expresa del propietario.
@@ -291,6 +305,12 @@ P01 aceptar con huella y PIN/contraseña pasó físicamente en A56, incluida cad
 La referencia plantillas/HANDOFF.md de padre/AGENTS.md no existe; usar pruebas/HANDOFF_PLANTILLA.md.
 
 ## Próxima tarea y lectura mínima
+
+PADRE-C03 cerrado documentalmente: esperar revisión y decisiones del propietario/
+coordinador sobre padre/REVISION_CONTROL_LOCAL_ADULTO.md §§6–7 antes de versión,
+ADR/planes/puertas o implementación. Sin nueva unidad automática ni prompts de vuelta.
+No adaptar PADRE-C02 ni producción por requisitos nuevos. QR02 requiere asignación
+independiente; A56 disponible no habilita uso, A13 excluido. Texto siguiente es historial.
 
 PADRE-QR01 cerrado como diagnóstico reproducible; detenida vía de corrección
 productiva por límite de asignación. Propuesta PADRE-QR02: revisión técnica del

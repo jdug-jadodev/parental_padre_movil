@@ -8,6 +8,23 @@ congeladas con hashes iguales, sin sincronizar cambios unilateralmente.
 
 **Ahora:** este repo se desarrolla de manera independiente. No importar el proyecto hermano ni forzar sincronización de repositorios.
 
+## Propuesta pendiente PADRE-C03 — control local del adulto (2026-10-10)
+
+Revisión en padre/REVISION_CONTROL_LOCAL_ADULTO.md sobre HIJO-C03 9ae6c99.
+Uso normal local offline con credencial de instalación contradice CP/1 §§2/9:
+proponer nueva versión de tres roles, no excepción privada. CP/2 provisional,
+sin schema/campos/fixtures ni ADR aprobados aquí. Acordar dominios de firma,
+versiones/subprotocolo, contexto revisión/desafío de órdenes y separación de
+STATE efectivo frente a resultado de última orden remota. ACK tardío no prueba
+modo vigente; padre/relay no reciben ni verifican código/salt/verificador/QR reutilizable.
+
+Migración física explícita propuesta: preservar identidad/vínculo/seq/reservas/
+consumos/esperas y resultados inciertos; no fabricar credencial/autorización ni
+downgrade CP/1 con semántica nueva. Decidir duraciones/precedencia/credencial/
+recuperación/alcance de apps y puertas antes de código/versionado sincronizado.
+Recibos exactos de pairing/consumo no exigidos automáticamente. CP/1 congelado,
+comparaciones de hashes anteriores no reejecutadas por esta unidad documental.
+
 ## Identidad del contrato — mismo valor para ambos
 
 - Protocolo: `CP/1` (v1).

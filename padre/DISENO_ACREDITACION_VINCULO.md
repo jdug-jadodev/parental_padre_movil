@@ -6,6 +6,14 @@ Fuentes: CP/1 §5, §6, §7.1 y §9; SPEC-P P3/P4; esquema PairAccept/State/
 OfflineChallenge/OfflineResponse; PairChild, MetadatosPadre y ParentStore actuales.
 No modifica CP/1, no promociona PREPARADO ni habilita órdenes.
 
+Nota de alcance 2026-10-10 (PADRE-C03): este diseño y su laboratorio §8 conservan
+semántica CP/1. El requisito de control normal local offline requiere nueva versión
+acordada; revisión/deltas en REVISION_CONTROL_LOCAL_ADULTO.md. Comparación pública
+y separación de firmas/observaciones se reutilizan, no suponen acreditar credencial,
+uso normal offline o reboot nuevos. CP/2 aquí no aprueba una versión ni exige añadir
+recibos exactos por el nuevo requisito. QR01 a8e4ffc reprodujo el defecto QR pendiente;
+el relato de §8 sobre incidencia no reproducida corresponde al cierre histórico C02.
+
 ## 1. Decisión y límite de prueba
 
 CP/1 §5.6 requiere autenticación con relay, STATE firmado y una recuperación
