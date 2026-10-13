@@ -1,9 +1,63 @@
 # Coordinación Padre / Relay / Hijo
 
-Fecha: 2026-10-10. Handoff del proyecto padre para el coordinador en parental_render.
+Fecha: 2026-10-12. Handoff del proyecto padre para el coordinador en parental_render.
 El propietario ha designado a la IA del servidor para orquestar el trabajo restante.
 Este archivo describe necesidades y evidencias; no autoriza cambios en otros
 repositorios, acceso a dispositivos, aprovisionamiento ni despliegue.
+
+## PADRE-C04 — draft técnico de órdenes/STATE/ACK y tiempo, no versión aprobada
+
+Base984693c. Borrador incremental: padre/BORRADOR_CP2_ORDENES_Y_TIEMPO.md.
+Contexto hijo C04 4636d30/C05 94b1bbe/C06 ae1c7eb/L02 c6e8d5d recibido del
+coordinador, sin lecturas externas ni reejecución. L02 reporta22 nuevos/199 debug
+ejecutados, núcleo169 UP-TO-DATE; no modelo productivo/métrica humana acreditada.
+
+Requisitos nuevos recogidos: código numérico5–10 elegido/ceros iniciales, pregunta
+local offline para código nuevo sin revelar anterior/no código extra obligatorio;
+todas apps normales/HOME propio/instalar-actualizar permitido y protección básica
+Ajustes/admin/desinstalar hijo; LOCAL tiempo elegido sin default30min; ambas
+fuentes conservan permiso offline; última acción confirmada/contexto nuevo tras
+conflicto, boot bloquea. RAM administrativa separada; emergencia/Keyguard intactos.
+Revisión exhaustiva escapes pospuesta, no retirar guardas ni prometer inviolable.
+
+Draft define tabla exacta de perfil/sobre/dominios/bytes/tipos/rangos/causas/rechazos;
+AUTH/SYNC/SET_POLICY con revisión global distinta de seq y desafío ligado operación;
+STATE efectivo/fuente/boot/revisión/vigencia separado de última remota id/seq/hash/
+resultado; ACK solo resultado, no snapshot actual. Duplicado no reaplica ni renueva,
+UNKNOWN_COMMAND no resuelve pendiente. Rango60..604800 y LOCK_FOR con apertura
+finita elegida/contextual propuestos NO acordados; ninguna función/botón eliminado.
+
+Tiempo: snapshot absoluto/subtotal/calidad, no sumas de duration ni deltas/historial,
+ni UsageStats/interacción humana. Recomienda autorización transcurrida incluso
+pantalla apagada/Keyguard, **no aprobado**; deadline no se pausa. Reconstruir mismo
+boot solo con permiso durable y continuidad probada, no política L02 de gap ciego;
+reboot/gap no cuantificable conserva subtotal PARTIAL/null fiable, nunca cero ficticio.
+Día parametrizado/política de zona propuesta, un bucket actual y último agotamiento
+mínimo: sin decisión previa supuesta. Deadline agotado distinto de bloqueo aplicado.
+Aviso anterior y permiso posterior separados; cerrado padre no garantía WSS/push.
+Sin reporte causa desconocida, no deducir internet hijo de timeout/presencia/PONG.
+
+Cuatro elecciones bloqueantes §12: base contador/pantalla; día-zona/retención;
+entrega avisos/último agotamiento; rango/apertura LOCK_FOR. Pregunta/KDF/admin/
+normalización/cupos/reset/olvido doble siguen privadas/técnicas sin aprobación.
+Ningún secreto/pregunta/salt/verificador/catálogo/ubicación en protocolo/relay;
+no nuevas rutas remotas reset/recibos exactos. Identidad/pairId/snapshot compatible,
+migración física preserva seq/reservas/pending v1/consumos/esperas/incertidumbre,
+no autorización/código fabricados, fallback o promoción por STATE/versión/presencia.
+
+Incluye trazas documentales no fixtures, matriz de invariantes/tests futuros por
+rol y mini mapa revisable; no modifica PLAN/ADR aceptados ni aprueba H05/H06/puertas.
+CP/2 y cp.v2 son provisionales; PAIR/OFFLINE/recuperación de transición necesitan
+revisión conjunta antes de migrar. Coordinador revisará ambos clientes/relay para
+acuerdo y sincronización; no implementación/asignación siguiente automática.
+
+Rutas propias: borrador nuevo, nota incremental C03, INTEGRACION_FUTURA.md, este
+relevo y ESTADO.md. Verificación solo lectura/revisión documental y Git(diff --check,
+preparado/estado); cero tests/builds/codec/CP1/schema/fixtures/C02/main/UI/Android/
+notificaciones/dispositivos/ADB/CA/LAN/push/despliegue o repos externos modificados.
+Sin agentes/sesiones/prompts de vuelta. QR a8e4ffc reproducido NO corregido; no QR02.
+Commit cierre «PADRE-C04: proponer contrato de órdenes y tiempo permitido» y hash
+devuelto tras commit; detener y esperar revisión sin ejecutar mini mapa.
 
 ## PADRE-C03 — revisión del control local del adulto, solo documental
 

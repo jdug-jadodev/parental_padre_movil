@@ -4,6 +4,12 @@ Fecha: 2026-10-10. Base padre `a8e4ffc`; propuesta hijo HIJO-C03 `9ae6c99`.
 **Compatible como propuesta con precisiones; no aprobación de opciones, versión,
 puertas o implementación.** CP/2 sigue siendo nombre provisional.
 
+Nota incremental 2026-10-12: PADRE-C04, BORRADOR_CP2_ORDENES_Y_TIEMPO.md,
+recoge decisiones nuevas comunicadas por coordinador: código numérico5–10/pregunta
+local, todas apps normales, permiso LOCAL/REMOTO aun sin internet, última acción
+confirmada y tiempo consumido no humano. Sustituyen alternativas históricas de este
+documento donde corresponde, sin aprobar versión/schema/puertas ni parámetros técnicos.
+
 ## 1. Fuentes y resultado
 
 Consultados en lectura: hijo/DISENO_CONTROL_LOCAL_ADULTO.md y relevo del hijo;

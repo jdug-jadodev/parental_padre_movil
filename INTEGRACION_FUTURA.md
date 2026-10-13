@@ -27,6 +27,16 @@ comparaciones de hashes anteriores no reejecutadas por esta unidad documental.
 
 ## Identidad del contrato — mismo valor para ambos
 
+Actualización documental PADRE-C04 (2026-10-12): borrador exacto separado en
+padre/BORRADOR_CP2_ORDENES_Y_TIEMPO.md, base984693c. Propone CP/2/cp.v2,
+CPv2/AUTH/MESSAGE, revisión global/contexto vivo, STATE de dos planos, ACK solo
+resultado remoto y contador absoluto de autorización consumida con calidad/día
+parametrizado. Nuevos requisitos comunicados reemplazan alternativas C03 de
+credencial/apps/red; contador/pantalla, día/retención/avisos y rango/LOCK_FOR aún
+pendientes. No es nuevo contrato congelado ni cambio codec/fixtures; requiere
+revisión hijo/relay y acuerdo antes de sincronizar. PAIR/OFFLINE/migración deben
+mantener recuperación y procedencia v1 sin reinterpretar firmas/consumos.
+
 - Protocolo: `CP/1` (v1).
 - `compartido/00_CONTRATO_V1.md` SHA-256: `deee863f7587736d3e209f5a11a6e972a93004d0700c47eb3a2d136ad8f16a3c`
 - `compartido/protocolo.schema.json` SHA-256: `eccf964fbb41869c47d86ddb0bfda6585136430bab297568d3c20b56607372bb`
