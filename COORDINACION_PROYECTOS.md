@@ -1,9 +1,70 @@
 # Coordinación Padre / Relay / Hijo
 
-Fecha: 2026-10-12. Handoff del proyecto padre para el coordinador en parental_render.
+Fecha: 2026-10-13. Handoff del proyecto padre para el coordinador en parental_render.
 El propietario ha designado a la IA del servidor para orquestar el trabajo restante.
 Este archivo describe necesidades y evidencias; no autoriza cambios en otros
 repositorios, acceso a dispositivos, aprovisionamiento ni despliegue.
+
+## PADRE-C04-R1 — borrador integrado tras revisión hijo/relay y decisiones13oct
+
+Base1582e66. Se consolida **el mismo documento**
+padre/BORRADOR_CP2_ORDENES_Y_TIEMPO.md, sin contrato/schema/codec nuevos.
+Fuentes hijo HIJO-C07 8b25c24 y revisión relay13oct íntegras suministradas por
+coordinador en conversación (3+1 partes), no lecturas externas de esta sesión.
+Decisiones finales asignación13oct prevalecen; no se verifican archivos ajenos.
+
+Confirmados incorporados, sin reabrir opciones: ALLOW libre LOCAL/REMOTE, LOCK
+inmediato, ALLOW_FOR1min..24h en minutos enteros sin preselección (durationSec60..86400
+múltiplo60); sin bloqueo temporal/apertura/campo/fase correspondiente. Contador de
+autorización transcurrida incluye apagado/Keyguard; ambas fuentes offline/reboot
+bloqueado/última acción/adminRAM/emergencia. Historia agregada varios días, hasta8
+fechas domingo21→domingo21 de zona LOCAL configurada, catch-up y purga conservadora
+aceptados sin cancelar permiso. Guardas básicas/código5–10/pregunta/apps normales
+siguen; escapes exhaustivos pospuestos no inviolabilidad/retiro de barreras.
+
+STATE integra permittedTime.days cerrado, retentionSeq/historyRevision separados
+de controlRevision/seq; total solo ventana retenida, calidad/nulos/cortes/calendario
+cerrados, materialización/readback y overflow sin reset. Purga preserva ledger activo,
+deadline/identidad/seq/pending/consumos/esperas; lastExpiry solo ventana vigente con
+detectedElapsedMs/retentionSeq. Padre tombstone offline sin totales ni generation
+hijo inventada; sync/cutoff/barreras impiden resurrección por STATE/backup/push viejo.
+ACK histórico no reemplaza estado ni historia; firma no frescura/APPLIED físico.
+
+Push SÍ evaluación mínima hint CONSULT_STATE, sin contenido factual/historial/
+órdenes y sin provider/token/endpoints/servicio/permisos implementados. Sin reporte
+causa desconocida, no inferir internet/humano de PONG/presencia. Limpieza previa al
+aviso/sync, sin garantía con app muerta. Historial no servidor/push ni cupo diario.
+
+§10 propone mínimos cerrados de CHILD_OFFER/PAIR_ACCEPT perfilv2 y OFFLINE reto/
+respuesta ligados boot/revisión/acción, mismos propósitos limitados. Alta usa hash
+CPv2/RECOVERY propuesto; legado conserva CPv1/RECOVERY y consumo/esperas identificados
+localmente, nunca MESSAGE/OFFLINEv1 como autoridadv2. Readback/ceremonia/capacidades
+y recuperación segura bloquean corte de versión si faltan. Sin recibos exactos
+adicionales/reset remoto/credencial transmitida/generación libre. Tres roles aún
+deben aprobar formatos/perfil/migración antes de freeze/sync.
+
+§14 registra deltas y candidato matemático derivado de inventario/tipos (STATE91
+miembros/84escalares/15objetos/array8): payload7116/frame9788; límite general8192
+da candidato frame11224. PAIR candidato1355/2108, offer524, OFFLINE731/1276.
+Son **derivaciones manuales condicionales, no cotas probadas de codecs**; revisión
+independiente/fronteras pendientes. Relay2966payload/4122frame/profundidad4 es solo
+ejercicio sintético inválido reportado, no reejecutado aquí/crypto/cota formal.
+No aumentar8192/16384. QR a8e4ffc reproducido NO corregido, ninguna lectura garantizada.
+
+Restantes pocos bloques §12: ratificación técnica DST/ancla/zona; PAIR/OFFLINE/
+recuperación/versionado conjunto; diseño push emisor/proveedor/privacidad/permisos
+posterior. KDF/normalización/admin/cupos/reset/olvido doble siguen privados/técnicos
+sin elección por campos. Mapa laboratorio puro de ledger/retención **distinto L02**
+separado de implementación productiva/migración/evidencia física; H05/H06/puertas
+no activados. CP/1 intacto, CP/2/cp.v2 todavía provisionales.
+
+Rutas propias: borrador consolidado, INTEGRACION_FUTURA.md, este relevo y ESTADO.md.
+Lectura local/revisión documental/Git(diff --check, preparado/estado), sin tests/
+builds/scripts de tamaño/Android/APK/UI/Keystore/notificaciones/KDF/WSS/productivo/
+C02/dispositivos/ADB/CA/LAN/git push/despliegue/repos externos o QR02. Sin sesiones/
+subagentes/prompts de vuelta. Commit «PADRE-C04-R1: consolidar borrador de control y
+retención semanal»; hash devuelto al cierre. Esperar revisión/coordinador antes de
+freeze/sincronización/código; no iniciar otra unidad. Secciones siguientes históricas.
 
 ## PADRE-C04 — draft técnico de órdenes/STATE/ACK y tiempo, no versión aprobada
 

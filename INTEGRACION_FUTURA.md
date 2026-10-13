@@ -27,6 +27,17 @@ comparaciones de hashes anteriores no reejecutadas por esta unidad documental.
 
 ## Identidad del contrato — mismo valor para ambos
 
+PADRE-C04-R1 (2026-10-13), base1582e66: borrador único consolidado en
+padre/BORRADOR_CP2_ORDENES_Y_TIEMPO.md tras textos HIJO-C07 8b25c24/relay13oct
+suministrados por coordinador y decisiones finales. Ahora solo LOCK/ALLOW/ALLOW_FOR
+(1..1440 minutos enteros); incluye apagado/Keyguard y retención domingo21 local,
+array8/tombstones/catch-up/purga conservadora, hint push en evaluación. Propuestas
+mínimas PAIR/OFFLINEv2 y legado de hashes identificados sin fallback/consumos
+restaurados; aprobación y recuperación operativa bloquean migración. Cotas §14
+manuales condicionales, no pruebas de codec; ningún límite compartido aumentado.
+CP/2 aún no aprobado; freeze/schema/vectores/sync/código solo después de acuerdo
+de tres roles. Las opciones del párrafo C04 siguiente son historial supersedido.
+
 Actualización documental PADRE-C04 (2026-10-12): borrador exacto separado en
 padre/BORRADOR_CP2_ORDENES_Y_TIEMPO.md, base984693c. Propone CP/2/cp.v2,
 CPv2/AUTH/MESSAGE, revisión global/contexto vivo, STATE de dos planos, ACK solo

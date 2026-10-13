@@ -1,9 +1,9 @@
 # Estado de implementación
 
-Última actualización: 2026-10-12
+Última actualización: 2026-10-13
 Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. P00: 37c74a3, 943082c. Primer bloque P01: 0f143c4; cierre local en el commit posterior, consultar git log.
-Tarea actual: PADRE-C04 — draft técnico separado de órdenes/STATE/ACK y tiempo permitido
-Estado: PADRE_C04_BORRADOR_DOCUMENTAL_COMPLETO — campos/reglas propuestos para revisión hijo/relay; CP/2 no acordado; decisiones técnicas pendientes; CP/1 intacto; QR NO corregido
+Tarea actual: PADRE-C04-R1 — consolidación documental del borrador tras revisión hijo/relay
+Estado: PADRE_C04_R1_BORRADOR_INTEGRADO — decisiones13oct incorporadas; PAIR/OFFLINE y versión de tres roles pendientes de acuerdo; CP/1 intacto; QR NO corregido
 
 ## Entorno observado
 
@@ -47,6 +47,8 @@ Node 24.21.0 / npm 11.19.0 / Windows 11 amd64
 SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Terminado y demostrado
+
+- PADRE-C04-R1: consolidado mismo padre/BORRADOR_CP2_ORDENES_Y_TIEMPO.md sobre1582e66. Fuentes HIJO-C07 8b25c24 y revisión relay13oct íntegras como textos suministrados, no lecturas externas. Decisiones finales: ALLOW libre ambas fuentes, LOCK inmediato, ALLOW_FOR60..86400 múltiplo60 (minutos enteros sin preselección), sin apertura automática; autorización incluye apagado/Keyguard. Historia varios días domingo21 local/array8 con retentionSeq/historyRevision/época/tombstone/readback/catch-up/purga conservadora y ledger activo separado sin cancelar permiso ni resetear seq/consumos/esperas. LastExpiry limitado ventana/detección; push hint CONSULT_STATE evaluable no servicio activo/estado factual. §10 propone mínimos PAIR/OFFLINE/legado seguro bloqueantes de versión; no nuevas autoridades/reset remoto/recibos exactos o CP1 modificado. §14 candidatos bytes derivados manualmente de tipos, no cotas probadas ni tests; relay ejercicio2966/4122 reportado no reejecutado/crypto/protocolo. Pocos bloques pendientes §12 y mapa lab/productivo separados sin habilitar H05/H06/puertas. QR a8e4ffc NO corregido. Textos de C04 siguientes son históricos donde opciones supersedidas.
 
 - PADRE-C04: borrador separado padre/BORRADOR_CP2_ORDENES_Y_TIEMPO.md sobre 984693c, incorpora contexto/requisitos íntegros enviados por coordinador sin lecturas externas. Tablas exactas de perfil/sobre/firma/canonización/hash/roles/tipos/mensajes AUTH/SYNC/SET_POLICY/STATE/ACK/errores; revisión global distinta de seq, desafío operación/boot/revisión, último remoto distinto de snapshot efectivo, ACK tardío/duplicados/desconocido sin replay. Contador absoluto de autorización CONSUMIDA no humano ni UsageStats; continuidad/calidad/reconstrucción durable mismo boot/gaps/reboot/día parametrizado, sin sumar duration ni deltas/historial. Rango/LOCK_FOR y pantalla-Keyguard/día-retención/avisos propuestos pendientes (cuatro elecciones §12). Nuevos requisitos de código numérico 5–10/pregunta local/apps normales y dos fuentes offline registrados; no secretos en protocolo/relay, ni permiso/código fabricado al migrar. Trazas documentales no fixtures, matriz futura por rol y mapa revisable, sin aprobación versión/puertas/H05/H06. QR a8e4ffc reproducido NO corregido y no reejecutado.
 
@@ -144,6 +146,10 @@ SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Archivos modificados en la última tarea
 
+PADRE-C04-R1: padre/BORRADOR_CP2_ORDENES_Y_TIEMPO.md (consolidado, no segundo draft),
+INTEGRACION_FUTURA.md, COORDINACION_PROYECTOS.md y ESTADO.md. Solo documentos propios;
+fuentes/CP1/codec/schema/fixtures/PLAN/ADR aceptados/C02/main intactos.
+
 PADRE-C04: padre/BORRADOR_CP2_ORDENES_Y_TIEMPO.md (nuevo draft),
 padre/REVISION_CONTROL_LOCAL_ADULTO.md (nota incremental), INTEGRACION_FUTURA.md,
 COORDINACION_PROYECTOS.md y ESTADO.md. Solo documentación; siguientes listas históricas.
@@ -216,6 +222,8 @@ app-parent/src/androidTest/java/dev/controlparental/parent/AlmacenAndroidTest.kt
 pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P03.md y pruebas/HANDOFF_P03.md.
 
 ## Pruebas ejecutadas y resultado
+
+- PADRE-C04-R1: cero tests/builds/scripts de tamaño/crypto/mediciones/dispositivos. Solo lecturas locales/revisión de textos suministrados/documental y Git(diff --check, revisión preparado/estado). Candidato §14 por conteo/álgebra manual sujeto a revisión y futuros tests asignados, no demostración formal/codec; relay2966payload/4122frame caso sintético inválido reportado no reejecutado. L02/PADRE-C02 históricos no acreditan ledger/retención/enforcement productivos. Sin lectura o edición externa/ampliación de permisos, Android/UI/Keystore/notificaciones/WSS/push/despliegue/agentes/sesiones/QR02. Commit «PADRE-C04-R1: consolidar borrador de control y retención semanal», hash entregado al cierre.
 
 - PADRE-C04: ninguna prueba/build/medición humana/Android nueva. Solo lectura/revisión documental, git diff --check y revisión de preparado/estado. L02 hijo22 nuevos/199 debug ejecutados y núcleo169 UP-TO-DATE son reportados por coordinador, no reejecutados ni garantía productiva. No QR rerun. Código/main/C02/CP1/codec/schema/fixtures/PLAN/ADR aceptados intactos; sin dispositivos/repos externos/agentes/sesiones/notificaciones/LAN/push/despliegue. Commit «PADRE-C04: proponer contrato de órdenes y tiempo permitido», hash entregado al cierre.
 
@@ -301,6 +309,15 @@ pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P03.md y pruebas/HANDOFF_P03.md.
 
 ## Bloqueos y riesgos abiertos
 
+PADRE-C04-R1: revisión conjunta de borrador antes freeze/contrato/vectores/sync.
+Pendiente ratificación técnica DST/ancla/zona, formatos/contextos/capacidades de
+PAIR/OFFLINE y continuidad recuperación legada durante migración; sin ruta segura
+no versión activada. Push emisor/proveedor/consentimiento/privacidad/permisos a
+evaluar separado, sin garantía activa. Rango/libre/contador apagado-Keyguard/
+domingo21 local/catch-up/purga conservadora YA confirmados13oct, no preguntas abiertas.
+Reglas/cotas manuales necesitan verificación independiente, no inviolabilidad,
+borrado forense o APPLIED por firmas. Bloqueos posteriores C04 son historial.
+
 PADRE-C04: acuerdo de tres roles/versiones/subprotocolo/recuperación de migración
 pendiente antes de sincronizar schema/vectores. Base contador vs pantalla/Keyguard,
 día/zona/retención, último aviso/entrega padre cerrado y rango/apertura LOCK_FOR
@@ -322,6 +339,12 @@ P01 aceptar con huella y PIN/contraseña pasó físicamente en A56, incluida cad
 La referencia plantillas/HANDOFF.md de padre/AGENTS.md no existe; usar pruebas/HANDOFF_PLANTILLA.md.
 
 ## Próxima tarea y lectura mínima
+
+PADRE-C04-R1 cerrado documentalmente. Esperar revisión/coordinador sobre borrador
+integrado §§10/12/14 antes freeze/sync/código; ningún laboratorio/modelo/protocolo/
+push ni siguiente tarea automática activados. CP/1 congelado, CP/2/cp.v2 provisional.
+QR reproducido NO corregido requiere unidad aparte. A56 no permiso para operar;
+A13 excluido. Texto posterior conserva historial, no autorización actual.
 
 PADRE-C04 documental cerrado; leer padre/BORRADOR_CP2_ORDENES_Y_TIEMPO.md para
 revisión hijo/relay y decisiones §12 antes de acuerdo/sincronización. No activar
