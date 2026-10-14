@@ -67,7 +67,7 @@ class DiagnosticoQrTest {
             comprobar(c, m, "mascara-$mascara")
         }
     }
-    @Test fun casoPublicoFijoCaracterizaFalloNoCorregidoSinFirmarDeNuevo() {
+    @Test fun casoPublicoFijoExigeLecturaCorregidaSinFirmarDeNuevo() {
         val json = javaClass.getResourceAsStream("/qr01_respuesta_publica.json")!!.use {
             Json.parseToJsonElement(it.readBytes().toString(Charsets.UTF_8)).jsonObject
         }
@@ -78,7 +78,7 @@ class DiagnosticoQrTest {
         val qr = Encoder.encode(texto, ErrorCorrectionLevel.L, mapOf(EncodeHintType.CHARACTER_SET to "UTF-8"))
         assertEquals(15, qr.version.versionNumber); assertEquals(4, qr.maskPattern)
         val matriz = QrLocal.generar(texto)
-        repeat(3) { assertFalse("Limitación conocida no corregida", comprobar(c, matriz, "fixture-identico-${it + 1}")) }
+        assertTrue("El lector productivo debe preservar bytes y firma", comprobar(c, matriz, "fixture-corregido"))
         val imagen = BinaryBitmap(HybridBinarizer(RGBLuminanceSource(matriz.width, matriz.height, pixeles(matriz))))
         val puntos = mutableListOf<ResultPoint>()
         assertThrows(ChecksumException::class.java) {
