@@ -1,9 +1,9 @@
 # Estado de implementación
 
-Última actualización: 2026-10-13
+Última actualización: 2026-10-14
 Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. P00: 37c74a3, 943082c. Primer bloque P01: 0f143c4; cierre local en el commit posterior, consultar git log.
-Tarea actual: PADRE-C04-R1 — consolidación documental del borrador tras revisión hijo/relay
-Estado: PADRE_C04_R1_BORRADOR_INTEGRADO — decisiones13oct incorporadas; PAIR/OFFLINE y versión de tres roles pendientes de acuerdo; CP/1 intacto; QR NO corregido
+Tarea actual: PADRE-QR02 — corrección productiva de lector QR con fixture público fijo
+Estado: PADRE_QR02_FIX_VALIDADO_SINTETICO_PREPARADO_FISICO — código ff9aa4c; cámara/A56 sin autorización/prueba nueva; CP1/identidad/vínculo PREPARADO intactos
 
 ## Entorno observado
 
@@ -47,6 +47,8 @@ Node 24.21.0 / npm 11.19.0 / Windows 11 amd64
 SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Terminado y demostrado
+
+- PADRE-QR02: reproducido fixture fijo original antes del fix; corrección productiva ff9aa4c en QrLocal,4 orientaciones geométricas RGB/Y con límite cooperativo400ms, errores checksum/formato explícitos y UTF8 estricto/texto sin normalizar. Sin PURE/máscara fija/nueva firma/deps/codec/CP1/UI cambiados.9 tests nuevos normales+1 estrategia; test fijo diagnóstico exige éxito real, baseline directo conserva fallo conocido.48 variantes=96 lecturas exactas/firma,4 rotaciones,cizalla limitada/negativos/límites. Suite fixture142app+30core+1interop=173 ejecutados distintos; suite normal141app, todas sin fallos/errores/omisiones. Builds debug/testAPK/release unsigned/lint debug-release correctos,23warnings de versiones por variante. Evidencia pruebas/EVIDENCIA_PADRE_QR02.md; hashes finales postcommitff9aa4c y DEX/ZIP inspeccionados sin141 clases JVMtest/C02/diagnóstico/falso o marcadores fixture en dos APK app. FIX_VALIDADO_SINTETICO/PREPARADO_FISICO, no cámara/hijo/enforcement/vínculo/CP2 aprobados. Sin dispositivos/ADB/muestreo diagnóstico nuevo ni pruebas ajenas. Historial siguiente conserva NO corregido en cierres anteriores.
 
 - PADRE-C04-R1: consolidado mismo padre/BORRADOR_CP2_ORDENES_Y_TIEMPO.md sobre1582e66. Fuentes HIJO-C07 8b25c24 y revisión relay13oct íntegras como textos suministrados, no lecturas externas. Decisiones finales: ALLOW libre ambas fuentes, LOCK inmediato, ALLOW_FOR60..86400 múltiplo60 (minutos enteros sin preselección), sin apertura automática; autorización incluye apagado/Keyguard. Historia varios días domingo21 local/array8 con retentionSeq/historyRevision/época/tombstone/readback/catch-up/purga conservadora y ledger activo separado sin cancelar permiso ni resetear seq/consumos/esperas. LastExpiry limitado ventana/detección; push hint CONSULT_STATE evaluable no servicio activo/estado factual. §10 propone mínimos PAIR/OFFLINE/legado seguro bloqueantes de versión; no nuevas autoridades/reset remoto/recibos exactos o CP1 modificado. §14 candidatos bytes derivados manualmente de tipos, no cotas probadas ni tests; relay ejercicio2966/4122 reportado no reejecutado/crypto/protocolo. Pocos bloques pendientes §12 y mapa lab/productivo separados sin habilitar H05/H06/puertas. QR a8e4ffc NO corregido. Textos de C04 siguientes son históricos donde opciones supersedidas.
 
@@ -146,6 +148,11 @@ SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Archivos modificados en la última tarea
 
+PADRE-QR02: app-parent/src/main/java/dev/controlparental/parent/pairing/QrLocal.kt;
+app-parent/src/test/java/dev/controlparental/parent/{DiagnosticoQrTest,EstrategiaQrTest,QrLocalRegresionTest}.kt;
+pruebas/EVIDENCIA_PADRE_QR02.md, COORDINACION_PROYECTOS.md y ESTADO.md.
+Fixture QR01/evidenciaQR01/compartido/codec/C02/main restante intactos; sin config/deps.
+
 PADRE-C04-R1: padre/BORRADOR_CP2_ORDENES_Y_TIEMPO.md (consolidado, no segundo draft),
 INTEGRACION_FUTURA.md, COORDINACION_PROYECTOS.md y ESTADO.md. Solo documentos propios;
 fuentes/CP1/codec/schema/fixtures/PLAN/ADR aceptados/C02/main intactos.
@@ -222,6 +229,8 @@ app-parent/src/androidTest/java/dev/controlparental/parent/AlmacenAndroidTest.kt
 pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P03.md y pruebas/HANDOFF_P03.md.
 
 ## Pruebas ejecutadas y resultado
+
+- PADRE-QR02: seis comandos Gradle BUILD SUCCESSFUL con25/25/25/29/131/113 tareas ejecutadas. Baseline fixture viejo caracterizó3NotFound+Checksum directo; estrategia fija8scans (2Checksum esperados,6éxitos); focal29tests; final fixture142app+30core+1interop; normal141app+build/lint; rebuild APK postcommitff9aa4c. No contar ejecuciones repetidas/UP-TO-DATE como nuevos tests.9regresión+1estrategia nuevos,48variantes/96lecturas sin fallo; negativos explícitos. Lint0errores/23warnings cada variante, .so sin strip advertido. DEX/ZIP de dos APK app contrastado contra141 clases JVMtest:0 coincidencias/fixture; QrLocal sí presente. Hashes/órdenes completos en evidencia. Sin test Android ejecutado/Node/relay/CP2/QR cámara ni validación física. Sin nuevos secretos o repos externos. Cierre códigoff9aa4c y documental por mensaje «PADRE-QR02: registrar regresión y APK preparados para prueba física».
 
 - PADRE-C04-R1: cero tests/builds/scripts de tamaño/crypto/mediciones/dispositivos. Solo lecturas locales/revisión de textos suministrados/documental y Git(diff --check, revisión preparado/estado). Candidato §14 por conteo/álgebra manual sujeto a revisión y futuros tests asignados, no demostración formal/codec; relay2966payload/4122frame caso sintético inválido reportado no reejecutado. L02/PADRE-C02 históricos no acreditan ledger/retención/enforcement productivos. Sin lectura o edición externa/ampliación de permisos, Android/UI/Keystore/notificaciones/WSS/push/despliegue/agentes/sesiones/QR02. Commit «PADRE-C04-R1: consolidar borrador de control y retención semanal», hash entregado al cierre.
 
@@ -309,6 +318,14 @@ pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P03.md y pruebas/HANDOFF_P03.md.
 
 ## Bloqueos y riesgos abiertos
 
+PADRE-QR02 corregido **en sintético**; PREPARADO_FISICO sin autorización A56 nueva.
+No garantía de cualquier QR/cámara/varios candidatos ni deadline duro (presupuesto
+cooperativo ZXing400ms). Leer QR no valida vínculo/identidad/consumo/APPLIED. A56 APK
+previo sigue instalado; hashes nuevos son archivos locales no instalación. CP/2
+sin schema/versión acordados; contexto POSTC08 hijo NORMAL10s/OFFLINE explícito/boot/
+DNSVPN solo reportado, no integración o pruebas nuestras. Riesgos QR NO corregido
+de párrafos históricos siguientes no describen el estado actual sintético.
+
 PADRE-C04-R1: revisión conjunta de borrador antes freeze/contrato/vectores/sync.
 Pendiente ratificación técnica DST/ancla/zona, formatos/contextos/capacidades de
 PAIR/OFFLINE y continuidad recuperación legada durante migración; sin ruta segura
@@ -339,6 +356,13 @@ P01 aceptar con huella y PIN/contraseña pasó físicamente en A56, incluida cad
 La referencia plantillas/HANDOFF.md de padre/AGENTS.md no existe; usar pruebas/HANDOFF_PLANTILLA.md.
 
 ## Próxima tarea y lectura mínima
+
+PADRE-QR02 cerrado localmente: esperar revisión/coordinador o autorización específica
+de instalación/prueba física A56 en esta sesión. Leer pruebas/EVIDENCIA_PADRE_QR02.md;
+primera cámara solo fixture público ficticio en pantalla PC, sin ceremonias reales
+o dispositivo hijo. No operar por «listo/disponible»; A13 excluido. Sin siguiente
+tarea automática ni nuevas rondas CP2/historia/push/remoto por este cierre. Las
+asignaciones/referencias NO corregido posteriores son historial supersedido en sintético.
 
 PADRE-C04-R1 cerrado documentalmente. Esperar revisión/coordinador sobre borrador
 integrado §§10/12/14 antes freeze/sync/código; ningún laboratorio/modelo/protocolo/

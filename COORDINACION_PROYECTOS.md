@@ -1,9 +1,50 @@
 # Coordinación Padre / Relay / Hijo
 
-Fecha: 2026-10-13. Handoff del proyecto padre para el coordinador en parental_render.
+Fecha: 2026-10-14. Handoff del proyecto padre para el coordinador en parental_render.
 El propietario ha designado a la IA del servidor para orquestar el trabajo restante.
 Este archivo describe necesidades y evidencias; no autoriza cambios en otros
 repositorios, acceso a dispositivos, aprovisionamiento ni despliegue.
+
+## PADRE-QR02 — implementación corregida, PREPARADO_FISICO
+
+Base75eb56e, commit código **ff9aa4c**. Evidencia pruebas/EVIDENCIA_PADRE_QR02.md.
+Reproducido primero fixture público original sin nueva firma/muestreo:0° falla,
+90/180/270 pasan. QrLocal productivo ahora QRCodeReader geométrico/UTF8/TRY_HARDER,
+hasta4 orientaciones plano RGB/Y, presupuesto cooperativo400ms antes de otro scan
+(no interrumpir scan síncrono). Sin PURE productivo, máscara/contenido alterados,
+checksum convertido en texto, dependencias/cámara/UI/codec/CP1 nuevos.
+
+9 tests regresión normales+1 estrategia;48 variantes/96 lecturas RGB/Y,4 rotaciones,
+cizalla/traslación acotadas, límites/noQR/dañado/múltiple candidato/texto inválido/
+firma mala, bytes exactos+crypto SPKI real ficticio. Test fijo diagnóstico ahora exige
+éxito productivo, mantiene baseline geométrico; original P07 intacto/incluido.
+Suite fixture142app+30core+1interop=173 ejecutados distintos; normal141app. Cero
+fallos/errores/omitidos. Sin opt-in muestreo aleatorio ni reruns hasta verde. Builds
+debug/testAPK/release unsigned y lint debug/release correctos (23warnings versiones
+cada uno,0errores); sin instrumentación real/Node/relay nuevos. Seis comandos Gradle
+ejecutados documentados, final APK reconstruido tras commit código.
+
+Hashes finales: debug7f3947394c5bb921a11539a66ed7162029818702d0fc1a3181c53a5b55d6f534;
+release unsigned3025fedfea1634c843ce89842e85654ceda9d8955c95e92b4b6274bf78951857;
+testAPK2074540e73558d22ea5241c108ff432ad125d77a0839a16caa29a0f53931be25.
+Rutas/procedencia/hash previo diferentes en evidencia; no APK instalado. DEX/ZIP
+de dos APK app:477 propias/1QrLocal,0 coincidencias con141 clases JVMtest/C02/
+diagnóstico/falso,0 marcadores fixture público. Inspección dirigida, no auditoría
+universal/identidad/Keystore/privadas reales. Fixture y evidenciaQR01 intactos.
+
+Resultado FIX_VALIDADO_SINTETICO/PREPARADO_FISICO: no aprobación cámara/A56/vínculo/
+APPLIED/consumo/CP2. A56 requiere aviso y autorización específicos antes de instalar
+o probar, primera prueba solo fixture público PC y rol/tipo puede ser rechazado por
+UI correctamente. A13/hijo excluidos, sin dispositivos/ADB/CA/LAN/push/despliegue/
+sesiones/subagentes/prompts de vuelta. PREPARADO no promovido. Contexto LOCAL01–08/
+45f7a44 y cambios POSTC08 reportados por Render, no reejecutados ni integrados aquí:
+NORMAL10s/excepción OFFLINE explícita/boot/DNSVPN no cambian CP1 por este fix.
+
+Rutas: QrLocal.kt, DiagnosticoQrTest.kt, EstrategiaQrTest.kt, QrLocalRegresionTest.kt,
+pruebas/EVIDENCIA_PADRE_QR02.md, este relevo y ESTADO.md. Cierre documental por mensaje
+«PADRE-QR02: registrar regresión y APK preparados para prueba física»; hash devuelto.
+Esperar revisión/autorización específica, no otra tarea automática. Secciones
+siguientes históricas: donde QR figura NO corregido corresponde a esos cierres previos.
 
 ## PADRE-C04-R1 — borrador integrado tras revisión hijo/relay y decisiones13oct
 
