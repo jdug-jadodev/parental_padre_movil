@@ -2,8 +2,8 @@
 
 Última actualización: 2026-10-14
 Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. P00: 37c74a3, 943082c. Primer bloque P01: 0f143c4; cierre local en el commit posterior, consultar git log.
-Tarea actual: PADRE-PAIR01 — MAIN lector CP/2 y preparación firmada RAM separada
-Estado: LECTOR_CP2_MAIN_PREPARADO_FISICO_PREPARACION_LOCAL_PROBADA — código82734c7; firma/códigos CP2 MAIN bloqueados sin snapshot autorizado; sin migrar/store/commit/dispositivos; PREPARADO intacto
+Tarea actual: PADRE-AUTH01 — codec y borde cliente AUTH CP/2 aislados sin red
+Estado: AUTH_CP2_LOCAL_PROBADO_BORDE_SIN_SNAPSHOT_NO_DISPONIBLE — código0b010d7; sin activación MAIN/WSS/migración/dispositivos; snapshot PAIR01 pendiente y PREPARADO intacto
 
 ## Entorno observado
 
@@ -47,6 +47,8 @@ Node 24.21.0 / npm 11.19.0 / Windows 11 amd64
 SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Terminado y demostrado
+
+- PADRE-AUTH01: schemaAUTH Renderd99ddac suministrado en conversación copiado separado, codecDTOs/firmasCPv2AUTH LFreal/originalbytes/DERrango/perfil estricto. Borde puro por generación/reto10s/envío confirmado antesAUTH_OK/callbackstale/replay/cierre-fondo/snapshotreloj; sin snapshotcompatibleexterno→NO_DISPONIBLE. Firmante inyectable sobre almacén existente/sesión sin crear/rotar; no conexión MAIN/WSS/ParentStore o migraciónCP1.12tests nuevos, fixture163app+30core+1interop=194distintos y normal162app,0fallos/errores/omisiones. Buildsdebug/test/releaseunsigned/lint0errores/23avisosversión. Código0b010d7; evidencia pruebas/EVIDENCIA_PADRE_AUTH01.md con hashesAPKpostcommit/comandos/inspecciónDEXdirigida sin148clasesJVMtest/diagnóstico/C02/falso/fixture/schemaAUTH en APKapp. Sin red/dispositivos/ADB. AUTH_OK no hijo operativo/APPLIED. PAIR01snapshotMAIN/persistencia pendientes intactos.
 
 - PADRE-PAIR01: codecCP2 separado+schema íntegro recibido de Render4ac4962, sin lectura externa/CP1modificado. MAIN ofrece NUEVO PERFILCP2 para cámara/huellas sin pareja, RAM5min/salida/fondo; todo legado/incierto REQUIERE_MIGRACION y firma/códigos nuevos bloqueados. PrepararPairCp2 puro sin store/commit probado: snapshot autorizado/coherente, ticket/gen/boot/TTL/auth/huellas/origen/códigos,3Base32/hashCPv2RECOVERY y firma bytesoriginales CPv2PAIR; no conexión productiva de firma/alta/migración.9tests nuevos; suitefixture151app+30core+1interop=182distintos, normal150app,0fallos/errores/omitidos. APKdebug/test/releaseunsigned+lint0errores/23avisos versión por variante. Código82734c7; evidencia pruebas/EVIDENCIA_PADRE_PAIR01.md con rutas/comandos/hashes postcommit y empaquetado dirigido sin test/fixture en APKapp. Sin ADB/instalaciones/física; A56 conservaQR02F01. No promoción PREPARADO ni listo hijo/relay acreditados.
 
@@ -152,6 +154,11 @@ SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Archivos modificados en la última tarea
 
+PADRE-AUTH01: contrato-cp2/{autenticacion.schema.json,README.md}; core-protocol/.../cp2/{AutenticacionCp2.kt,VinculacionCp2.kt(3helpersinternal)};
+app-parent/.../{network/AuthClienteCp2.kt,security/FirmanteAuthCp2.kt}; test/.../AuthCp2Test.kt;
+app-parent/build.gradle.kts; pruebas/EVIDENCIA_PADRE_AUTH01.md, ESTADO.md y relevo.
+CP1/compartido/MAIN/UI/RelayConnection/ParentStore intactos.
+
 PADRE-PAIR01: contrato-cp2/{vinculacion.schema.json,README.md}; core-protocol/src/main/kotlin/dev/controlparental/protocol/cp2/VinculacionCp2.kt;
 app-parent/src/main/java/dev/controlparental/parent/{MainActivity.kt,pairing/PrepararPairCp2.kt,ui/OfertaCp2Screen.kt,ui/CamaraOferta.kt};
 app-parent/src/test/java/dev/controlparental/parent/PairCp2Test.kt; app-parent/build.gradle.kts;
@@ -243,6 +250,8 @@ pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P03.md y pruebas/HANDOFF_P03.md.
 
 ## Pruebas ejecutadas y resultado
 
+- AUTH01: focal11tests BUILD SUCCESSFUL(7ejecutadas/18UP-TO-DATE); final12nuevos incluidos en163app+30core+1interop(29tareas ejecutadas); normal162app+APKdebug/test/releaseunsigned/lint(131tareas ejecutadas). Cero fallos/errores/omitidos; sin sumar repeticiones/UP-TO-DATE. Lint0errores/23warnings versión/deps por variante; .so sinstrip advertidas. DEX/ZIP dirigido148clasesJVMtest contraAPKapp:0coincidencias/diagnóstico/C02/falso/marcadoresfixture/schemaAUTH,3clasesAUTH y518propias presentes/APKapp. Comandos/hashes concretos evidenciaAUTH01; no AndroidTest ejecutado/ADB/red/125testsRender reportados.
+
 - PADRE-PAIR01: focal8tests BUILD SUCCESSFUL(8ejecutadas/17UP-TO-DATE); suitefixture final9nuevos incluidos en151app+30core+1interop(29tareas ejecutadas); normal150app+APKdebug/test/releaseunsigned/lint(131tareas ejecutadas). Cero fallos/errores/omitidos, sin contar repeticiones/UP-TO-DATE. Corregido warning nullable de property en test antes del build final; sin errores de pruebas. Lint23warnings versiones/0errores por variante. DEX/ZIP dirigido143clases JVMtest contrastadas,0coincidencias/fixture/schema en APKapp;503clases propias/codec y preparadorCP2 presentes. Comandos/hashes concretos en evidenciaPAIR01; no dispositivos/instrumentación/relay externo ni físicas.
 
 - PADRE-QR02: seis comandos Gradle BUILD SUCCESSFUL con25/25/25/29/131/113 tareas ejecutadas. Baseline fixture viejo caracterizó3NotFound+Checksum directo; estrategia fija8scans (2Checksum esperados,6éxitos); focal29tests; final fixture142app+30core+1interop; normal141app+build/lint; rebuild APK postcommitff9aa4c. No contar ejecuciones repetidas/UP-TO-DATE como nuevos tests.9regresión+1estrategia nuevos,48variantes/96lecturas sin fallo; negativos explícitos. Lint0errores/23warnings cada variante, .so sin strip advertido. DEX/ZIP de dos APK app contrastado contra141 clases JVMtest:0 coincidencias/fixture; QrLocal sí presente. Hashes/órdenes completos en evidencia. Sin test Android ejecutado/Node/relay/CP2/QR cámara ni validación física. Sin nuevos secretos o repos externos. Cierre códigoff9aa4c y documental por mensaje «PADRE-QR02: registrar regresión y APK preparados para prueba física».
@@ -333,6 +342,12 @@ pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P03.md y pruebas/HANDOFF_P03.md.
 
 ## Bloqueos y riesgos abiertos
 
+AUTH01 es borde aislado sin transporte ni activación MAIN; default sin snapshot
+compatible→NO_DISPONIBLE. Proveedor autorizado de identidad/pareja/perfil, ciclo
+de socket real/confirmaciónenvío/callbacksTLS/heartbeat/snapshotPAIR01/persistencia
+e integración aún pendientes. AUTH_OK no STATE/hijo operativo/APPLIED. No inferir
+interop por pruebas locales/125testsRender reportados; sin permisos físicos nuevos.
+
 PAIR01: MAIN lectorCP2 compilado, no instalado/prueba física; sigue autorización
 nueva específica antes de A56. Firma/códigosCP2 MAIN bloqueados: falta snapshot de
 alta/migración compatible autorizado y persistencia/readback/ceremonia posterior.
@@ -384,6 +399,11 @@ P01 aceptar con huella y PIN/contraseña pasó físicamente en A56, incluida cad
 La referencia plantillas/HANDOFF.md de padre/AGENTS.md no existe; usar pruebas/HANDOFF_PLANTILLA.md.
 
 ## Próxima tarea y lectura mínima
+
+Tras AUTH01 detener/esperar revisión y asignación separada; leer evidenciaAUTH01 y
+contrato-cp2/README.md. No activar red ni convertir snapshotCP1 para conectar.
+PAIR01snapshotMAIN/persistencia/ceremonia no se resuelven por AUTH. Sin otra tarea
+automática/operacionesA56/A13/QR/dispositivos o prompts de vuelta.
 
 Tras PADRE-PAIR01, detener y esperar revisión/asignación. Leer evidenciaPAIR01 y
 contrato-cp2/README.md. Siguiente decisión separada: snapshot/persistencia CP2 compatible

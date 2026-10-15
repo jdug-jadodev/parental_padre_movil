@@ -5,6 +5,35 @@ El propietario ha designado a la IA del servidor para orquestar el trabajo resta
 Este archivo describe necesidades y evidencias; no autoriza cambios en otros
 repositorios, acceso a dispositivos, aprovisionamiento ni despliegue.
 
+## PADRE-AUTH01 — codec/firmante/borde puros CP/2, sin red
+
+Base0c66d96, código **0b010d7**. Fuente íntegra schema CP2-A01 Renderd99ddac recibida
+en conversación, copiada contrato-cp2/autenticacion.schema.json sin leer repoexterno.
+DTOs CHALLENGE10/AUTH_PROOF/AUTH_OK/PING/PONG/sobreAUTH cerrados; bytes canónicos
+ASCII/UTF8/duplicados/base64/UUID/nonce32/depth6/límites8192-16384/DERr,s/P256.
+DominioCPv2/AUTH LFreal sobre payloadoriginal, hashSHA256, copias defensivas. CP1intacto.
+
+AuthClienteCp2 puro sin transporte/UI/store: snapshot externo explícito identidad/
+pairId/rolPARENT/perfil/revisión/autorización; defaultausente→NO_DISPONIBLE, no inferir
+desde reto/CP1. Generaciones por apertura/cierre, timeout10s conservador desde abrir,
+sin renovar por reto tardío; nonce/connectionId exactos y payloadfirmado comparado.
+AUTH_OK solo tras ticket confirmado enviado, mismo contexto y plazo. Stale callbacks
+ignorados, replay/cierre/fondo/snapshot/reloj/firmafueraplazo invalidan. Adaptador
+FirmanteAuthCp2 sobre almacén existente exige sesión/públicaesperada, sin crear/rotar.
+No conectado MAIN/Keystore/runtime/WSS; snapshotPAIR01/migración/persistencia pendientes.
+PING/PONG solo codec; AUTH_OK no remoto listo/hijo/STATE/APPLIED ni promociónPREPARADO.
+
+12tests nuevos; fixture163app+30core+1interop=194distintos, normal162app, sin fallos/
+errores/omitidos; buildsdebug/test/releaseunsigned+lint0errores/23warningsversiones.
+APKpostcommit0b010d7: debug33ef534732cf2ce0e3a3e1acc1ca2afc2b9d98ac5266373d9ba11cac54d4dd7a;
+releasee90c0da649277592d1bb0003dfdbcdbe92cce13fb38eef91707dda582b4d00b2.
+DEX/ZIPdirigido148clasesJVMtest contrastadas,0coincidencias/diagnóstico/C02/falso/
+marcadoresfixture/schemaAUTH;3clasesAUTHpresentes,518propias/APKapp. No auditoríauniversal.
+Sin APKinstalado/ADB/dispositivos/red/reposajenos;125testsRenderA01 y avances hijo
+solo reportados, no pruebas nuestras/autorizaciónceremonia. Rutas/comandos/hashes y
+límites en pruebas/EVIDENCIA_PADRE_AUTH01.md. Detener; siguiente integración requiere
+asignación snapshot/transportecp2 compatible, no otra tarea automática/prompts.
+
 ## PADRE-PAIR01 — MAIN lector CP/2 y preparación RAM; PREPARADO_FISICO
 
 Basebeecf75, código **82734c7**. Fuentes CP2-V01Render4ac4962 schema/README recibidos

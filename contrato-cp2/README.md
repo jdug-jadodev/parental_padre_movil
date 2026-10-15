@@ -20,3 +20,13 @@ Solo PAIR local: prefijo `CPv2/PAIR\n` y pública padre esperada externa. No AUT
 OFFLINE, MESSAGE, STATE, WSS, replay durable o commit. La oferta no tiene firma.
 Verificación criptográfica no acredita vigencia, autoridad humana ni vínculo.
 El codec CP/1 y `compartido/` permanecen intactos; sin fallback de perfiles.
+
+## Ampliación PADRE-AUTH01 separada
+
+SchemaAUTH íntegro suministrado en conversación, fuente CP2-A01 Renderd99ddac,
+copiado en autenticacion.schema.json sin acceso externo. AutenticacionCp2 y
+AuthClienteCp2 prueban codec/firmante/handshake puro, sin activar red/MAIN/migración.
+Proveedor de snapshot compatible por defecto ausente→NO_DISPONIBLE; no adaptar CP1.
+PING/PONG solo codec, no nuevo scheduler de latidos. AUTH_OK no demuestra hijo
+operativo. Evidencia: pruebas/EVIDENCIA_PADRE_AUTH01.md; PAIR01 sigue pendiente de
+snapshot/persistencia/ceremonia, no se resuelve por AUTH.
