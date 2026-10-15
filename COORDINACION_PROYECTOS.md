@@ -5,6 +5,37 @@ El propietario ha designado a la IA del servidor para orquestar el trabajo resta
 Este archivo describe necesidades y evidencias; no autoriza cambios en otros
 repositorios, acceso a dispositivos, aprovisionamiento ni despliegue.
 
+## PADRE-INTEROP01 — Node verificado por JVM; vuelta JVM pública publicada
+
+Base35928e5. Resultado PUBLICAR_VECTOR_JVM_Y_VERIFICO_NODE: Node→JVM aprobado con
+codecs propios reales, JVM→Node queda para validación posterior del rol Node.
+FuenteCP2-I01 íntegra recibida, copiada solo core-protocol/src/test/resources/cp2_node_publico.json;
+SHA967ae05aecd28c6b7f90b8ae90e8421b408dd70acbf22fd30911085c69a964ec exactoUTF8+LF.
+Oferta/PAIR/AUTHambosroles originales verificados firma/hash/identidades/enrolcontexto/
+bytes, negativosdominioCPv1/rol/clave/bytes rechazan. Assert10campos y conjuntos
+exactos dePAIR_ACCEPT/schema; corregida mención11 en docs previos, sin cambiar
+schema/codec/comandos/resultados históricos. No desacuerdo técnico de formatos.
+
+Una salida pública JVM nueva, proceso efímero soloRAM sin privada persistida:
+pruebas/interop_cp2_jvm_publica.json SHA256
+fb830c79349479eca0e7ee5392c05d5a32ca62157af7e00fd1d890dcf2c65d4b.
+Exactas8claves como Node, markerSIN_AUTORIDAD, públicas/SPKI/hash32/UUID/origen
+https://relay.example:443, misma oferta/pair/contexto y AUTHporrol. Autoverificada;
+no regenerar. Solo públicas/sobres/hash, sin identidades/códigos de teléfonos.
+
+4tests nuevos, final34core+177app=211distintos,0fallos/errores/omisiones. Generador
+una ejecución(3tareas/3UP-TO-DATE), focal4tests(2/4), suitefinal(28/0). No Node ni
+testInteropCP1 invocados, no atribuir validación Node de vuelta. Sin APKbuild/lint
+por ausencia de cambio productivo. SourceSets/JARmain recompuesto y APKPAIR02existentes
+sin nuevosmarkers/testhelpers/públicas/sobres (dirigido, no auditoría universal).
+Evidencia pruebas/EVIDENCIA_PADRE_INTEROP01.md con rutas/hashes/procedencia/comandos.
+
+Sin ADB/teléfonos/APKinstall/QRreal/guardarvínculo/migración/recibos/otrosrepos/
+subagentes/push/deploy/promptsdevuelta. Interop no cámara/IOAndroid/confirmaciones/
+enrolamiento/frescura/ACKAPPLIED. HijoPAIR03/RenderCP2T01/cifras reportados, no
+ejecutados aquí. F02cerrada y PAIR02sininstalar. Detener tras entregar vector para
+consolidación/verificación Node posterior, sin nueva tarea automática.
+
 ## PADRE-PAIR02 — MAIN firma/persistencia pública CP/2, PREPARADO_FISICO
 
 Base2d1d6e6, códigoscaf4333/371b07d/2511353. MAIN usa identidad/autoridad existentes,
@@ -34,8 +65,8 @@ APKtest reutilizado build371b07d/hashcompletoen evidencia. InspecciónDEX/ZIPdir
 clasesJVM+AndroidTest,0coincidencias/falso/C02/diagnóstico/fixture enAPKapp,568propias.
 
 Rutas/órdenes/límites/transacciones/hashes: pruebas/EVIDENCIA_PADRE_PAIR02.md. Schema
-fuente sigue11aceptación incluyendo v/kind/protocol; reporte10campos no cambia fuente
-ni demuestra interop. HijoPAIR02/Render133tests solo reportados/noejecutados aquí.
+fuente tiene10aceptación incluyendo v/kind/protocol; correcciónINTEROP01:11era error
+documental, no cambio de codec/schema. HijoPAIR02/Render133tests solo reportados/noejecutados aquí.
 Sin ADB/install/A56/A13/ceremonia/otrosrepos/subagentes/push/despliegue/órdenes.
 F02siguecerrada/A56AUTH01, no esta preparaciónMAIN. Siguiente revisiónasignada/permiso
 físiconuevo, sin otra tarea automática/prompts. Falta aceptaciónhijo/reconciliación/
@@ -99,7 +130,7 @@ asignación snapshot/transportecp2 compatible, no otra tarea automática/prompts
 
 Basebeecf75, código **82734c7**. Fuentes CP2-V01Render4ac4962 schema/README recibidos
 íntegros en conversación, sin lectura externa. Schema copiado en contrato-cp2/;
-fuente tiene6/11/5 campos (aceptación11, no10 del resumen), preservados íntegros.
+fuente tiene6/10/5 campos (correcciónINTEROP01:11era error documental, no schema/codec), preservados íntegros.
 Codec Kotlin separado en core-protocol/.../cp2: canonicidad ASCII/UTF8/duplicados/
 campos/UUID/base64/SPKIP256punto/DERrango/origen/depth6/límites8192-16384, dominio
 CPv2/PAIR sobre bytes originales y hashpayload, pública esperada externa. CP1intacto.

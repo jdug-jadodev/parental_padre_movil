@@ -12,9 +12,9 @@ reutilizadas sin modificarlas (parser, UTF8, base64, SPKI, DER, origen).
 Profundidad6 se comprueba antes del parser, canonicidad también oferta/sobre,
 r/s1..n−1 y punto P256 se comprueban adicionalmente en CP/2.
 
-La fuente tiene **6 campos oferta, 11 aceptación y 5 sobre**, contando v/kind/
-protocol. Se preservan los once campos de aceptación del schema íntegro, aunque
-la asignación los resumía como10; no se omite ninguno.
+Corrección PADRE-INTEROP01: la fuente y el codec siempre tuvieron **6 campos oferta,
+10 aceptación y 5 sobre**, contando v/kind/protocol. La referencia previa a once
+era un error documental; no hubo cambio de schema/codec ni desacuerdo de formatos.
 
 Solo PAIR local: prefijo `CPv2/PAIR\n` y pública padre esperada externa. No AUTH,
 OFFLINE, MESSAGE, STATE, WSS, replay durable o commit. La oferta no tiene firma.

@@ -11,8 +11,8 @@ Schema/README CP2-V01 Render4ac4962 recibidos íntegros en conversación. No lec
 externa, ejecución relay o comprobación de aquel commit. Copia local nueva exacta
 del schema: contrato-cp2/vinculacion.schema.json, SHA256
 `7290e6cb419e910756d3848586be24358f063455b1c65c47f24e75b5cef22239`.
-Fuente íntegra tiene6 campos oferta/**11 aceptación**/5 sobre, no10 aceptación;
-se conserva fuente sin reinterpretarla. Schema no se carga en producción; codec
+Corrección documental PADRE-INTEROP01: fuente íntegra tiene6 campos oferta/**10 aceptación**/5 sobre;
+la mención previa a11 era error de conteo, no de schema/codec. Schema no se carga en producción; codec
 valida explícitamente campos/tipos/formatos equivalentes. Test contrasta conjuntos
 required/properties de los tres objetos y ausencia de cada campo.
 

@@ -26,7 +26,7 @@ guardas+consentimiento+auth, pública real/hash legado/marca instanciaRAM (no bo
 
 Fuentes: schema/READMEPAIR01/AUTH01 íntegros recibidos en conversación y draft75eb56e§10.
 No otros repos. Schemas/codecsCP1/CP2 sin cambios. Fuente íntegra mantiene6oferta/
-**11aceptación**/5sobre; referencia reportada a10 no autoriza omitir campos. Reportes
+**10aceptación**/5sobre (corrección documental INTEROP01:11era error de conteo, no de codec/schema). Reportes
 HijoPAIR02/Render133tests no ejecutados aquí ni evidencia de compatibilidad física.
 
 ## Ceremonia local, códigos y cancelación

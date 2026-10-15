@@ -2,8 +2,8 @@
 
 Última actualización: 2026-10-15
 Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. P00: 37c74a3, 943082c. Primer bloque P01: 0f143c4; cierre local en el commit posterior, consultar git log.
-Tarea actual: PADRE-PAIR02 — preparación/firma MAIN y persistencia pública CP/2 separada
-Estado: MAIN_PAIR_CP2_IMPLEMENTADO_PROBADO_LOCAL_PREPARADO_FISICO — códigos/firma reales con guardas identidad/legado/alta/auth; solo PENDIENTE_CONFIRMACION_HIJO, sin ACTIVO/migración/dispositivos; F02cerrada
+Tarea actual: PADRE-INTEROP01 — verificación vector Node y publicación de vuelta JVM pública
+Estado: PUBLICAR_VECTOR_JVM_Y_VERIFICO_NODE — Node→JVM codecs reales aprobado; salida JVM pública autoverificada publicada, pendiente validación Node posterior; sin teléfonos/producción cambiada
 
 ## Entorno observado
 
@@ -47,6 +47,8 @@ Node 24.21.0 / npm 11.19.0 / Windows 11 amd64
 SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Terminado y demostrado
+
+- PADRE-INTEROP01: fuenteNodeCP2-I01 íntegra recibida, SHA967ae05aecd28c6b7f90b8ae90e8421b408dd70acbf22fd30911085c69a964ec copiada solo core-protocol/src/test/resources/cp2_node_publico.json. Oferta/PAIR/AUTHPARENT/CHILD verificados con codecsCP2reales, bytesoriginales/hash/contexto/identidades y negativosdominio/rol/clave/bytes. Assert cantidad10+conjunto exactoPAIR_ACCEPT/schema; referencia11corregida documentalmente sin codec/schema/comandos históricos alterados. Una salida pruebas/interop_cp2_jvm_publica.json SHAfb830c79349479eca0e7ee5392c05d5a32ca62157af7e00fd1d890dcf2c65d4b generada/autoverificada solo públicas, claves efímerasRAM.4tests nuevos; suitefinal34core+177app=211distintos,0fallos/errores/omisiones. Sin Node invocado, comprobación vueltaNode pendiente. No APKrebuild/lint/ADB/física. JARmain/sourceSets y APKexistentes inspeccionados sin marcadoresnuevos; evidencia pruebas/EVIDENCIA_PADRE_INTEROP01.md. Producción/PAIR02sininstalar/F02cerrada intactos.
 
 - PADRE-PAIR02: MAIN conecta VincularCp2 a identidad/autoridad existentes y área públicaCP2 separada noBackup/AtomicFile/readback. Fuente real validada legadoPREPARADO/SIN_VINCULAR coherentes sin evidencia/secuencias/pendientes, consentimiento nuevoenrolamiento+auth; activo/corrupto/ausente/incierto/identidaddistinta bloqueados. ParentStore.inspeccionarSinMigrar no escribe legado.3códigos/hashCPv2RECOVERY soloRAM, confirmacioneshuellas/origen/códigos antesfirma real; TTL5minoriginal/salida/fondo/contexto/prompt/error invalidanQR/códigos. Persistencia firmada íntegra soloPENDIENTE_CONFIRMACION_HIJO; reinicio no reabreQR/códigos ni otra preparación sobrependiente; exportpúblico etiquetado sinAUTH/WSS/ACTIVO.14JVMnuevos, fixture177app+30core+1interop=208distintos; normalfinal176app sinfallos/errores/omisiones. Nuevo testAtomicAndroid solo compilado, APKdebug/test/releaseunsigned/lint0errores/23avisos versión porvariante. Commitscaf4333/371b07d/2511353; evidencia pruebas/EVIDENCIA_PADRE_PAIR02.md con hashes reales finales/órdenes/límites. Sin ADB/física ni garantizar fuenteA56compatible; sigue instaladoAUTH01F02. SchemaCP1/CP2/fixtures intactos, PREPARADOlegado sinpromoción.
 
@@ -158,6 +160,11 @@ SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Archivos modificados en la última tarea
 
+INTEROP01: core-protocol/build.gradle.kts; src/test/resources/cp2_node_publico.json;
+src/test/kotlin/dev/controlparental/protocol/cp2/{InteropCp2Test.kt,GenerarVectorPublicoCp2.kt};
+pruebas/interop_cp2_jvm_publica.json y EVIDENCIA_PADRE_INTEROP01.md; contrato-cp2/README.md,
+evidenciasPAIR01/PAIR02 y relevo (conteo10), ESTADO.md. Sin producción/schema/CP1fixtures.
+
 PAIR02: app-parent/.../data/{ParentStore.kt,PairStoreCp2.kt,AlmacenPairCp2Android.kt};
 pairing/{PrepararPairCp2.kt,VincularCp2.kt}; security/AutoridadPadre.kt;
 ui/OfertaCp2Screen.kt; MainActivity.kt; test/PairIntegradoCp2Test.kt;
@@ -263,6 +270,8 @@ pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P03.md y pruebas/HANDOFF_P03.md.
 
 ## Pruebas ejecutadas y resultado
 
+- INTEROP01: generadorJavaExec una vez BUILD SUCCESSFUL(3ejecutadas/3UP-TO-DATE), focal4tests(2/4), final34core+177app=211distintos(28/0),0fallos/errores/omitidos. No sumar repeticiones/UP-TO-DATE/autoverificación como tests; no Node/testInteropCP1/normal separado/APKbuild/lint/instrumentación nuevos. HashNode exacto/ambosvectores8cadenas+LF comprobados; JARmain y APKPAIR02existentes0marcadoresnuevos/testhelpers/públicas/sobres. JARmain recompuesto en tareasJVM, APKsinrebuild; evidencias/hashes/límites en INTEROP01. JVM→Node aún no comprobado por Node aquí.
+
 - PAIR02:5órdenes Gradle BUILD SUCCESSFUL; focal21JVM(5ejecutadas/20UP-TO-DATE); focal23JVM+APKtest(9/45); fixture177app+30core+1interop(29/0); normal176app+build/lint(131/0); ajusteUIfinal2511353 y normal176app+build/lint(30/101). No sumar repeticiones/UP-TO-DATE; test normal sí ejecutado final, APKtest final reutilizado de buildanterior.0fallos/errores/omisiones; lintAnalyze final ejecutado, reportesidénticosUP-TO-DATE0errores/23warningsversiones porvariante. AtomicFileinstrumentado compilado/noejecutado. DEX/ZIP dirigido235clasesJVM+AndroidTest contrastadas,0coincidencias/falso/C02/diagnósticos/marcadoresfixtures enAPKapp;568propias/4clasescontroller-store-adaptador-autoridad presentes. Hashespostcommit2511353 y límites en evidenciaPAIR02. Sin dispositivos/ADB ni tests de otrosrepos.
 
 - F02física: lectorlisto confirmado por propietario, ofertaCP2yhuella hijo visibles confirmadas por chat; sin verificación de bytes ópticos exactos. HashAPKA56 medido previo7f3947…f534, instalado/final33ef5347…d4dd7a completo en evidencia. Una install-r Success, sin testAPK/Gradle/instrumentación/logcat/capturas/lecturaQRbody. Cierre manual confirmado sin CAMERA nuevo. Pruebas JVM de AUTH01 anteriores no se reejecutaron ni se suman aquí.
@@ -359,6 +368,12 @@ pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P03.md y pruebas/HANDOFF_P03.md.
 
 ## Bloqueos y riesgos abiertos
 
+INTEROP01 verifica Node→JVM y autoverifica salida públicaJVM; falta comprobación de
+esa salida por Node/relay posterior. No demuestra confirmaciónhijo/persistencia
+Android/recuperación/cámara/STATE/APPLIED o autoridad de fixtures. ConteoPAIR10
+corregido, sin desacuerdo real de schema/codec. PAIR02/transporteyfísica pendientes
+no resueltos por criptografía local; no despliegue/permisos heredados.
+
 PAIR02 implementado localmente, no actualizado/probadoA56. Fuente actualA56 no leída;
 si preparación incompleta/legadoactivo/incierto, bloquear sin fabricar snapshot.
 ÁreaCP2persistida solo pública/pendiente, sin recibo/acreditación hijo. Reinicio o
@@ -429,6 +444,10 @@ P01 aceptar con huella y PIN/contraseña pasó físicamente en A56, incluida cad
 La referencia plantillas/HANDOFF.md de padre/AGENTS.md no existe; usar pruebas/HANDOFF_PLANTILLA.md.
 
 ## Próxima tarea y lectura mínima
+
+Tras INTEROP01 detener/esperar revisión. EvidenciaINTEROP01 y salida pública
+pruebas/interop_cp2_jvm_publica.json con hash publicado. Verificación Node posterior
+a cargo del rol correspondiente, no ejecutada aquí ni prompt/tarea automática.
 
 Tras PAIR02 detener/esperar revisión/asignación. Leer pruebas/EVIDENCIA_PADRE_PAIR02.md.
 Nueva física requerirá autorización propia; F02nohereda permiso. No solicitar ni
