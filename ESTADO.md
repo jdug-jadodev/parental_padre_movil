@@ -2,8 +2,8 @@
 
 Última actualización: 2026-10-15
 Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. P00: 37c74a3, 943082c. Primer bloque P01: 0f143c4; cierre local en el commit posterior, consultar git log.
-Tarea actual: PADRE-PAIR01-F02 — lectura física de oferta CP/2, solo lectura
-Estado: LECTURA_CP2_UI_CONFIRMADA_POR_PROPIETARIO_SIN_VINCULAR — APK0b010d7 actualizado/verificado A56, oferta y huella visibles reportadas; sin bytes ópticos exactos/commit/migración/órdenes; PREPARADO intacto
+Tarea actual: PADRE-PAIR02 — preparación/firma MAIN y persistencia pública CP/2 separada
+Estado: MAIN_PAIR_CP2_IMPLEMENTADO_PROBADO_LOCAL_PREPARADO_FISICO — códigos/firma reales con guardas identidad/legado/alta/auth; solo PENDIENTE_CONFIRMACION_HIJO, sin ACTIVO/migración/dispositivos; F02cerrada
 
 ## Entorno observado
 
@@ -47,6 +47,8 @@ Node 24.21.0 / npm 11.19.0 / Windows 11 amd64
 SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Terminado y demostrado
+
+- PADRE-PAIR02: MAIN conecta VincularCp2 a identidad/autoridad existentes y área públicaCP2 separada noBackup/AtomicFile/readback. Fuente real validada legadoPREPARADO/SIN_VINCULAR coherentes sin evidencia/secuencias/pendientes, consentimiento nuevoenrolamiento+auth; activo/corrupto/ausente/incierto/identidaddistinta bloqueados. ParentStore.inspeccionarSinMigrar no escribe legado.3códigos/hashCPv2RECOVERY soloRAM, confirmacioneshuellas/origen/códigos antesfirma real; TTL5minoriginal/salida/fondo/contexto/prompt/error invalidanQR/códigos. Persistencia firmada íntegra soloPENDIENTE_CONFIRMACION_HIJO; reinicio no reabreQR/códigos ni otra preparación sobrependiente; exportpúblico etiquetado sinAUTH/WSS/ACTIVO.14JVMnuevos, fixture177app+30core+1interop=208distintos; normalfinal176app sinfallos/errores/omisiones. Nuevo testAtomicAndroid solo compilado, APKdebug/test/releaseunsigned/lint0errores/23avisos versión porvariante. Commitscaf4333/371b07d/2511353; evidencia pruebas/EVIDENCIA_PADRE_PAIR02.md con hashes reales finales/órdenes/límites. Sin ADB/física ni garantizar fuenteA56compatible; sigue instaladoAUTH01F02. SchemaCP1/CP2/fixtures intactos, PREPARADOlegado sinpromoción.
 
 - PADRE-PAIR01-F02 (15oct): autorización física nueva/aviso previo; artefacto0b010d7/hash33ef534732cf2ce0e3a3e1acc1ca2afc2b9d98ac5266373d9ba11cac54d4dd7a comprobado sin rebuild. Una actualización -r A56 Success desde hashQR02; hash instalado y final idéntico al autorizado. Primer descubrimiento abortó por aviso daemon PowerShell antes de dispositivo/install; luego selección única/modelo explícitos, sin repetir instalación. Propietario confirmó cámara MAIN→Vinculación→NUEVO PERFILCP2 lista antes de generar manualmente oferta nueva A13; después «si aparece» a ofertaCP2leída+huella hijo. Cierre sesión/QR A13 y cámara/perfil A56 confirmado «Cerrado, sin permiso nuevo». Sin ADB A13/bytes exactos ópticos/capturas/payload/store/firmar/commit/migración/órdenes. Evidencia pruebas/EVIDENCIA_PADRE_PAIR01_F02.md; legadoPREPARADO sin promoción. AUTH01/PAIR01 pendientes de integración persistencia/snapshot/ceremonia.
 
@@ -156,6 +158,12 @@ SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Archivos modificados en la última tarea
 
+PAIR02: app-parent/.../data/{ParentStore.kt,PairStoreCp2.kt,AlmacenPairCp2Android.kt};
+pairing/{PrepararPairCp2.kt,VincularCp2.kt}; security/AutoridadPadre.kt;
+ui/OfertaCp2Screen.kt; MainActivity.kt; test/PairIntegradoCp2Test.kt;
+androidTest/PairStoreCp2AndroidTest.kt; pruebas/EVIDENCIA_PADRE_PAIR02.md,
+contrato-cp2/README.md, ESTADO.md y relevo. Sin schema/deps/codecCP1/CP2 cambiados.
+
 PADRE-PAIR01-F02: pruebas/EVIDENCIA_PADRE_PAIR01_F02.md, ESTADO.md y
 COORDINACION_PROYECTOS.md (solo documentación). Sin código/build/tests nuevos.
 
@@ -255,6 +263,8 @@ pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P03.md y pruebas/HANDOFF_P03.md.
 
 ## Pruebas ejecutadas y resultado
 
+- PAIR02:5órdenes Gradle BUILD SUCCESSFUL; focal21JVM(5ejecutadas/20UP-TO-DATE); focal23JVM+APKtest(9/45); fixture177app+30core+1interop(29/0); normal176app+build/lint(131/0); ajusteUIfinal2511353 y normal176app+build/lint(30/101). No sumar repeticiones/UP-TO-DATE; test normal sí ejecutado final, APKtest final reutilizado de buildanterior.0fallos/errores/omisiones; lintAnalyze final ejecutado, reportesidénticosUP-TO-DATE0errores/23warningsversiones porvariante. AtomicFileinstrumentado compilado/noejecutado. DEX/ZIP dirigido235clasesJVM+AndroidTest contrastadas,0coincidencias/falso/C02/diagnósticos/marcadoresfixtures enAPKapp;568propias/4clasescontroller-store-adaptador-autoridad presentes. Hashespostcommit2511353 y límites en evidenciaPAIR02. Sin dispositivos/ADB ni tests de otrosrepos.
+
 - F02física: lectorlisto confirmado por propietario, ofertaCP2yhuella hijo visibles confirmadas por chat; sin verificación de bytes ópticos exactos. HashAPKA56 medido previo7f3947…f534, instalado/final33ef5347…d4dd7a completo en evidencia. Una install-r Success, sin testAPK/Gradle/instrumentación/logcat/capturas/lecturaQRbody. Cierre manual confirmado sin CAMERA nuevo. Pruebas JVM de AUTH01 anteriores no se reejecutaron ni se suman aquí.
 
 - AUTH01: focal11tests BUILD SUCCESSFUL(7ejecutadas/18UP-TO-DATE); final12nuevos incluidos en163app+30core+1interop(29tareas ejecutadas); normal162app+APKdebug/test/releaseunsigned/lint(131tareas ejecutadas). Cero fallos/errores/omitidos; sin sumar repeticiones/UP-TO-DATE. Lint0errores/23warnings versión/deps por variante; .so sinstrip advertidas. DEX/ZIP dirigido148clasesJVMtest contraAPKapp:0coincidencias/diagnóstico/C02/falso/marcadoresfixture/schemaAUTH,3clasesAUTH y518propias presentes/APKapp. Comandos/hashes concretos evidenciaAUTH01; no AndroidTest ejecutado/ADB/red/125testsRender reportados.
@@ -349,6 +359,14 @@ pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P03.md y pruebas/HANDOFF_P03.md.
 
 ## Bloqueos y riesgos abiertos
 
+PAIR02 implementado localmente, no actualizado/probadoA56. Fuente actualA56 no leída;
+si preparación incompleta/legadoactivo/incierto, bloquear sin fabricar snapshot.
+ÁreaCP2persistida solo pública/pendiente, sin recibo/acreditación hijo. Reinicio o
+QRcancelado tras persistir requiere reconciliación separada, no reabrir/reemplazar
+códigos/QRporarchivo. Falta aceptaciónhijo/recuperación/ceremonia y transportecp2.
+AtomicFile/prompt/KeystoreAndroid no probados físicamente. Sin garantía rollback/
+corteenergía/multiproceso ni vínculo operativo por firma/persistencia/AUTH_OK.
+
 F02 acredita UI de lectura física, no bytes exactos/frescura criptográfica/huellas
 comparadas/ceremonia/commit/vínculo operativo/STATE/APPLIED. A56 ahora contiene APK
 AUTH01conlectorPAIR01, hash33ef5347…d4dd7a; referencias siguientes a APKQR02 instalado
@@ -411,6 +429,10 @@ P01 aceptar con huella y PIN/contraseña pasó físicamente en A56, incluida cad
 La referencia plantillas/HANDOFF.md de padre/AGENTS.md no existe; usar pruebas/HANDOFF_PLANTILLA.md.
 
 ## Próxima tarea y lectura mínima
+
+Tras PAIR02 detener/esperar revisión/asignación. Leer pruebas/EVIDENCIA_PADRE_PAIR02.md.
+Nueva física requerirá autorización propia; F02nohereda permiso. No solicitar ni
+ejecutar automáticamente ceremonia, instalación, reconciliaciónpendiente oWSS.
 
 Tras F02 detener/esperar revisión o asignación nueva. Leer evidenciaF02; no repetir
 instalación ni asumir permisos físicos heredados. Snapshot/persistencia/ceremonia

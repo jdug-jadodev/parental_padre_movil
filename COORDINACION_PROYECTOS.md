@@ -5,6 +5,42 @@ El propietario ha designado a la IA del servidor para orquestar el trabajo resta
 Este archivo describe necesidades y evidencias; no autoriza cambios en otros
 repositorios, acceso a dispositivos, aprovisionamiento ni despliegue.
 
+## PADRE-PAIR02 — MAIN firma/persistencia pública CP/2, PREPARADO_FISICO
+
+Base2d1d6e6, códigoscaf4333/371b07d/2511353. MAIN usa identidad/autoridad existentes,
+fuente ParentStorevalidada sin migrar, consentimiento nuevoenrolamiento+auth oficial.
+SoloSIN_VINCULARexistente/PREPARADO íntegro sin secuencias/evidencia/pendientes;
+activo/recuperación/corrupto/ausente/incierto/identidaddistinta bloquean con causa.
+No crea/rota/exportaprivada, no convierte aceptación/hashCP1 ni escribe legado.
+FuenteA56 real no inspeccionada en estaunidad, puede resultar bloqueada legítimamente.
+
+ReutilizaPrepararPairCp2:3Base32hashCPv2RECOVERYsoloRAM, TTL5min desdelecturaoriginal,
+confirmaciones huellas/origen/códigosguardados y firmaKeystore/autoridad. Cambiooferta/
+origen/salida/fondo/cancelación/prompt/error invalida. QR MAIN solo tras verificarfirma/
+capacidad/escritura/readback/revalidarcontexto. Nueva área públicaCP2v1 noBackup con
+AtomicFile/mutex y frameoriginal/hash/anclalegado, únicaetapaPENDIENTE_CONFIRMACION_HIJO.
+NoACTIVO/recibo inventado, snapshot pending no autorizaAUTH/WSS ni hijooperativo.
+Reinicio verificaetapa/noQRni códigosrestaurados; pendiente bloquea reemplazo hasta
+reconciliaciónasignada. Cancelación durantecommit puede dejar pendientepúblico sin
+entregarQR, preservado. Exportpúblicoetiquetado solo desde snapshotvalidado.
+CP1preparación/creación bloqueadas si áreaCP2ocupada/incierta sin borrarlegado.
+
+14JVMnuevos; fixture177app+30core+1interop=208distintos, normalfinal176app,0fallos/
+errores/omitidos. TestAtomicFileAndroid solo compilado. Buildsdebug/test/releaseunsigned/
+lintAnalyze correctos0errores/23avisosversiones; final30tareas ejecutadas/101UP-TO-DATE,
+no sumarlos como tests. AppAPKpost2511353: debug30780c682665832da6337ef62075fc9499b5de4d7c2aceb17a98d2ddc19e8af8;
+released4c19fa055d2cd01db4d449489d8b662e4f00a8196abd64943475773746e0cf3.
+APKtest reutilizado build371b07d/hashcompletoen evidencia. InspecciónDEX/ZIPdirigida235
+clasesJVM+AndroidTest,0coincidencias/falso/C02/diagnóstico/fixture enAPKapp,568propias.
+
+Rutas/órdenes/límites/transacciones/hashes: pruebas/EVIDENCIA_PADRE_PAIR02.md. Schema
+fuente sigue11aceptación incluyendo v/kind/protocol; reporte10campos no cambia fuente
+ni demuestra interop. HijoPAIR02/Render133tests solo reportados/noejecutados aquí.
+Sin ADB/install/A56/A13/ceremonia/otrosrepos/subagentes/push/despliegue/órdenes.
+F02siguecerrada/A56AUTH01, no esta preparaciónMAIN. Siguiente revisiónasignada/permiso
+físiconuevo, sin otra tarea automática/prompts. Falta aceptaciónhijo/reconciliación/
+recuperación y transportecp2; no prometer rollback/corteenergía o hardware ya probados.
+
 ## PADRE-PAIR01-F02 — lectura física UI confirmada, sin vínculo
 
 15oct, based92a349/código0b010d7. Autorización específica «sí» transmitida/aviso antes

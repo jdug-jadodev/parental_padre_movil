@@ -30,3 +30,13 @@ Proveedor de snapshot compatible por defecto ausente→NO_DISPONIBLE; no adaptar
 PING/PONG solo codec, no nuevo scheduler de latidos. AUTH_OK no demuestra hijo
 operativo. Evidencia: pruebas/EVIDENCIA_PADRE_AUTH01.md; PAIR01 sigue pendiente de
 snapshot/persistencia/ceremonia, no se resuelve por AUTH.
+
+## PADRE-PAIR02 — actualización del alcance MAIN
+
+MAIN integra preparación/firma con identidad existente y autorización adulta,
+solo legado SIN_VINCULAR/PREPARADO íntegro no operativo. Área pública CP2v1 separada
+noBackup con AtomicFile/readback: siempre PENDIENTE_CONFIRMACION_HIJO, nunca ACTIVO.
+No convierte ni escribe legado/contrato CP1; firma/hashescp2 nuevos. Reinicio no
+reconstruye códigos/QR; pendiente no se reemplaza sin reconciliar. AUTH/transportecp2
+siguen sin activarse por esto. Fuentes/codecs/schemas intactos. Evidencia ejecutada,
+límites y hashes finales en pruebas/EVIDENCIA_PADRE_PAIR02.md; falta física autorizada.
