@@ -29,8 +29,8 @@ object VinculacionCp2 {
     private val orden = BigInteger("ffffffff00000000ffffffffffffffffbce6faada7179e84f3b9cac2fc632551", 16)
     fun b64(bytes: ByteArray): String = java.util.Base64.getUrlEncoder().withoutPadding().encodeToString(bytes)
     private fun base64(s: String, max: Int, exacto: Int? = null): ByteArray = Formatos.base64(s, max, exacto)
-    private fun campos(o: JsonObject, vararg nombres: String) { require(o.keys == nombres.toSet()) { "Campos CP/2 inesperados" } }
-    private fun texto(o: JsonObject, k: String): String {
+    internal fun campos(o: JsonObject, vararg nombres: String) { require(o.keys == nombres.toSet()) { "Campos CP/2 inesperados" } }
+    internal fun texto(o: JsonObject, k: String): String {
         val p = o.getValue(k) as? JsonPrimitive ?: error("Cadena requerida")
         require(p.isString); return p.content
     }
@@ -39,7 +39,7 @@ object VinculacionCp2 {
         if (kind != "SIGNED") require(texto(o, "protocol") == "cp.v2")
     }
     // Barrera previa al parser compartido (cuyo límite propio es mayor): no modificar CP/1.
-    private fun documento(bytes: ByteArray, max: Int): JsonObject {
+    internal fun documento(bytes: ByteArray, max: Int): JsonObject {
         require(bytes.isNotEmpty() && bytes.size <= max)
         val s = utf8Estricto(bytes)
         var nivel = 0; var cadena = false; var escape = false

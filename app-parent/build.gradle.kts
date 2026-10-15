@@ -28,6 +28,7 @@ android {
     sourceSets.getByName("androidTest").java.srcDir("src/soporteTest/kotlin")
     testOptions.unitTests.all {
         it.systemProperty("schemaCp2", rootProject.file("contrato-cp2/vinculacion.schema.json").absolutePath)
+        it.systemProperty("schemaAuthCp2", rootProject.file("contrato-cp2/autenticacion.schema.json").absolutePath)
         val diagnosticoQr = providers.gradleProperty("diagnosticoQr").orNull
         if (diagnosticoQr !in listOf("true", "fixture")) it.exclude("**/DiagnosticoQrTest*")
         if (diagnosticoQr == "fixture") it.filter.excludeTestsMatching("*.presupuestoSesentaYCuatroParesYDieciseisVariantesMaximas")
