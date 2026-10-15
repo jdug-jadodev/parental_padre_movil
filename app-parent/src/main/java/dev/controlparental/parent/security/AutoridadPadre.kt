@@ -20,6 +20,17 @@ internal class AutoridadPadre(
 
     fun exportarPublica(): String = almacen.publicaSpki()
 
+    fun firmarMessageCp2(payload: ByteArray, publicaEsperada: String): dev.controlparental.protocol.cp2.MessageVerificadoCp2 {
+        try {
+            sesion.exigirVigencia()
+            check(almacen.publicaSpki() == publicaEsperada)
+            return dev.controlparental.protocol.cp2.MensajesPadreCp2.firmar(payload, publicaEsperada) { bytes ->
+                sesion.exigirVigencia(); check(almacen.publicaSpki() == publicaEsperada)
+                almacen.firmar(bytes)
+            }.also { sesion.exigirVigencia(); check(almacen.publicaSpki() == publicaEsperada) }
+        } catch (e: Exception) { sesion.invalidar(); throw e }
+    }
+
     fun firmarPairCp2(bytes: ByteArray, publicaEsperada: String): ByteArray {
         try {
             sesion.exigirVigencia()

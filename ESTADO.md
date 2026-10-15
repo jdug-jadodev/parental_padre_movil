@@ -2,8 +2,8 @@
 
 Última actualización: 2026-10-15
 Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. P00: 37c74a3, 943082c. Primer bloque P01: 0f143c4; cierre local en el commit posterior, consultar git log.
-Tarea actual: PADRE-INTEROP01 — verificación vector Node y publicación de vuelta JVM pública
-Estado: PUBLICAR_VECTOR_JVM_Y_VERIFICO_NODE — Node→JVM codecs reales aprobado; salida JVM pública autoverificada publicada, pendiente validación Node posterior; sin teléfonos/producción cambiada
+Tarea actual: PADRE-ORD01 — codec/firma MESSAGE y preparación segura aislada CP/2
+Estado: CODEC_FIRMANTE_MESSAGE_CP2_PROBADOS_LOCAL_SIN_EMISION — fuenteSTATE externa sin implementación, sin UI/red/reserva/persistencia/secuencia real; detenido al cierre
 
 ## Entorno observado
 
@@ -47,6 +47,8 @@ Node 24.21.0 / npm 11.19.0 / Windows 11 amd64
 SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Terminado y demostrado
+
+- PADRE-ORD01: codec separado MensajesPadreCp2 para SYNC_REQUEST6/SET_POLICY12campos (lista recibida suma12no13; conjuntos exactos con asserts), sobreMESSAGE5 y dominioCPv2/MESSAGE+LFreal. AutoridadPadre.firmarMessageCp2 reutiliza identidad/sesión existentes sin crear claves. PreparaciónRAM con puerto de snapshot confirmado+STATE ya verificado SIN implementación productiva; tickets20s desdeinicioSYNC, contexto/acción/confirmación exactos/relecturas/cancelación al conflicto. No parserSTATE/UI/red/reserva/persistencia/contador nuevo.15tests nuevos: fixture192app+34core=226distintos,0fallos/errores/omisiones; normalfinal191app. Debug/releaseunsigned y lint correctos (23warnings versiones/0errores por variante). InspecciónAPK dirigida contra210clasesJVMtest/markers/fixturesCP2:0coincidencias,3clasesproductivas presentes. Fuente parcial ORD01_FUENTE_PARCIAL.md, evidencia pruebas/EVIDENCIA_PADRE_ORD01.md. Sin física/ADB/órdenes/store/Node/otrosrepos. Interop vueltaJVM verificada por Render según mensaje propietario, no ejecutada aquí; no vínculo real.
 
 - PADRE-INTEROP01: fuenteNodeCP2-I01 íntegra recibida, SHA967ae05aecd28c6b7f90b8ae90e8421b408dd70acbf22fd30911085c69a964ec copiada solo core-protocol/src/test/resources/cp2_node_publico.json. Oferta/PAIR/AUTHPARENT/CHILD verificados con codecsCP2reales, bytesoriginales/hash/contexto/identidades y negativosdominio/rol/clave/bytes. Assert cantidad10+conjunto exactoPAIR_ACCEPT/schema; referencia11corregida documentalmente sin codec/schema/comandos históricos alterados. Una salida pruebas/interop_cp2_jvm_publica.json SHAfb830c79349479eca0e7ee5392c05d5a32ca62157af7e00fd1d890dcf2c65d4b generada/autoverificada solo públicas, claves efímerasRAM.4tests nuevos; suitefinal34core+177app=211distintos,0fallos/errores/omisiones. Sin Node invocado, comprobación vueltaNode pendiente. No APKrebuild/lint/ADB/física. JARmain/sourceSets y APKexistentes inspeccionados sin marcadoresnuevos; evidencia pruebas/EVIDENCIA_PADRE_INTEROP01.md. Producción/PAIR02sininstalar/F02cerrada intactos.
 
@@ -160,6 +162,13 @@ SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Archivos modificados en la última tarea
 
+ORD01: core-protocol/src/main/kotlin/dev/controlparental/protocol/cp2/MensajesPadreCp2.kt;
+app-parent/src/main/java/dev/controlparental/parent/{pairing/PrepararMensajeCp2.kt,
+security/AutoridadPadre.kt}; app-parent/src/test/java/dev/controlparental/parent/OrdenCp2Test.kt;
+pruebas/verificar_aislamiento_ord01.py y EVIDENCIA_PADRE_ORD01.md;
+contrato-cp2/{ORD01_FUENTE_PARCIAL.md,README.md}, ESTADO.md y COORDINACION_PROYECTOS.md.
+Sin cambios CP1/schema/PAIR/AUTH/fixtures/almacenes/MAIN/transporte.
+
 INTEROP01: core-protocol/build.gradle.kts; src/test/resources/cp2_node_publico.json;
 src/test/kotlin/dev/controlparental/protocol/cp2/{InteropCp2Test.kt,GenerarVectorPublicoCp2.kt};
 pruebas/interop_cp2_jvm_publica.json y EVIDENCIA_PADRE_INTEROP01.md; contrato-cp2/README.md,
@@ -270,6 +279,8 @@ pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P03.md y pruebas/HANDOFF_P03.md.
 
 ## Pruebas ejecutadas y resultado
 
+- ORD01: focal inicial falló compilación de test/helper/paréntesis, corregido; segunda focal11tests aprobó antes de ampliar a15. Fullfixture192app+34core=226distintos(31ejecutadas/77UP-TO-DATE),0fallos/errores/omitidos. Repetición final192app ejecutados,34core ya aprobados sin cambios/UP-TO-DATE(28/80); normalfinal191app(1/24). Debug/releaseunsigned compilan; lintAnalyze ejecutado/reportes idénticos reutilizados,23warnings0errores por variante. No sumar repeticiones/UP-TO-DATE como tests nuevos. APK SHAdebug dcb52612188d707c454a6bc8d673f1eb86bafadf2211e5f5639b2263ab119df6; releaseunsigned ba5f075870ea259d6560e3fc2c21613a230c890f55141b34d6f707b7aa693de7. Inspección ZIP/DEX dirigida210clasesJVMtest+markers/fixturesCP2:0coincidencias,3/3clasesproductivas presentes. Sin Node/instrumentación/Keystorehardware/dispositivo; comandos/límites en evidenciaORD01.
+
 - INTEROP01: generadorJavaExec una vez BUILD SUCCESSFUL(3ejecutadas/3UP-TO-DATE), focal4tests(2/4), final34core+177app=211distintos(28/0),0fallos/errores/omitidos. No sumar repeticiones/UP-TO-DATE/autoverificación como tests; no Node/testInteropCP1/normal separado/APKbuild/lint/instrumentación nuevos. HashNode exacto/ambosvectores8cadenas+LF comprobados; JARmain y APKPAIR02existentes0marcadoresnuevos/testhelpers/públicas/sobres. JARmain recompuesto en tareasJVM, APKsinrebuild; evidencias/hashes/límites en INTEROP01. JVM→Node aún no comprobado por Node aquí.
 
 - PAIR02:5órdenes Gradle BUILD SUCCESSFUL; focal21JVM(5ejecutadas/20UP-TO-DATE); focal23JVM+APKtest(9/45); fixture177app+30core+1interop(29/0); normal176app+build/lint(131/0); ajusteUIfinal2511353 y normal176app+build/lint(30/101). No sumar repeticiones/UP-TO-DATE; test normal sí ejecutado final, APKtest final reutilizado de buildanterior.0fallos/errores/omisiones; lintAnalyze final ejecutado, reportesidénticosUP-TO-DATE0errores/23warningsversiones porvariante. AtomicFileinstrumentado compilado/noejecutado. DEX/ZIP dirigido235clasesJVM+AndroidTest contrastadas,0coincidencias/falso/C02/diagnósticos/marcadoresfixtures enAPKapp;568propias/4clasescontroller-store-adaptador-autoridad presentes. Hashespostcommit2511353 y límites en evidenciaPAIR02. Sin dispositivos/ADB ni tests de otrosrepos.
@@ -368,6 +379,16 @@ pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P03.md y pruebas/HANDOFF_P03.md.
 
 ## Bloqueos y riesgos abiertos
 
+ORD01 no tiene fuente real STATEfirmado/reto vivo/snapshot confirmado compatible,
+ni reserva duradera de secuencia/intención/reintento/reconciliación. Preparación
+RAM y firma no autorizan enviar; UI/transporte siguen bloqueados sin adaptación.
+Puerto futuro debe retirar STATE al perder vigencia/conexión; lifecycle futuro
+debe cancelar tickets en fondo. Contador local/seq real y stores no tocados.
+Lista SET_POLICY12 (no13) comunicada; falta contraste con schemaNodeORD cuando
+validado/recibido, sin inventar campos ni freezeCP2completo. VueltaJVM→Node de
+INTEROP01 verificada según propietario (actualiza pendiente histórico de abajo),
+no ejecutada aquí y sin vínculo real. ORD01 no cambia NORMAL10s/OFFLINElocal.
+
 INTEROP01 verifica Node→JVM y autoverifica salida públicaJVM; falta comprobación de
 esa salida por Node/relay posterior. No demuestra confirmaciónhijo/persistencia
 Android/recuperación/cámara/STATE/APPLIED o autoridad de fixtures. ConteoPAIR10
@@ -444,6 +465,12 @@ P01 aceptar con huella y PIN/contraseña pasó físicamente en A56, incluida cad
 La referencia plantillas/HANDOFF.md de padre/AGENTS.md no existe; usar pruebas/HANDOFF_PLANTILLA.md.
 
 ## Próxima tarea y lectura mínima
+
+Tras ORD01 detener/esperar revisión o fuenteNodeORD validada. Ver evidenciaORD01,
+contrato-cp2/ORD01_FUENTE_PARCIAL.md y relevo. No iniciar automáticamente STATE,
+reserva/persistencia/órdenes/red/instalación/física. F02cerrada; autorización
+física nueva necesaria, A13 excluido. Pendientes históricos se mantienen salvo
+interopJVM→Node reportada verificada por propietario en asignaciónORD01.
 
 Tras INTEROP01 detener/esperar revisión. EvidenciaINTEROP01 y salida pública
 pruebas/interop_cp2_jvm_publica.json con hash publicado. Verificación Node posterior

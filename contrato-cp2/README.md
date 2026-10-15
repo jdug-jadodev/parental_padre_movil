@@ -40,3 +40,12 @@ No convierte ni escribe legado/contrato CP1; firma/hashescp2 nuevos. Reinicio no
 reconstruye códigos/QR; pendiente no se reemplaza sin reconciliar. AUTH/transportecp2
 siguen sin activarse por esto. Fuentes/codecs/schemas intactos. Evidencia ejecutada,
 límites y hashes finales en pruebas/EVIDENCIA_PADRE_PAIR02.md; falta física autorizada.
+
+## PADRE-ORD01 — MESSAGE parcial, sin emisión activa
+
+Fuente nueva parcial: [ORD01_FUENTE_PARCIAL.md](ORD01_FUENTE_PARCIAL.md), lista cerrada
+recibida del propietario, no schema Node recibido ni freeze completo. Codec/firma
+de SYNC_REQUEST6campos y SET_POLICY12campos (lista exacta, no13), aislados de PAIR/
+AUTH/CP1. Preparación solo RAM con puerto externo STATE verificado sin implementación
+productiva; MAIN/transporte no conectados. No reserva/persistencia/envío de órdenes.
+Evidencia ejecutada y límites: pruebas/EVIDENCIA_PADRE_ORD01.md.

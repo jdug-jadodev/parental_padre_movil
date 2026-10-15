@@ -5,6 +5,41 @@ El propietario ha designado a la IA del servidor para orquestar el trabajo resta
 Este archivo describe necesidades y evidencias; no autoriza cambios en otros
 repositorios, acceso a dispositivos, aprovisionamiento ni despliegue.
 
+## PADRE-ORD01 — codec/firma MESSAGE y preparación aislada, sin emisión
+
+Base8e13290. Resultado CODEC_FIRMANTE_MESSAGE_CP2_PROBADOS_LOCAL_SIN_EMISION.
+Fuente lista cerrada recibida en conversación, parcial/no freeze; schemaNodeORD
+aún no recibido/contrastado. SYNC_REQUEST6 y SET_POLICY**12**campos exactos con
+asserts (lista suma12no13: v,kind,sender,pairId,bootId,childSessionId,commandId,seq,
+expectedRevision,commandNonce,action,durationSec); lista comunicada sin inventar.
+SobreSIGNED5 purposeMESSAGE dominioCPv2/MESSAGE+LFreal; límites/UTF8/canonicalidad/
+duplicados/UUID/nonce/cadenasC/C+/DER/SPKI/duración cerrados. CP1/PAIR/AUTH intactos.
+
+AutoridadPadre.firmarMessageCp2 usa misma identidad/almacén/sesión, sin crear claves.
+PrepararMensajeCp2 solo RAM con puerto externo snapshot confirmado+STATE verificado
+SIN implementación productiva/parserSTATE. Tickets ligados al sync/instancia20s
+desdeinicio, confirmación/contexto exactos, relecturas/cancelación al conflicto.
+ALLOW_FOR minutos enteros1..1440 explícitos, no preselección; sin LOCK_FOR/alias/
+remoteoffline ni copiar semántica superada draft§5. No conectar a MAIN/transporte.
+No reserva/persistencia/contador nuevo/seqreal/órdenesred; firmaRAM no autoriza envío
+ni exactly-once. Reserva max(local,lastAccepted)+1/intención/reintento irán después.
+
+15tests nuevos, fixture192app+34core=226distintos0fallos/errores/omitidos;
+normalfinal191app. Debug/releaseunsigned y lint correctos23warnings0errores por
+variante; reportes idénticos reutilizados tras análisis ejecutado. Inspección
+dirigida APK contra210descriptoresJVMtest/markers/fixturesCP2:0coincidencias,
+3/3descriptoresproductivos presentes, no auditoría universal. Hashes/comandos/
+fallo inicial de compilación test corregido/rutas en pruebas/EVIDENCIA_PADRE_ORD01.md.
+Fuente parcial: contrato-cp2/ORD01_FUENTE_PARCIAL.md. Sin física/ADB/install/QRreal/
+ceremonia/store/migración/otrosrepos/subagentes/sesiones/push/deploy/promptsdevuelta.
+
+Actualización externa recibida: Render verificó vueltaJVM hashfb830c79…65d4b oferta/
+PAIR/ambosAUTH y muestra hijo hashfa04fc86…b36bf6, interop local correcta/no vínculo
+real; no ejecutado aquí. HIJO-AUTH01/RendercodecORD en curso solo reportados.
+Sigue faltando STATEfirmado/reto/snapshot reales, persistencia/reserva/envío/IOAndroid/
+confirmaciónhijo/frescura/enforcement. AUTH_OK/PONG/QR/PAIRpendiente no habilitan órdenes.
+F02cerrada/PAIR02sininstalar. Detener al cierre; no iniciar siguiente tarea automática.
+
 ## PADRE-INTEROP01 — Node verificado por JVM; vuelta JVM pública publicada
 
 Base35928e5. Resultado PUBLICAR_VECTOR_JVM_Y_VERIFICO_NODE: Node→JVM aprobado con
