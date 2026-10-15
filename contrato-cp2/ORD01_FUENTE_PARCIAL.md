@@ -1,8 +1,20 @@
 # ORD01 — fuente parcial de mensajes del padre
 
-2026-10-15. Fuente: lista cerrada del propietario en asignación PADRE-ORD01,
-recibida en conversación. No se leyó otro repositorio ni se recibió aún schema
-NodeORD validado. Esto no congela CP/2 completo ni altera CP/1, PAIR o AUTH.
+2026-10-15. Fuentes suministradas en conversación: lista cerrada del propietario
+en PADRE-ORD01 y, tras el primer cierre, schema íntegro parcial CP2-O01 Render
+copiado sin cambios en `ordenes.schema.json`. No se leyó otro repositorio ni se
+ejecutó Node. Siete tests focales Render correctos solo reportados por el emisor.
+El propietario confirmó el conteo12/6 y que13 era error de la asignación.
+Esto no congela MESSAGE/STATE ni CP/2 completo, ni altera CP/1, PAIR o AUTH.
+SHA256 local del schema UTF8 con LF final:
+`e5acd941ea0739ad875dcd493ea6685a2a3ec9d07a440f1c89a578fc064e8906`.
+No se recibió hash externo para cotejar; no atribuir este hash a Render.
+
+El test de fuente compara required/properties, cantidades6/12/5, const y enums,
+y límites condicionales de duración con el codec existente. No es un intérprete
+JSON Schema universal. Las reglas normativas adicionales siguen en runtime:
+topeLong.MAX_VALUE (el regex de19dígitos del schema no basta), base64roundtrip,
+DER/SPKI, firmas/canonicalidad/tamaños/profundidad. No se relajan por el schema.
 
 `SYNC_REQUEST`: exactamente **6** campos: `v`, `kind`, `pairId`, `sender`,
 `syncNonce`, `requestedAction`. Valores fijos: 2, SYNC_REQUEST, PARENT;

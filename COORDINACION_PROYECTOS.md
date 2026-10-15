@@ -7,6 +7,20 @@ repositorios, acceso a dispositivos, aprovisionamiento ni despliegue.
 
 ## PADRE-ORD01 — codec/firma MESSAGE y preparación aislada, sin emisión
 
+**Continuación de mismaORD01 tras a7217bd:** fuente íntegra parcialCP2-O01 recibida
+del propietario y copiada en contrato-cp2/ordenes.schema.json, sin acceso externo.
+Confirma12/6;13era error de asignación. SHA256local UTF8+LFfinal
+e5acd941ea0739ad875dcd493ea6685a2a3ec9d07a440f1c89a578fc064e8906, sin hash externo.
+Un test nuevo contrasta required/properties/const/enums/duración y conjuntos6/12/5.
+193appfixture ejecutados0fallos/errores/omisiones,34coreUP-TO-DATE ya aprobados sin
+cambios;227distintos vigentes,16ORD01.28tareas2ejecutadas26UP-TO-DATE. No validador
+JSONSchema universal; runtime conserva Long.MAX_VALUE/roundtrip/cripto adicionales.
+Sin cambios productivos ni rebuild/lint/inspecciónAPK nuevos. No freezeMESSAGE/
+STATE ni semántica offline antigua. Siete focalesRender correctos solo reportados,
+no ejecutados aquí. Resuelta recepción/contraste de schema pendiente en primer
+cierre descrito debajo; pendientes funcionales/límites iguales. EvidenciaORD01
+adenda y fuenteparcial actualizadas, commit de continuación; detener sin otra tarea.
+
 Base8e13290. Resultado CODEC_FIRMANTE_MESSAGE_CP2_PROBADOS_LOCAL_SIN_EMISION.
 Fuente lista cerrada recibida en conversación, parcial/no freeze; schemaNodeORD
 aún no recibido/contrastado. SYNC_REQUEST6 y SET_POLICY**12**campos exactos con

@@ -45,6 +45,30 @@ class OrdenCp2Test {
     private fun canonicoTest(o: JsonObject) = JsonObject(o.toSortedMap()).toString()
     private fun cambiar(b: ByteArray, k: String, v: JsonElement) = canonicoTest(JsonObject(obj(b) + (k to v))).toByteArray()
 
+    @Test fun fuenteO01SuministradaCamposRequiredConstEnumsYDuracion() {
+        val raiz = java.nio.file.Path.of(requireNotNull(System.getProperty("schemaCp2"))).parent
+        val schema = obj(java.nio.file.Files.readAllBytes(raiz.resolve("ordenes.schema.json")))
+        val defs = schema.getValue("\$defs").jsonObject
+        val sobre = MensajesPadreCp2.firmar(MensajesPadreCp2.payload(policy()), publica, ::firma).frame()
+        for ((nombre, bytes) in listOf("sync" to MensajesPadreCp2.payload(sync()),
+            "orden" to MensajesPadreCp2.payload(policy()), "sobreMessage" to sobre)) {
+            val d = defs.getValue(nombre).jsonObject; val propiedades = d.getValue("properties").jsonObject
+            assertEquals(obj(bytes).keys, propiedades.keys)
+            assertEquals(obj(bytes).keys, d.getValue("required").jsonArray.map { it.jsonPrimitive.content }.toSet())
+            assertEquals(when (nombre) { "sync" -> 6; "orden" -> 12; else -> 5 }, propiedades.size)
+            assertEquals(JsonPrimitive(false), d["additionalProperties"])
+            propiedades.forEach { (k, v) -> v.jsonObject["const"]?.let { assertEquals(it, obj(bytes)[k]) } }
+        }
+        val acciones = AccionCp2.entries.map { JsonPrimitive(it.name) }
+        assertEquals(JsonArray(listOf(JsonNull) + acciones), defs.getValue("sync").jsonObject.getValue("properties").jsonObject.getValue("requestedAction").jsonObject["enum"])
+        assertEquals(JsonArray(acciones), defs.getValue("orden").jsonObject.getValue("properties").jsonObject.getValue("action").jsonObject["enum"])
+        val condicion = defs.getValue("orden").jsonObject.getValue("allOf").jsonArray.single().jsonObject
+        val duracion = condicion.getValue("then").jsonObject.getValue("properties").jsonObject.getValue("durationSec").jsonObject
+        assertEquals(JsonPrimitive(60), duracion["minimum"]); assertEquals(JsonPrimitive(86400), duracion["maximum"])
+        assertEquals(JsonPrimitive(60), duracion["multipleOf"])
+        assertEquals(JsonPrimitive("null"), condicion.getValue("else").jsonObject.getValue("properties").jsonObject.getValue("durationSec").jsonObject["type"])
+    }
+
     @Test fun camposExactosDoceSeisYCincoNullObligatorioYCopias() {
         val p = MensajesPadreCp2.payload(policy()); val s = MensajesPadreCp2.payload(sync())
         assertEquals(setOf("v", "kind", "sender", "pairId", "bootId", "childSessionId", "commandId", "seq", "expectedRevision", "commandNonce", "action", "durationSec"), obj(p).keys)

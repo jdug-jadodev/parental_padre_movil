@@ -118,3 +118,35 @@ No APKinstalado ni órdenes reales, sin teléfonos/A56/A13/ceremonia/seqreal/alm
 otrosrepos/subagentes/sesiones/promptsdevuelta/push/deploy. F02cerrada. Detener al
 cierre, sin otra tarea automática. Interop/firmas locales no prueban enrolamiento,
 confirmación hijo, IOAndroid, cámara, ACK/APPLIED, frescura remota ni enforcement.
+
+## Incorporación posterior de fuente CP2-O01 — misma ORD01
+
+Tras cierrea7217bd el propietario suministró el schema íntegro parcial RenderCP2-O01
+y confirmó12camposSET_POLICY/6SYNC,13era error propio. Copiado íntegro como fuente
+en contrato-cp2/ordenes.schema.json, UTF8+LFfinal, SHA256 calculado localmente
+`e5acd941ea0739ad875dcd493ea6685a2a3ec9d07a440f1c89a578fc064e8906`.
+Sin hash externo suministrado, commitRender declarado ni acceso a su repo.
+Siete tests focales Node correctos son información recibida, no ejecución aquí.
+Resuelve el pendiente de recepción/contraste de fuente mencionado arriba,
+sin congelar MESSAGE/STATE completos ni semántica offline antigua.
+
+Un test JVM adicional en OrdenCp2Test contrasta schema suministrado con payloads/
+sobre del codec real: conjuntosrequired/properties y cantidades6/12/5, cierre de
+extras, const, enums de acción/null y duración condicional60..86400múltiplo60/null.
+No parserJSONSchema general ni cambios productivos. TopeLong.MAX_VALUE, roundtrip
+base64 y validación criptográfica/canonicidad siguen exigidos por lista normativa
+y runtime: el schema por sí solo no los demuestra ni reemplaza.
+
+```powershell
+.\gradlew.bat :core-protocol:test :app-parent:testDebugUnitTest -PdiagnosticoQr=fixture --console=plain
+Get-FileHash contrato-cp2/ordenes.schema.json -Algorithm SHA256
+```
+
+Resultado:193app ejecutados,0fallos/errores/omitidos,16testsORD01. Core34UP-TO-DATE,
+ya ejecutados en primer cierre sin cambios; total vigente227tests distintos
+combinando esa evidencia, no227ejecutados de nuevo.28tareas2ejecutadas26UP-TO-DATE.
+No repetir builds/lint/normal/APKinspección por rutina: solo schema test/doc y test
+añadidos, main intacto frentea7217bd. Schema no configurado como recurso main.
+APK/hashes/límites del primer cierre se conservan; no nueva física/red/store/seq.
+ESTADO/relevo/procedencia actualizados y commit de continuación mismaORD01 sin push;
+detener después, sin otra tarea.

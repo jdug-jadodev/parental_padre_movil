@@ -44,7 +44,8 @@ límites y hashes finales en pruebas/EVIDENCIA_PADRE_PAIR02.md; falta física au
 ## PADRE-ORD01 — MESSAGE parcial, sin emisión activa
 
 Fuente nueva parcial: [ORD01_FUENTE_PARCIAL.md](ORD01_FUENTE_PARCIAL.md), lista cerrada
-recibida del propietario, no schema Node recibido ni freeze completo. Codec/firma
+recibida del propietario y schema íntegro parcial CP2-O01 suministrado después,
+copiado en ordenes.schema.json sin leer otros repositorios; no freeze completo. Codec/firma
 de SYNC_REQUEST6campos y SET_POLICY12campos (lista exacta, no13), aislados de PAIR/
 AUTH/CP1. Preparación solo RAM con puerto externo STATE verificado sin implementación
 productiva; MAIN/transporte no conectados. No reserva/persistencia/envío de órdenes.

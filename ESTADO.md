@@ -48,6 +48,8 @@ SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Terminado y demostrado
 
+- Continuación de la misma ORD01: propietario suministra schema íntegro parcialCP2-O01 y confirma12camposSET_POLICY/6SYNC. Copia contrato-cp2/ordenes.schema.json SHA256local e5acd941ea0739ad875dcd493ea6685a2a3ec9d07a440f1c89a578fc064e8906, sin hash externo. Test adicional compara required/properties/conjuntos/cantidades/const/enums/duración;193appfixture ejecutados0fallos/errores/omisiones,34coreUP-TO-DATE ya aprobados sin cambios=227distintos vigentes.16testsORD01. No main/build/lint/física/Node nuevos; siete focalesRender solo reportados. Fuente recibida/contrastada, no freezeMESSAGE/STATE. EvidenciaORD01 sección de incorporación posterior; límites funcionales intactos.
+
 - PADRE-ORD01: codec separado MensajesPadreCp2 para SYNC_REQUEST6/SET_POLICY12campos (lista recibida suma12no13; conjuntos exactos con asserts), sobreMESSAGE5 y dominioCPv2/MESSAGE+LFreal. AutoridadPadre.firmarMessageCp2 reutiliza identidad/sesión existentes sin crear claves. PreparaciónRAM con puerto de snapshot confirmado+STATE ya verificado SIN implementación productiva; tickets20s desdeinicioSYNC, contexto/acción/confirmación exactos/relecturas/cancelación al conflicto. No parserSTATE/UI/red/reserva/persistencia/contador nuevo.15tests nuevos: fixture192app+34core=226distintos,0fallos/errores/omisiones; normalfinal191app. Debug/releaseunsigned y lint correctos (23warnings versiones/0errores por variante). InspecciónAPK dirigida contra210clasesJVMtest/markers/fixturesCP2:0coincidencias,3clasesproductivas presentes. Fuente parcial ORD01_FUENTE_PARCIAL.md, evidencia pruebas/EVIDENCIA_PADRE_ORD01.md. Sin física/ADB/órdenes/store/Node/otrosrepos. Interop vueltaJVM verificada por Render según mensaje propietario, no ejecutada aquí; no vínculo real.
 
 - PADRE-INTEROP01: fuenteNodeCP2-I01 íntegra recibida, SHA967ae05aecd28c6b7f90b8ae90e8421b408dd70acbf22fd30911085c69a964ec copiada solo core-protocol/src/test/resources/cp2_node_publico.json. Oferta/PAIR/AUTHPARENT/CHILD verificados con codecsCP2reales, bytesoriginales/hash/contexto/identidades y negativosdominio/rol/clave/bytes. Assert cantidad10+conjunto exactoPAIR_ACCEPT/schema; referencia11corregida documentalmente sin codec/schema/comandos históricos alterados. Una salida pruebas/interop_cp2_jvm_publica.json SHAfb830c79349479eca0e7ee5392c05d5a32ca62157af7e00fd1d890dcf2c65d4b generada/autoverificada solo públicas, claves efímerasRAM.4tests nuevos; suitefinal34core+177app=211distintos,0fallos/errores/omisiones. Sin Node invocado, comprobación vueltaNode pendiente. No APKrebuild/lint/ADB/física. JARmain/sourceSets y APKexistentes inspeccionados sin marcadoresnuevos; evidencia pruebas/EVIDENCIA_PADRE_INTEROP01.md. Producción/PAIR02sininstalar/F02cerrada intactos.
@@ -161,6 +163,10 @@ SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 - No hay autorización contextual: leerPayloadSinVerificar no acredita firmas; DocumentoVerificado acredita firma/estructura, no pareja autorizada, sesión vigente ni aplicación de una orden.
 
 ## Archivos modificados en la última tarea
+
+Continuación fuenteORD01: contrato-cp2/ordenes.schema.json (copia íntegra suministrada),
+ORD01_FUENTE_PARCIAL.md y README; OrdenCp2Test.kt; evidenciaORD01, ESTADO y relevo.
+Sin cambios main/CP1/PAIR/AUTH/fixtures/almacenes/transporte.
 
 ORD01: core-protocol/src/main/kotlin/dev/controlparental/protocol/cp2/MensajesPadreCp2.kt;
 app-parent/src/main/java/dev/controlparental/parent/{pairing/PrepararMensajeCp2.kt,
@@ -279,6 +285,8 @@ pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P03.md y pruebas/HANDOFF_P03.md.
 
 ## Pruebas ejecutadas y resultado
 
+- IncorporaciónCP2-O01 mismaORD01: comando core:test+app:testDebugUnitTest con -PdiagnosticoQr=fixture;193app ejecutados0fallos/errores/omitidos,34coreUP-TO-DATE ya aprobados sin cambios;227distintos vigentes no todos ejecutados de nuevo.28tareas2ejecutadas26UP-TO-DATE. Test nuevo de contraste estructural de schema, no validadorJSONSchema universal. Sin rebuild/lint/normal/inspecciónAPK nuevos porque main no cambia. SHA/procedencia/límites en evidenciaORD01.
+
 - ORD01: focal inicial falló compilación de test/helper/paréntesis, corregido; segunda focal11tests aprobó antes de ampliar a15. Fullfixture192app+34core=226distintos(31ejecutadas/77UP-TO-DATE),0fallos/errores/omitidos. Repetición final192app ejecutados,34core ya aprobados sin cambios/UP-TO-DATE(28/80); normalfinal191app(1/24). Debug/releaseunsigned compilan; lintAnalyze ejecutado/reportes idénticos reutilizados,23warnings0errores por variante. No sumar repeticiones/UP-TO-DATE como tests nuevos. APK SHAdebug dcb52612188d707c454a6bc8d673f1eb86bafadf2211e5f5639b2263ab119df6; releaseunsigned ba5f075870ea259d6560e3fc2c21613a230c890f55141b34d6f707b7aa693de7. Inspección ZIP/DEX dirigida210clasesJVMtest+markers/fixturesCP2:0coincidencias,3/3clasesproductivas presentes. Sin Node/instrumentación/Keystorehardware/dispositivo; comandos/límites en evidenciaORD01.
 
 - INTEROP01: generadorJavaExec una vez BUILD SUCCESSFUL(3ejecutadas/3UP-TO-DATE), focal4tests(2/4), final34core+177app=211distintos(28/0),0fallos/errores/omitidos. No sumar repeticiones/UP-TO-DATE/autoverificación como tests; no Node/testInteropCP1/normal separado/APKbuild/lint/instrumentación nuevos. HashNode exacto/ambosvectores8cadenas+LF comprobados; JARmain y APKPAIR02existentes0marcadoresnuevos/testhelpers/públicas/sobres. JARmain recompuesto en tareasJVM, APKsinrebuild; evidencias/hashes/límites en INTEROP01. JVM→Node aún no comprobado por Node aquí.
@@ -379,6 +387,11 @@ pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P03.md y pruebas/HANDOFF_P03.md.
 
 ## Bloqueos y riesgos abiertos
 
+Actualización fuenteORD01: recibido y contrastado schema parcialCP2-O01 suministrado
+por propietario; queda resuelta la espera documental de schema mencionada abajo.
+No validación Node ejecutada aquí ni freezeMESSAGE/STATE completo. STATE real,
+snapshot confirmado, reserva/persistencia/reintento/UI/red siguen pendientes.
+
 ORD01 no tiene fuente real STATEfirmado/reto vivo/snapshot confirmado compatible,
 ni reserva duradera de secuencia/intención/reintento/reconciliación. Preparación
 RAM y firma no autorizan enviar; UI/transporte siguen bloqueados sin adaptación.
@@ -465,6 +478,10 @@ P01 aceptar con huella y PIN/contraseña pasó físicamente en A56, incluida cad
 La referencia plantillas/HANDOFF.md de padre/AGENTS.md no existe; usar pruebas/HANDOFF_PLANTILLA.md.
 
 ## Próxima tarea y lectura mínima
+
+FuenteCP2-O01 ya incorporada a la mismaORD01; detener tras entrega/commit y esperar
+asignación explícita. No seguir esperando ese schema como impedimento ni iniciar
+STATE/reserva/envío/instalación automáticamente. EvidenciaORD01 incluye la adenda.
 
 Tras ORD01 detener/esperar revisión o fuenteNodeORD validada. Ver evidenciaORD01,
 contrato-cp2/ORD01_FUENTE_PARCIAL.md y relevo. No iniciar automáticamente STATE,
