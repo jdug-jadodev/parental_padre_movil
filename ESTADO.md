@@ -2,8 +2,8 @@
 
 Última actualización: 2026-10-14
 Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. P00: 37c74a3, 943082c. Primer bloque P01: 0f143c4; cierre local en el commit posterior, consultar git log.
-Tarea actual: PADRE-QR02 — corrección productiva de lector QR con fixture público fijo
-Estado: PADRE_QR02_FIX_VALIDADO_SINTETICO_PREPARADO_FISICO — código ff9aa4c; cámara/A56 sin autorización/prueba nueva; CP1/identidad/vínculo PREPARADO intactos
+Tarea actual: PADRE-QR02-F01 — comprobación física A56, bloqueada antes de abrir cámara
+Estado: APK_DEBUG_INSTALADO_VERIFICADO_CAMARA_NO_EJECUTADA — hash QR02 confirmado tras desconexión/reconexión USB manual; escáner deshabilitado confirmado por propietario; vínculo PREPARADO intacto
 
 ## Entorno observado
 
@@ -47,6 +47,8 @@ Node 24.21.0 / npm 11.19.0 / Windows 11 amd64
 SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Terminado y demostrado
+
+- PADRE-QR02-F01: autorización específica y aviso previos; una actualización app debug -r reportó Success, sin datos borrados deliberadamente. Ante contradicción del propietario se suspendió atribución y se comprobó presencia física actual: retirar cable A56→0 A56, reconectar→1 A56; modelo y SHA256 del APK propio confirmado 7f3947394c5bb921a11539a66ed7162029818702d0fc1a3181c53a5b55d6f534, sin reinstalar. Propietario confirma escáner Recuperación deshabilitado: no preview/lectura física ni CAMERA concedido. No alta ficticia ni guarda retirada; código ff9aa4c intacto, PREPARADO sin promoción. Evidencia pruebas/EVIDENCIA_PADRE_QR02_F01.md. No se acredita retrospectivamente conexión de primera instalación ni lectura de bytes ópticos.
 
 - PADRE-QR02: reproducido fixture fijo original antes del fix; corrección productiva ff9aa4c en QrLocal,4 orientaciones geométricas RGB/Y con límite cooperativo400ms, errores checksum/formato explícitos y UTF8 estricto/texto sin normalizar. Sin PURE/máscara fija/nueva firma/deps/codec/CP1/UI cambiados.9 tests nuevos normales+1 estrategia; test fijo diagnóstico exige éxito real, baseline directo conserva fallo conocido.48 variantes=96 lecturas exactas/firma,4 rotaciones,cizalla limitada/negativos/límites. Suite fixture142app+30core+1interop=173 ejecutados distintos; suite normal141app, todas sin fallos/errores/omisiones. Builds debug/testAPK/release unsigned/lint debug-release correctos,23warnings de versiones por variante. Evidencia pruebas/EVIDENCIA_PADRE_QR02.md; hashes finales postcommitff9aa4c y DEX/ZIP inspeccionados sin141 clases JVMtest/C02/diagnóstico/falso o marcadores fixture en dos APK app. FIX_VALIDADO_SINTETICO/PREPARADO_FISICO, no cámara/hijo/enforcement/vínculo/CP2 aprobados. Sin dispositivos/ADB/muestreo diagnóstico nuevo ni pruebas ajenas. Historial siguiente conserva NO corregido en cierres anteriores.
 
@@ -147,6 +149,10 @@ SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 - No hay autorización contextual: leerPayloadSinVerificar no acredita firmas; DocumentoVerificado acredita firma/estructura, no pareja autorizada, sesión vigente ni aplicación de una orden.
 
 ## Archivos modificados en la última tarea
+
+PADRE-QR02-F01 (solo documentos): pruebas/EVIDENCIA_PADRE_QR02_F01.md,
+COORDINACION_PROYECTOS.md y ESTADO.md. Auxiliar/PNG públicos solo temporal PC,
+no repo/APK. Sin código/build/tests nuevos.
 
 PADRE-QR02: app-parent/src/main/java/dev/controlparental/parent/pairing/QrLocal.kt;
 app-parent/src/test/java/dev/controlparental/parent/{DiagnosticoQrTest,EstrategiaQrTest,QrLocalRegresionTest}.kt;
@@ -318,6 +324,12 @@ pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P03.md y pruebas/HANDOFF_P03.md.
 
 ## Bloqueos y riesgos abiertos
 
+F01: cámara no ejecutada porque propietario confirma escáner deshabilitado.
+RecoveryScreen exige pareja conocida; no leer store ni crear una ficticia para
+sortearlo. APK QR02 actual sí verificado en A56 por USB; observación de preview/
+bytes/firma/semántica no realizada. Datos no inspeccionados, PREPARADO no promovido.
+Referencias posteriores a APK A56 previo son históricas: ya tiene hash QR02.
+
 PADRE-QR02 corregido **en sintético**; PREPARADO_FISICO sin autorización A56 nueva.
 No garantía de cualquier QR/cámara/varios candidatos ni deadline duro (presupuesto
 cooperativo ZXing400ms). Leer QR no valida vínculo/identidad/consumo/APPLIED. A56 APK
@@ -356,6 +368,11 @@ P01 aceptar con huella y PIN/contraseña pasó físicamente en A56, incluida cad
 La referencia plantillas/HANDOFF.md de padre/AGENTS.md no existe; usar pruebas/HANDOFF_PLANTILLA.md.
 
 ## Próxima tarea y lectura mínima
+
+Prioridad tras F01: esperar decisión/asignación separada; leer evidencia F01.
+Posible diagnóstico físico aislado requiere autorización específica APKtest/tests
+propios públicos; no ejecutado/autorizado aquí. No cambiar pareja/guards para abrir
+cámara ni repetir instalaciones. F01 detenido por impedimento, sin otra tarea automática.
 
 PADRE-QR02 cerrado localmente: esperar revisión/coordinador o autorización específica
 de instalación/prueba física A56 en esta sesión. Leer pruebas/EVIDENCIA_PADRE_QR02.md;

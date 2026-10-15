@@ -5,6 +5,30 @@ El propietario ha designado a la IA del servidor para orquestar el trabajo resta
 Este archivo describe necesidades y evidencias; no autoriza cambios en otros
 repositorios, acceso a dispositivos, aprovisionamiento ni despliegue.
 
+## PADRE-QR02-F01 — APK en A56 confirmado; cámara no ejecutada
+
+Base94d1746/códigoff9aa4c, autorización específica recibida y aviso antes de operar.
+Primera instalación única -r reportó Success/hash QR02. Propietario cuestionó conexión:
+se suspendió atribución; tras nuevo «listo», se confirmó físicamente acceso actual
+por cable: desconectar A56→0 A56 disponibles; reconectar→1; modelo y hash APK propio
+7f3947394c5bb921a11539a66ed7162029818702d0fc1a3181c53a5b55d6f534 comprobados.
+No reinstalación adicional; no inferir retrospectivamente conexión inicial.
+
+Fixture público original renderizado QrLocal768×768 en temporal PC y abierto, sin
+firmas nuevas/fixtures cambiados. Propietario confirmó dos veces escáner deshabilitado,
+la última tras verificación USB/hash. No cámara/preview/bytes ópticos/semántica/firma
+física observados. RecoveryScreen habilita solo con pareja conocida; sin leer store
+ni crear pareja ficticia/autoParentConfirm/retirar guarda. Sin permisos concedidos,
+APKtest/instrumentación/compilación/tests nuevos o acceso A13/hijo/otros repos.
+
+Resultado APK_DEBUG_INSTALADO_VERIFICADO / CAMARA_NO_EJECUTADA; corrección sintética
+QR02 vigente, vínculo PREPARADO intacto. Evidencia pruebas/EVIDENCIA_PADRE_QR02_F01.md;
+rutas modificadas: esa evidencia, ESTADO.md y este relevo. Próxima decisión separada:
+diagnóstico aislado con permiso específico APKtest/tests propios públicos o desarrollo
+de ruta productiva de vinculación; ninguna opción ejecutada/autorizada por F01.
+Sin nueva tarea automática/prompts de vuelta. Apartados siguientes son históricos:
+«no instalado» corresponde al cierre QR02 anterior, no al estado actual A56.
+
 ## PADRE-QR02 — implementación corregida, PREPARADO_FISICO
 
 Base75eb56e, commit código **ff9aa4c**. Evidencia pruebas/EVIDENCIA_PADRE_QR02.md.
