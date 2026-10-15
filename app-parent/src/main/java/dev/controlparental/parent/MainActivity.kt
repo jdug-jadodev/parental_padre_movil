@@ -17,6 +17,7 @@ import dev.controlparental.parent.ui.IdentidadPadre
 import dev.controlparental.parent.ui.PairingScreen
 import dev.controlparental.parent.ui.OfertaCp2Screen
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
 import dev.controlparental.parent.pairing.PairChild
 import dev.controlparental.parent.data.AlmacenPadreAndroid
 import dev.controlparental.protocol.Proposito
@@ -94,6 +95,9 @@ class MainActivity : ComponentActivity() {
             }
         }
         val vinculacion = PairChild(store, autoridad::exportarPublica, { autoridad.firmar(it, Proposito.PAIR) })
+        val areaCp2 = dev.controlparental.parent.data.AlmacenPairCp2Android.obtener(applicationContext)
+        val vincularCp2 = dev.controlparental.parent.pairing.VincularCp2(store, areaCp2, autoridad::exportarPublica,
+            sesion::exigirVigencia, autoridad::firmarPairCp2, SystemClock::elapsedRealtime)
         val modelo = ViewModelProvider(this, AppContainer().fabrica)[ParentViewModel::class.java]
         setContent {
             val estado by modelo.estado.collectAsStateWithLifecycle()
@@ -112,15 +116,21 @@ class MainActivity : ComponentActivity() {
                 null -> dev.controlparental.parent.presentation.PresenciaHijo.DESCONOCIDA
             }
             val presentacion = estado.copy(datos = estado.datos.copy(relay = relayUi, presencia = presenciaUi))
+            var cp2 by remember { mutableStateOf(false) }
+            var legadoPermitido by remember { mutableStateOf(false) }
+            LaunchedEffect(cp2) { legadoPermitido = !areaCp2.ocupadaOIncierta() }
             MaterialTheme {
                 AplicacionPadre(presentacion, modelo::navegar, modelo::volver,
-                    identidad = { IdentidadPadre(aviso, publica, ::crearIdentidad, ::autenticar) },
+                    identidad = { if (!cp2 && legadoPermitido) IdentidadPadre(aviso, publica, ::crearIdentidad, ::autenticar) },
                     vinculacion = {
-                        var cp2 by remember { mutableStateOf(false) }
-                        androidx.compose.material3.TextButton(onClick = { cp2 = !cp2 }) {
+                        androidx.compose.material3.TextButton(onClick = {
+                            autenticacion.cancelar(); vincularCp2.descartar(); legadoPermitido = false; cp2 = !cp2
+                        }) {
                             androidx.compose.material3.Text(if (cp2) "Volver al perfil legado CP/1" else "Abrir NUEVO PERFIL CP/2 (sin migrar)")
                         }
-                        if (cp2) OfertaCp2Screen(store) else PairingScreen(vinculacion, store, ::autenticar)
+                        if (cp2) OfertaCp2Screen(vincularCp2, { resultado -> autenticacion.solicitar(resultado) }, SystemClock::elapsedRealtime)
+                        else if (legadoPermitido) PairingScreen(vinculacion, store, ::autenticar)
+                        else androidx.compose.material3.Text("Área CP/2 pendiente o incierta: nueva preparación CP/1 bloqueada; datos legados conservados.")
                     },
                     conexion = { ConexionRelayScreen(conexion, store, redValidada, ::autenticar, politicas) },
                     controles = { ControlScreen(accionesControl, ::autenticar,

@@ -24,9 +24,10 @@ class PairIntegradoCp2Test {
     private var firmadas = 0
     private class Archivo : ArchivoMetadatos {
         var bytes: ByteArray? = null; var escrituras = 0; var fallo = false; var malReadback = false
+        var alEscribir: (() -> Unit)? = null
         override fun existe() = bytes != null
         override fun leer(): ByteArray = if (malReadback) byteArrayOf(0) else bytes!!.copyOf()
-        override fun escribir(bytes: ByteArray) { escrituras++; if (fallo) error("Fallo simulado"); this.bytes = bytes.copyOf() }
+        override fun escribir(bytes: ByteArray) { escrituras++; if (fallo) error("Fallo simulado"); this.bytes = bytes.copyOf(); alEscribir?.invoke() }
     }
     private val archivoLegado = Archivo()
     private val archivoCp2 = Archivo()
@@ -142,5 +143,25 @@ class PairIntegradoCp2Test {
             assertArrayEquals(payload, d.payload()); rechaza { a.firmarPairCp2("CPv2/AUTH\n".toByteArray() + payload, publica) }
         }
         assertEquals(0, creadas)
+    }
+    @Test fun cancelacionDuranteCommitConservaPendientePeroNoDevuelveQr() = conFuente { c, _, _ ->
+        val t = preparar(c); archivoCp2.alEscribir = { c.descartar() }
+        rechaza { c.firmar(t, true, true, true) }
+        archivoCp2.alEscribir = null
+        assertNotNull(c.inspeccionar().pendiente); assertTrue(t.mostrarCodigos().isEmpty())
+        rechaza { preparar(c) }; assertEquals(1, archivoCp2.escrituras)
+    }
+    @Test fun sustitucionDoblePendienteHashFrameYPresenciaSeRechazan() = conFuente { c, _, area ->
+        val t = preparar(c); val d = c.firmar(t, true, true, true); val f = c.inspeccionar()
+        rechaza { area.guardarNuevo(d, publica, f.legadoHash) }
+        val original = archivoCp2.bytes!!.copyOf()
+        val objeto = Json.parseToJsonElement(original.toString(Charsets.UTF_8)).jsonObject
+        for (campo in listOf("payloadSha256B64", "frameB64", "legadoSha256B64")) {
+            archivoCp2.bytes = JsonObject(objeto + (campo to JsonPrimitive("A".repeat(43)))).toString().toByteArray()
+            rechaza { PairStoreCp2(archivoCp2).leer(publica, f.legadoHash) }
+        }
+        archivoCp2.bytes = original; assertNotNull(area.leer(publica, f.legadoHash))
+        archivoCp2.bytes = null; rechaza { area.leer(publica, f.legadoHash) }
+        assertTrue(area.ocupadaOIncierta())
     }
 }

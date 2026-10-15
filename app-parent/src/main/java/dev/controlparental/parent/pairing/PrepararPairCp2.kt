@@ -25,8 +25,8 @@ internal class PrepararPairCp2(private val reloj: () -> Long, private val snapsh
     private val aleatorio: SecureRandom = SecureRandom()) {
     private var turno = 0L
     private var ticket: TicketPairCp2? = null
-    fun descartar() { turno++; ticket?.borrar(); ticket = null }
-    fun preparar(oferta: ByteArray, origen: String, recibidaEn: Long = reloj()): TicketPairCp2 {
+    @Synchronized fun descartar() { turno++; ticket?.borrar(); ticket = null }
+    @Synchronized fun preparar(oferta: ByteArray, origen: String, recibidaEn: Long = reloj()): TicketPairCp2 {
         descartar()
         val alta = snapshot()
         check(alta.ausenciaCoherente && alta.autorizada) { "REQUIERE_MIGRACION o alta no autorizada" }
@@ -59,7 +59,7 @@ internal class PrepararPairCp2(private val reloj: () -> Long, private val snapsh
             hashRecuperacion(t.aceptacion.pairId, it, t.codigos.getValue(it))
         })
     }
-    fun firmar(t: TicketPairCp2, huellas: Boolean, origen: Boolean, guardados: Boolean): PairVerificadoCp2 {
+    @Synchronized fun firmar(t: TicketPairCp2, huellas: Boolean, origen: Boolean, guardados: Boolean): PairVerificadoCp2 {
         try {
             exigir(t); check(huellas && origen && guardados)
             autenticarVigente(); exigir(t)
