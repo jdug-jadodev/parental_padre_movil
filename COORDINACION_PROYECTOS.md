@@ -1,9 +1,34 @@
 # Coordinación Padre / Relay / Hijo
 
-Fecha: 2026-10-14. Handoff del proyecto padre para el coordinador en parental_render.
+Fecha: 2026-10-15. Handoff del proyecto padre para el coordinador en parental_render.
 El propietario ha designado a la IA del servidor para orquestar el trabajo restante.
 Este archivo describe necesidades y evidencias; no autoriza cambios en otros
 repositorios, acceso a dispositivos, aprovisionamiento ni despliegue.
+
+## PADRE-PAIR01-F02 — lectura física UI confirmada, sin vínculo
+
+15oct, based92a349/código0b010d7. Autorización específica «sí» transmitida/aviso antes
+ADB: actualizar debugA56conservandodatos y leer QR nuevo generado por dueño en sesión
+adultaA13, sololectura. Artefacto existente verificado sin rebuild. Primer hostADB
+abortó por aviso inicio daemon/PowerShell antes de dispositivo/install; comprobación
+de descubrimiento posterior y bloque autorizado con únicoA56/modelo explícito.
+Una install-r Success, sin -t/clear-data/uninstall/reintentos: previoQR02hash7f3947…f534;
+instalado y final33ef534732cf2ce0e3a3e1acc1ca2afc2b9d98ac5266373d9ba11cac54d4dd7a.
+
+Propietario abrió MAINVinculación→NUEVOPERFILCP2→cámara, confirmó visor. Se entregó
+LECTOR_LISTO antes de solicitar oferta nueva; aclarado qué era oferta, dueño la
+generó manualmente. Confirmó «si aparece» a OfertaCP2leída+huellahijo. Lectura por
+UI humana, NO bytes ópticos exactos/identidad/frescura/ceremonia/applied. Mensaje
+REQUIERE_MIGRACION explicado como esperado, no confirmado independientemente en UI;
+firmaMAIN bloqueada por código intacto, sin snapshot/alta/commit/migración/códigos.
+
+Cierre por dueño confirmado «Cerrado, sin permiso nuevo»: QR/sesiónA13 retirados y
+cámara/perfilA56 cerrados. Solo paquete/hashA56 comprobados al final; sin operarA13/
+otrosdispositivos/reposajenos/payloads/huellas/códigos/logcat/capturas/store/privadas/
+APKtest/instrumentación/red/órdenes. Evidencia pruebas/EVIDENCIA_PADRE_PAIR01_F02.md,
+rutas modificadas: esa evidencia/ESTADO.md/este relevo. Sin tests/builds nuevos.
+PREPARADO no promovido. Esperar asignación; no otra tarea automática/permisosfísicos
+heredados/reinstalación por reiniciodeservicio. Apartados siguientes históricos.
 
 ## PADRE-AUTH01 — codec/firmante/borde puros CP/2, sin red
 

@@ -1,9 +1,9 @@
 # Estado de implementación
 
-Última actualización: 2026-10-14
+Última actualización: 2026-10-15
 Commits C00: 4cc7a39, e25bff5, 00329bd. C01: f7e2044, dc50004, 6725515. C02: f120557, 68348c2. P00: 37c74a3, 943082c. Primer bloque P01: 0f143c4; cierre local en el commit posterior, consultar git log.
-Tarea actual: PADRE-AUTH01 — codec y borde cliente AUTH CP/2 aislados sin red
-Estado: AUTH_CP2_LOCAL_PROBADO_BORDE_SIN_SNAPSHOT_NO_DISPONIBLE — código0b010d7; sin activación MAIN/WSS/migración/dispositivos; snapshot PAIR01 pendiente y PREPARADO intacto
+Tarea actual: PADRE-PAIR01-F02 — lectura física de oferta CP/2, solo lectura
+Estado: LECTURA_CP2_UI_CONFIRMADA_POR_PROPIETARIO_SIN_VINCULAR — APK0b010d7 actualizado/verificado A56, oferta y huella visibles reportadas; sin bytes ópticos exactos/commit/migración/órdenes; PREPARADO intacto
 
 ## Entorno observado
 
@@ -47,6 +47,8 @@ Node 24.21.0 / npm 11.19.0 / Windows 11 amd64
 SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Terminado y demostrado
+
+- PADRE-PAIR01-F02 (15oct): autorización física nueva/aviso previo; artefacto0b010d7/hash33ef534732cf2ce0e3a3e1acc1ca2afc2b9d98ac5266373d9ba11cac54d4dd7a comprobado sin rebuild. Una actualización -r A56 Success desde hashQR02; hash instalado y final idéntico al autorizado. Primer descubrimiento abortó por aviso daemon PowerShell antes de dispositivo/install; luego selección única/modelo explícitos, sin repetir instalación. Propietario confirmó cámara MAIN→Vinculación→NUEVO PERFILCP2 lista antes de generar manualmente oferta nueva A13; después «si aparece» a ofertaCP2leída+huella hijo. Cierre sesión/QR A13 y cámara/perfil A56 confirmado «Cerrado, sin permiso nuevo». Sin ADB A13/bytes exactos ópticos/capturas/payload/store/firmar/commit/migración/órdenes. Evidencia pruebas/EVIDENCIA_PADRE_PAIR01_F02.md; legadoPREPARADO sin promoción. AUTH01/PAIR01 pendientes de integración persistencia/snapshot/ceremonia.
 
 - PADRE-AUTH01: schemaAUTH Renderd99ddac suministrado en conversación copiado separado, codecDTOs/firmasCPv2AUTH LFreal/originalbytes/DERrango/perfil estricto. Borde puro por generación/reto10s/envío confirmado antesAUTH_OK/callbackstale/replay/cierre-fondo/snapshotreloj; sin snapshotcompatibleexterno→NO_DISPONIBLE. Firmante inyectable sobre almacén existente/sesión sin crear/rotar; no conexión MAIN/WSS/ParentStore o migraciónCP1.12tests nuevos, fixture163app+30core+1interop=194distintos y normal162app,0fallos/errores/omisiones. Buildsdebug/test/releaseunsigned/lint0errores/23avisosversión. Código0b010d7; evidencia pruebas/EVIDENCIA_PADRE_AUTH01.md con hashesAPKpostcommit/comandos/inspecciónDEXdirigida sin148clasesJVMtest/diagnóstico/C02/falso/fixture/schemaAUTH en APKapp. Sin red/dispositivos/ADB. AUTH_OK no hijo operativo/APPLIED. PAIR01snapshotMAIN/persistencia pendientes intactos.
 
@@ -154,6 +156,9 @@ SM / Android / One UI / parche del hijo: PENDIENTE DE INTEGRACION
 
 ## Archivos modificados en la última tarea
 
+PADRE-PAIR01-F02: pruebas/EVIDENCIA_PADRE_PAIR01_F02.md, ESTADO.md y
+COORDINACION_PROYECTOS.md (solo documentación). Sin código/build/tests nuevos.
+
 PADRE-AUTH01: contrato-cp2/{autenticacion.schema.json,README.md}; core-protocol/.../cp2/{AutenticacionCp2.kt,VinculacionCp2.kt(3helpersinternal)};
 app-parent/.../{network/AuthClienteCp2.kt,security/FirmanteAuthCp2.kt}; test/.../AuthCp2Test.kt;
 app-parent/build.gradle.kts; pruebas/EVIDENCIA_PADRE_AUTH01.md, ESTADO.md y relevo.
@@ -250,6 +255,8 @@ pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P03.md y pruebas/HANDOFF_P03.md.
 
 ## Pruebas ejecutadas y resultado
 
+- F02física: lectorlisto confirmado por propietario, ofertaCP2yhuella hijo visibles confirmadas por chat; sin verificación de bytes ópticos exactos. HashAPKA56 medido previo7f3947…f534, instalado/final33ef5347…d4dd7a completo en evidencia. Una install-r Success, sin testAPK/Gradle/instrumentación/logcat/capturas/lecturaQRbody. Cierre manual confirmado sin CAMERA nuevo. Pruebas JVM de AUTH01 anteriores no se reejecutaron ni se suman aquí.
+
 - AUTH01: focal11tests BUILD SUCCESSFUL(7ejecutadas/18UP-TO-DATE); final12nuevos incluidos en163app+30core+1interop(29tareas ejecutadas); normal162app+APKdebug/test/releaseunsigned/lint(131tareas ejecutadas). Cero fallos/errores/omitidos; sin sumar repeticiones/UP-TO-DATE. Lint0errores/23warnings versión/deps por variante; .so sinstrip advertidas. DEX/ZIP dirigido148clasesJVMtest contraAPKapp:0coincidencias/diagnóstico/C02/falso/marcadoresfixture/schemaAUTH,3clasesAUTH y518propias presentes/APKapp. Comandos/hashes concretos evidenciaAUTH01; no AndroidTest ejecutado/ADB/red/125testsRender reportados.
 
 - PADRE-PAIR01: focal8tests BUILD SUCCESSFUL(8ejecutadas/17UP-TO-DATE); suitefixture final9nuevos incluidos en151app+30core+1interop(29tareas ejecutadas); normal150app+APKdebug/test/releaseunsigned/lint(131tareas ejecutadas). Cero fallos/errores/omitidos, sin contar repeticiones/UP-TO-DATE. Corregido warning nullable de property en test antes del build final; sin errores de pruebas. Lint23warnings versiones/0errores por variante. DEX/ZIP dirigido143clases JVMtest contrastadas,0coincidencias/fixture/schema en APKapp;503clases propias/codec y preparadorCP2 presentes. Comandos/hashes concretos en evidenciaPAIR01; no dispositivos/instrumentación/relay externo ni físicas.
@@ -342,6 +349,11 @@ pruebas/MATRIZ_ACEPTACION.md, pruebas/EVIDENCIA_P03.md y pruebas/HANDOFF_P03.md.
 
 ## Bloqueos y riesgos abiertos
 
+F02 acredita UI de lectura física, no bytes exactos/frescura criptográfica/huellas
+comparadas/ceremonia/commit/vínculo operativo/STATE/APPLIED. A56 ahora contiene APK
+AUTH01conlectorPAIR01, hash33ef5347…d4dd7a; referencias siguientes a APKQR02 instalado
+son históricas. No nuevo snapshot/migración/persistencia CP2; firmaMAIN sigue bloqueada.
+
 AUTH01 es borde aislado sin transporte ni activación MAIN; default sin snapshot
 compatible→NO_DISPONIBLE. Proveedor autorizado de identidad/pareja/perfil, ciclo
 de socket real/confirmaciónenvío/callbacksTLS/heartbeat/snapshotPAIR01/persistencia
@@ -399,6 +411,10 @@ P01 aceptar con huella y PIN/contraseña pasó físicamente en A56, incluida cad
 La referencia plantillas/HANDOFF.md de padre/AGENTS.md no existe; usar pruebas/HANDOFF_PLANTILLA.md.
 
 ## Próxima tarea y lectura mínima
+
+Tras F02 detener/esperar revisión o asignación nueva. Leer evidenciaF02; no repetir
+instalación ni asumir permisos físicos heredados. Snapshot/persistencia/ceremonia
+compatibles y conexiónCP2 siguen fuera; sin otra tarea automática.
 
 Tras AUTH01 detener/esperar revisión y asignación separada; leer evidenciaAUTH01 y
 contrato-cp2/README.md. No activar red ni convertir snapshotCP1 para conectar.
