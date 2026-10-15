@@ -5,8 +5,7 @@ import java.security.MessageDigest
 import java.security.SecureRandom
 import java.util.UUID
 
-// Snapshot aportado por una futura política de alta, NO por datos del QR.
-// MAIN no dispone aún de snapshot CP2 autorizado: no fabrica uno desde CP1.
+// Snapshot de la política de alta validada, nunca de datos del QR.
 internal data class AltaCp2(val publica: String, val generacion: String, val boot: String,
     val ausenciaCoherente: Boolean, val autorizada: Boolean)
 
@@ -27,7 +26,7 @@ internal class PrepararPairCp2(private val reloj: () -> Long, private val snapsh
     private var turno = 0L
     private var ticket: TicketPairCp2? = null
     fun descartar() { turno++; ticket?.borrar(); ticket = null }
-    fun preparar(oferta: ByteArray, origen: String): TicketPairCp2 {
+    fun preparar(oferta: ByteArray, origen: String, recibidaEn: Long = reloj()): TicketPairCp2 {
         descartar()
         val alta = snapshot()
         check(alta.ausenciaCoherente && alta.autorizada) { "REQUIERE_MIGRACION o alta no autorizada" }
@@ -48,8 +47,8 @@ internal class PrepararPairCp2(private val reloj: () -> Long, private val snapsh
             fun hash(p: PropositoRecuperacion) = hashRecuperacion(pairId, p, codigos.getValue(p))
             val a = AceptacionCp2(pairId, o.enrollId, o.enrollNonce, alta.publica, o.childPublicKeyB64, origen,
                 RecuperacionCp2(hash(PropositoRecuperacion.MAINTENANCE), hash(PropositoRecuperacion.RECOVER_PARENT), hash(PropositoRecuperacion.RETIRE)))
-            val ahora = reloj(); check(ahora >= 0 && ahora <= Long.MAX_VALUE - 300_000)
-            return TicketPairCp2(turno, alta, ahora + 300_000, a, codigos, VinculacionCp2.payload(a)).also { ticket = it }
+            val ahora = reloj(); check(recibidaEn in 0..Long.MAX_VALUE - 300_000 && ahora in recibidaEn until recibidaEn + 300_000)
+            return TicketPairCp2(turno, alta, recibidaEn + 300_000, a, codigos, VinculacionCp2.payload(a)).also { ticket = it }
         } catch (e: Exception) { codigos.clear(); throw e }
     }
     private fun exigir(t: TicketPairCp2) {

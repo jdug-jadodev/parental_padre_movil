@@ -71,6 +71,8 @@ class ParentStore(
     }
 
     suspend fun leer(): MetadatosPadre = transaccion { cargar() }
+    // Inspección para alta CP/2: validar sin migrar ni escribir el archivo legado.
+    suspend fun inspeccionarSinMigrar(): MetadatosPadre = transaccion { cargar(migrar = false) }
     suspend fun existe(): Boolean = transaccion { archivo.existe() }
 
     // Selección offline: no firma, no reserva seq y nunca reemplaza un envío incierto.
@@ -190,7 +192,7 @@ class ParentStore(
             ultimaEvidenciaFrameB64 = Base64.getUrlEncoder().withoutPadding().encodeToString(frame)))
     }
 
-    private fun cargar(): MetadatosPadre {
+    private fun cargar(migrar: Boolean = true): MetadatosPadre {
         if (incierto) throw AlmacenNoDisponible()
         return try {
             if (!archivo.existe()) throw AlmacenNoDisponible()
@@ -212,7 +214,7 @@ class ParentStore(
             require(original.toByteArray().contentEquals(claro)) { "Documento local no canónico" }
             validarMetadatos(datos)
             // Migración privada v1/v2 → v3: conserva reservas, evidencia y aceptación.
-            if (version < 3) guardar(datos)
+            if (version < 3 && migrar) guardar(datos)
             datos
         } catch (error: Exception) {
             incierto = true
