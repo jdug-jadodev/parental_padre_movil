@@ -15,6 +15,8 @@ import dev.controlparental.parent.presentation.ParentViewModel
 import dev.controlparental.parent.ui.AplicacionPadre
 import dev.controlparental.parent.ui.IdentidadPadre
 import dev.controlparental.parent.ui.PairingScreen
+import dev.controlparental.parent.ui.OfertaCp2Screen
+import androidx.compose.runtime.remember
 import dev.controlparental.parent.pairing.PairChild
 import dev.controlparental.parent.data.AlmacenPadreAndroid
 import dev.controlparental.protocol.Proposito
@@ -113,7 +115,13 @@ class MainActivity : ComponentActivity() {
             MaterialTheme {
                 AplicacionPadre(presentacion, modelo::navegar, modelo::volver,
                     identidad = { IdentidadPadre(aviso, publica, ::crearIdentidad, ::autenticar) },
-                    vinculacion = { PairingScreen(vinculacion, store, ::autenticar) },
+                    vinculacion = {
+                        var cp2 by remember { mutableStateOf(false) }
+                        androidx.compose.material3.TextButton(onClick = { cp2 = !cp2 }) {
+                            androidx.compose.material3.Text(if (cp2) "Volver al perfil legado CP/1" else "Abrir NUEVO PERFIL CP/2 (sin migrar)")
+                        }
+                        if (cp2) OfertaCp2Screen(store) else PairingScreen(vinculacion, store, ::autenticar)
+                    },
                     conexion = { ConexionRelayScreen(conexion, store, redValidada, ::autenticar, politicas) },
                     controles = { ControlScreen(accionesControl, ::autenticar,
                         redValidada && canal.fase == FaseRelay.AUTENTICADO && canal.canalSano) },

@@ -33,12 +33,17 @@ internal fun CamaraOferta(onOferta: (String) -> Unit) {
 }
 
 @Composable
+internal fun CamaraOfertaCp2(onOferta: (String) -> Unit) {
+    CamaraQr(onOferta, offline = false, cp2 = true)
+}
+
+@Composable
 internal fun CamaraRetoOffline(onReto: (String) -> Unit, habilitada: Boolean) {
     CamaraQr(onReto, offline = true, habilitada = habilitada)
 }
 
 @Composable
-private fun CamaraQr(onQr: (String) -> Unit, offline: Boolean, habilitada: Boolean = true) {
+private fun CamaraQr(onQr: (String) -> Unit, offline: Boolean, habilitada: Boolean = true, cp2: Boolean = false) {
     val contexto = LocalContext.current
     val propietario = LocalLifecycleOwner.current
     var abierta by remember { mutableStateOf(false) }
@@ -87,7 +92,14 @@ private fun CamaraQr(onQr: (String) -> Unit, offline: Boolean, habilitada: Boole
                         val plano = imagen.planes[0]
                         val gris = LuminanciaQr.copiar(plano.buffer, imagen.width, imagen.height, plano.rowStride, plano.pixelStride)
                         val texto = QrLocal.leerLuminancia(gris.ancho, gris.alto, gris.bytes)
-                        if (offline) {
+                        if (cp2) {
+                            try { dev.controlparental.protocol.cp2.VinculacionCp2.leerOferta(texto.toByteArray(Charsets.UTF_8)) }
+                            catch (_: Exception) {
+                                entregado.set(true)
+                                principal.execute { if (activo.get()) aviso = "QR decodificado, pero no es una oferta CP/2 válida. Sin verificar bytes exactos de cámara. Cierra y abre para otro intento." }
+                                return@setAnalyzer
+                            }
+                        } else if (offline) {
                             val sobre = CodecProtocolo.leerFrame(texto.toByteArray()) as? SobreFirmado ?: error("Falta firma")
                             require(sobre.purpose == Proposito.OFFLINE &&
                                 CodecProtocolo.leerPayloadSinVerificar(CodecProtocolo.bytesPayload(sobre), Proposito.OFFLINE) is RetoOffline)
@@ -101,6 +113,8 @@ private fun CamaraQr(onQr: (String) -> Unit, offline: Boolean, habilitada: Boole
                             }
                         }
                     }
+                } catch (_: com.google.zxing.ReaderException) {
+                    if (cp2) principal.execute { if (activo.get() && !entregado.get()) aviso = "Sin lectura óptica válida todavía. Apunta solo a la oferta CP/2." }
                 } catch (_: Exception) { /* Sin QR/oferta válida, continuar sin registrar imágenes ni contenido. */ }
                 finally { imagen.close() }
             }
