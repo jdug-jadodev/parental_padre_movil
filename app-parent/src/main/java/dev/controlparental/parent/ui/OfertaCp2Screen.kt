@@ -105,7 +105,7 @@ internal fun OfertaCp2Screen(flujo: VincularCp2, autenticar: ((Boolean) -> Unit)
             Button(enabled = permitida && !ocupado && altaNueva && ticket == null, onClick = {
                 ejecutar { turno ->
                     val t = flujo.preparar(texto.toByteArray(Charsets.UTF_8), origen, recibidaEn, altaNueva)
-                    if (turno == generacion && activa) { ticket = t; aviso = "Guarda los tres códigos fuera del teléfono. Solo RAM; se retiran al salir, fondo, error o vencimiento." }
+                    if (turno == generacion && activa) { ticket = t; padre = t.alta.publica; aviso = "Guarda los tres códigos fuera del teléfono. Solo RAM; se retiran al salir, fondo, error o vencimiento." }
                     else flujo.descartar()
                 }
             }) { Text("Preparar huellas y códigos CP/2") }

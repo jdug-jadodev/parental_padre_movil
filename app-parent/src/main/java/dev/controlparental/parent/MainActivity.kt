@@ -118,7 +118,9 @@ class MainActivity : ComponentActivity() {
             val presentacion = estado.copy(datos = estado.datos.copy(relay = relayUi, presencia = presenciaUi))
             var cp2 by remember { mutableStateOf(false) }
             var legadoPermitido by remember { mutableStateOf(false) }
-            LaunchedEffect(cp2) { legadoPermitido = !areaCp2.ocupadaOIncierta() }
+            LaunchedEffect(cp2) {
+                legadoPermitido = try { !areaCp2.ocupadaOIncierta() } catch (_: Exception) { false }
+            }
             MaterialTheme {
                 AplicacionPadre(presentacion, modelo::navegar, modelo::volver,
                     identidad = { if (!cp2 && legadoPermitido) IdentidadPadre(aviso, publica, ::crearIdentidad, ::autenticar) },
