@@ -5,6 +5,42 @@ El propietario ha designado a la IA del servidor para orquestar el trabajo resta
 Este archivo describe necesidades y evidencias; no autoriza cambios en otros
 repositorios, acceso a dispositivos, aprovisionamiento ni despliegue.
 
+## PADRE-PAIR01 — MAIN lector CP/2 y preparación RAM; PREPARADO_FISICO
+
+Basebeecf75, código **82734c7**. Fuentes CP2-V01Render4ac4962 schema/README recibidos
+íntegros en conversación, sin lectura externa. Schema copiado en contrato-cp2/;
+fuente tiene6/11/5 campos (aceptación11, no10 del resumen), preservados íntegros.
+Codec Kotlin separado en core-protocol/.../cp2: canonicidad ASCII/UTF8/duplicados/
+campos/UUID/base64/SPKIP256punto/DERrango/origen/depth6/límites8192-16384, dominio
+CPv2/PAIR sobre bytes originales y hashpayload, pública esperada externa. CP1intacto.
+
+MAIN Vinculación ofrece selector NUEVO PERFILCP2 para cámara/huellas sin pareja.
+REQUIERE_MIGRACION en todo almacén legado/incierto; firma/códigosCP2 bloqueados en
+MAIN incluso sin archivo (no alta automática). Sin crear/rotar identidad/store/
+fakeparentconfirm ni retirar guarda de Recuperación. OfertaRAM5min/cierre-fondo-
+disposal; errores ópticos vs decodificación-schema distintos sin logsbody.
+
+PrepararPairCp2 es caso uso puro RAM sin store/commit: alta explícita coherente/
+autorizada, snapshot identidad/generación/boot, ticket5min, descarte/cambio contexto,
+confirmaciones humanas+auth,3códigos20bytesBase32/hashCPv2RECOVERY, firma real separada.
+**No conectado a firma/Keystore/persistencia MAIN**, por falta de snapshot compatible
+aprobado; probado con fakes, no adulteración de producción. Entrega parcial expresa,
+no aceptación definitiva o promoción PREPARADO/operativo.
+
+9tests nuevos; fixture151app+30core+1interop=182distintos, normal150app,0fallos/
+errores/omitidos. Builds debug/testAPK/release unsigned/lint0errores/23avisos por
+variante. APK postcommit82734c7: debug8c919e1ec052f017e47668d4ae07fbe9087cdecc952fe5100f72d7cee247970b;
+releasec39b7c1991a252c62e5fd4bc778a9977a5d8a1997dc6284b1cf1e0af13b645e9.
+Inspección DEX/ZIP dirigida sin143clases JVMtest/diagnóstico/C02/falso ni marcadores
+fixture/schema en APKapp; codec/preparadorCP2 presentes. No auditoría universal.
+No instalar ni ADB: A56 sigue APKQR02F01, pruebas físicas requieren nuevo permiso.
+
+Evidencia/rutas/órdenes/hashes completos: pruebas/EVIDENCIA_PADRE_PAIR01.md.
+Próxima decisión separada snapshot/persistencia compatible o prueba física A56 de
+lector, no ceremonia/CP1migración/QRhijo por permisoF01. Contexto hijo/relay reportado
+no reejecutado, sin otra tarea automática/dispositivos/repos externos/subagentes/
+sesiones/prompts de vuelta. Apartados siguientes son históricos.
+
 ## PADRE-QR02-F01 — APK en A56 confirmado; cámara no ejecutada
 
 Base94d1746/códigoff9aa4c, autorización específica recibida y aviso antes de operar.
